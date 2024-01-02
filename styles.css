@@ -21,9 +21,15 @@
         padding: 20px;
     }
     
+<<<<<<< HEAD
     .logo-container a .logo-img {
         width: 100px; /* Set width explicitly */
         height: 100px; /* Set height explicitly */
+=======
+    .logo-img {
+        width: 100px !important; /* Set width explicitly */
+        height: 100px !important; /* Set height explicitly */
+>>>>>>> 9f2e03079c0bff6f57a8e5a065835ee2189704cd
         object-fit: contain; /* Maintain aspect ratio and fit within the defined dimensions */
         display: block;
     }
