@@ -27,10 +27,9 @@
 
     
     .logo-img {
-        max-width: 100px; /* Limit maximum width */
-        max-height: 100px; /* Limit maximum height */
-        width: auto;
-        height: auto; /* Allow the height to adjust accordingly */
+        width: 100px; /* Set width explicitly */
+        height: 100px; /* Set height explicitly */
+        object-fit: contain; /* Maintain aspect ratio and fit within the defined dimensions */
         display: block;
     }
 
