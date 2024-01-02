@@ -20,13 +20,8 @@
         align-items: center;
         padding: 20px;
     }
-    .logo-container {
-        display: flex;
-        align-items: center;
-    }
-
     
-    .logo-img {
+    .logo-container a .logo-img {
         width: 100px; /* Set width explicitly */
         height: 100px; /* Set height explicitly */
         object-fit: contain; /* Maintain aspect ratio and fit within the defined dimensions */
