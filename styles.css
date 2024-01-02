@@ -31,7 +31,7 @@ header {
 
 .logo-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     margin-right: 50px; /* Adjust the space between the logo and the navigation links */
 }
@@ -44,7 +44,7 @@ header {
 
 .logo-text {
     font-size: 30px;
-    color: #fff;
+    color: #ffcc00;
     font-weight: bold;
     text-align: center;
     margin-top: 5px;
