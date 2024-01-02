@@ -28,8 +28,11 @@ body, html {
 }
 
 .logo-text {
-    font-size: 20px; 
+    font-size: 40px; 
     color: #fff; 
+    font-weight: bold;
+    display: flex;
+    align-items: center;
 }
 
 /* Styling for the navigation links */
