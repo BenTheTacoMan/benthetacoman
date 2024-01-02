@@ -16,9 +16,13 @@ body, html {
     background-color: #4365c4;
     color: #fff; /* Change text color */
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 20px;
+}
+.logo-container {
+    display: flex;
+    align-items: center;
 }
 
 .logo img {
