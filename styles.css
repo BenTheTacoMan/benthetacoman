@@ -11,14 +11,12 @@
         font-style: normal;
     }
 
-    /* Styling for the navigation bar */
-    .top-nav {
+    
+    .body {
         background-color: #4365c4;
         color: #fff; /* Change text color */
-        display: flex;
         justify-content: center;
         align-items: center;
-        padding: 20px;
     }
 
     .logo-container a .logo-img {
