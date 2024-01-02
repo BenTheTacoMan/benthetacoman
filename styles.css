@@ -18,21 +18,17 @@
     }
 
     header {
-        text-align: center; /* Center-align the content inside the header */
-        max-width: 600px;
-        width: 100%;
         display: flex;
-        justify-content:  space-between;
+        justify-content: center; /* This will center the logo and the nav-links container */
         align-items: center;
+        max-width: 100%; /* You can adjust this as needed to control the maximum width */
         padding: 20px;
+        width: 100%;
     }
 
 
-    .logo-container{
-        display: flex;
-        align-items: center;
-
-
+    .logo-container {
+        flex: 0;
     }
     
     
@@ -48,19 +44,17 @@
         font-size: 30px; 
         color: #fff; 
         font-weight: bold;
-        display: flex;
-        text-align: center;
-        margin-top: 5;
+        width: 100%; /* This will make sure the text is centered in its container */
+        margin-top: 5px; /* Make sure to include 'px' */
     }
 
     /* Styling for the navigation links */
     .nav-links {
-        list-style-type: none;
-        display: flex;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        align-items: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    flex: 1; /* This will make the nav-links take the remaining space */
+    justify-content: flex-end; /* This will align the links to the right */
     }
 
     .nav-links li {
