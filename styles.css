@@ -24,16 +24,18 @@ header {
 
 .header-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
+    padding: 20px;
+    
 }
 
 .logo-container {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-right: 50px; /* Adjust the space between the logo and the navigation links */
+     /* Adjust the space between the logo and the navigation links */
 }
 
 .logo-img {
@@ -73,4 +75,49 @@ header {
 .nav-links li a:hover {
     color: #ffcc00;
 }
+
+#content {
+    min-height: 200vh; /* Temporary height to enable scrolling for demonstration */
+}
+
+/* Sticky navigation bar styles */
+.sticky-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center; /* This will center the links when sticky */
+    align-items: center;
+    padding: 10px 0;
+    z-index: 1000;
+    transition: top 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.moved-right {
+    transform: translateX(100%); /* Move to the right */
+    opacity: 0; /* Fade out */
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.moved-up {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%); /* Center the nav-links */
+    opacity: 1; /* Fade in */
+    background-color: #4365c4; /* Match the background color */
+    width: 100%; /* Full width */
+    justify-content: center; /* Center the items */
+    padding: 10px 0;
+    box-sizing: border-box;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+
+
+
+
+
+
 

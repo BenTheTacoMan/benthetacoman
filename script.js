@@ -1,23 +1,21 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    const navLinks = document.getElementById('nav-links');
-    const logoContainer = document.querySelector('.logo-container');
-    const headerContainer = document.querySelector('.header-container');
-    const stickyNavThreshold = 150; // Adjust the scroll threshold as needed
+// Get the nav element
+const navLinks = document.querySelector('.nav-links');
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > stickyNavThreshold) {
-            navLinks.classList.add('sticky-nav');
-            logoContainer.classList.add('hide-logo');
-        } else {
-            navLinks.classList.remove('sticky-nav');
-            logoContainer.classList.remove('hide-logo');
-        }
+// Function to be called when user scrolls
+function onScroll() {
+    // Define a threshold as a fraction of the window height
+    // For example, this sets the threshold at half the window height
+    const threshold = window.innerHeight / 4;
 
-        // Animate header container height to zero to slide up the navigation
-        if (window.scrollY > stickyNavThreshold * 2) {
-            headerContainer.style.transform = 'translateY(-100%)';
-        } else {
-            headerContainer.style.transform = 'translateY(0)';
-        }
-    });
-});
+    // Check if the window has been scrolled past the threshold
+    if (window.scrollY > threshold) {
+        // Add sticky class if scrolled past threshold
+        navLinks.classList.add('sticky-nav');
+    } else {
+        // Remove sticky class if scrolled back above threshold
+        navLinks.classList.remove('sticky-nav');
+    }
+}
+
+// Listen for scroll events
+window.addEventListener('scroll', onScroll);
