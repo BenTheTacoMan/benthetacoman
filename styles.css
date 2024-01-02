@@ -73,3 +73,7 @@ header {
 .nav-links li a:hover {
     color: #ffcc00;
 }
+
+#content {
+    min-height: 200vh;
+}
