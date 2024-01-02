@@ -1,59 +1,62 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Dosis', sans-serif;
-}
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: 'Dosis', sans-serif;
+    }
 
-@font-face {
-    font-family: 'Dosis';
-    src: url('Dosis-VariableFont_wght.ttf') format('ttf');
-    font-weight: normal;
-    font-style: normal;
-}
+    @font-face {
+        font-family: 'Dosis';
+        src: url('Dosis-VariableFont_wght.ttf') format('ttf');
+        font-weight: normal;
+        font-style: normal;
+    }
 
-/* Styling for the navigation bar */
-.top-nav {
-    background-color: #4365c4;
-    color: #fff; /* Change text color */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-.logo-container {
-    display: flex;
-    align-items: center;
-}
+    /* Styling for the navigation bar */
+    .top-nav {
+        background-color: #4365c4;
+        color: #fff; /* Change text color */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    .logo-container {
+        display: flex;
+        align-items: center;
+    }
 
-.logo img {
-    max-width: 200px; 
-    max-height: 200px;
-    width: auto;
-}
+    
+    .logo-img {
+        max-width: 100px; /* Limit maximum width */
+        max-height: 100px; /* Limit maximum height */
+        width: auto;
+        height: auto; /* Allow the height to adjust accordingly */
+        display: block;
+    }
 
-.logo-text {
-    font-size: 30px; 
-    color: #fff; 
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-}
+    .logo-text {
+        font-size: 30px; 
+        color: #fff; 
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+    }
 
-/* Styling for the navigation links */
-.nav-links {
-    list-style: none;
-    display: flex;
-}
+    /* Styling for the navigation links */
+    .nav-links {
+        list-style: none;
+        display: flex;
+    }
 
-.nav-links li {
-    margin-right: 20px; /* Adjust the space between links */
-}
+    .nav-links li {
+        margin-right: 20px; /* Adjust the space between links */
+    }
 
-.nav-links li a {
-    text-decoration: none;
-    color: #fff; /* Change link text color */
-}
+    .nav-links li a {
+        text-decoration: none;
+        color: #fff; /* Change link text color */
+    }
 
-.nav-links li a:hover {
-    color: #ffcc00; /* Change link text color on hover */
-}
+    .nav-links li a:hover {
+        color: #ffcc00; /* Change link text color on hover */
+    }
