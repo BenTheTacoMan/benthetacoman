@@ -27,6 +27,11 @@ body, html {
     width: auto;
 }
 
+.logo-text {
+    font-size: 20px; 
+    color: #fff; 
+}
+
 /* Styling for the navigation links */
 .nav-links {
     list-style: none;
