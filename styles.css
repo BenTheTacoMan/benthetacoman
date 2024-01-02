@@ -1,12 +1,19 @@
 body, html {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif; /* Change the font if desired */
+    font-family: 'Dosis', sans-serif;
+}
+
+@font-face {
+    font-family: 'Dosis';
+    src: url('Dosis-VariableFont_wght.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
 }
 
 /* Styling for the navigation bar */
 .top-nav {
-    background-color: #4365c4; /* Change the background color */
+    background-color: #4365c4;
     color: #fff; /* Change text color */
     display: flex;
     justify-content: space-between;
