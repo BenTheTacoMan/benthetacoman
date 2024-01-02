@@ -1,84 +1,75 @@
-    @font-face {
-        font-family: 'Dosis';
-        src: url('Dosis-VariableFont_wght.ttf') format('ttf');
-        font-weight: normal;
-        font-style: normal;
-    }
+@font-face {
+    font-family: 'Dosis';
+    src: url('Dosis-VariableFont_wght.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+}
 
-   body, html {
-        background-color: #4365c4;
-        color: #fff; /* Change text color */
-        margin: 0;
-        padding: 0;
-        font-family: 'Dosis', sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-    }
+body, html {
+    background-color: #4365c4;
+    color: #fff; /* Change text color */
+    margin: 0;
+    padding: 0;
+    font-family: 'Dosis', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
 
-    header {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        max-width: 100%;
-        padding: 20px;
-        width: 100%;
-    }
+header {
+    width: 100%;
+    padding: 20px;
+}
 
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
 
-    .logo-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex: 1; /* Allow the logo container to grow as needed */
-    }
-    
-    
-    .logo-img {
-        width: 200px; /* Set width explicitly */
-        height: 200px; /* Set height explicitly */
-        object-fit: contain; /* Maintain aspect ratio and fit within the defined dimensions */
-        display: flex;
-        
-    }
+.logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 50px; /* Adjust the space between the logo and the navigation links */
+}
 
-    .logo-text {
-        font-size: 30px;
-        color: #fff;
-        font-weight: bold;
-        display: block; /* Change this from flex to block */
-        text-align: center;
-        margin-top: 5px;
-        position: relative;
-        left: 50%;
-        transform: translateX(-50%);
-    }
+.logo-img {
+    width: 200px;
+    height: auto; /* Keep the aspect ratio of the image */
+    object-fit: contain;
+}
 
-    /* Styling for the navigation links */
-    .nav-links {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: flex-start; /* This will align the links to the start (left) */
-        flex: 1; /* This will make the nav-links take the remaining space */
-        align-items: center;
-    }
+.logo-text {
+    font-size: 30px;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 5px;
+}
 
-    .nav-links li {
-        margin-right: 20px; /* Adjust the space between links */
-        font-size: 30px; 
-        color: #fff; 
+.nav-links {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
 
-    }
+.nav-links li {
+    margin-right: 20px;
+    font-size: 30px;
+    color: #fff;
+}
 
-    .nav-links li a {
-        text-decoration: none;
-        color: #fff; 
-        font-weight: bold;
-    }
+.nav-links li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
 
-    .nav-links li a:hover {
-        color: #ffcc00; /* Change link text color on hover */
-    }
+.nav-links li a:hover {
+    color: #ffcc00;
+}
