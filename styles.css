@@ -27,8 +27,8 @@
 
     
     .logo-img {
-        width: 100px; /* Set width explicitly */
-        height: 100px; /* Set height explicitly */
+        width: 100px !important; /* Set width explicitly */
+        height: 100px !important; /* Set height explicitly */
         object-fit: contain; /* Maintain aspect ratio and fit within the defined dimensions */
         display: block;
     }
