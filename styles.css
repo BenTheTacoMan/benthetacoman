@@ -1,4 +1,6 @@
     body, html {
+        background-color: #4365c4;
+        color: #fff; /* Change text color */
         margin: 0;
         padding: 0;
         font-family: 'Dosis', sans-serif;
@@ -11,13 +13,6 @@
         font-style: normal;
     }
 
-    
-    .body {
-        background-color: #4365c4;
-        color: #fff; /* Change text color */
-        justify-content: center;
-        align-items: center;
-    }
 
     .logo-container a .logo-img {
         width: 200px; /* Set width explicitly */
@@ -42,11 +37,15 @@
 
     .nav-links li {
         margin-right: 20px; /* Adjust the space between links */
+        font-size: 30px; 
+        color: #fff; 
+
     }
 
     .nav-links li a {
         text-decoration: none;
-        color: #fff; /* Change link text color */
+        color: #fff; 
+        font-weight: bold;
     }
 
     .nav-links li a:hover {
