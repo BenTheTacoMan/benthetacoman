@@ -7,11 +7,11 @@
 
 body, html {
     background-color: #4365c4;
-    color: #fff;
+    color: #fff; /* Change text color */
     margin: 0;
     padding: 0;
     font-family: 'Dosis', sans-serif;
-    min-height: 100vh;
+    height: 100vh;
     overflow-x: hidden;
 }
 
@@ -23,32 +23,31 @@ body, html {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    z-index: 0;
 }
 
 #taco-image {
-    width: 200px;
-    height: auto;
-    transition: transform 1s ease-in-out;
-    z-index: 10;
+    max-width: 200px; /* Control the size of the taco image */
+    transition: all 1s ease-in-out;
+    z-index: 2;
 }
 
 #links-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     display: flex;
-    gap: 1em;
-    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
-    opacity: 1;
-    z-index: 10;
+    gap: 20px; /* Space between links */
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%);
+    transition: all 1s ease-in-out;
+    z-index: 2;
 }
 
 #logo-text {
-    font-size: 30px;
+    font-size: 2rem;
     color: #ffcc00;
     font-weight: bold;
+    margin: 0;
+    transition: all 1s ease-in-out;
 }
 
 #navbar {
@@ -56,26 +55,22 @@ body, html {
     top: -60px; /* Initially hidden */
     left: 0;
     width: 100%;
-    background-color: #4365c4;
-    transition: top 0.5s ease-in-out;
+    background-color: transparent;
+    transition: all 1s ease-in-out;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1em;
-    padding: 10px 0;
-    z-index: 100;
-}
-
-section {
-    min-height: 100vh;
-    /* Style for your sections */
+    gap: 20px;
+    padding: 1rem 0;
+    z-index: 1;
 }
 
 nav a {
     color: #fff;
     text-decoration: none;
     font-weight: bold;
-    font-size: 30px;
+    font-size: 1.5rem;
+    transition: color 0.3s;
 }
 
 nav a:hover {
@@ -84,4 +79,10 @@ nav a:hover {
 
 .hidden {
     display: none;
+}
+
+/* Add your section styles here */
+section {
+    min-height: 100vh;
+    /* Style for your sections */
 }
