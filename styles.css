@@ -135,14 +135,14 @@ main {
     margin-bottom: 10px;
     max-width: 700px;
     margin: 0 auto;
-    padding-left: 150px;
+    padding-left: 50px;
 }
 
 
 
 
 .about-img {
-    width: 15%; /* Adjust width as necessary or set to auto */
+    width: 17.5%; /* Adjust width as necessary or set to auto */
     height: auto;
     position: relative; /* Fixed to the viewport */
     left: -100%; /* Start off-screen */
