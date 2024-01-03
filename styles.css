@@ -121,8 +121,8 @@ main {
     font-size: 30px;
     text-align: center;
     display: block;
-    
-    margin-bottom: 20px
+    width: 100%;
+    margin-bottom: 20px;
     
 }
 
