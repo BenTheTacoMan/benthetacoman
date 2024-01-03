@@ -1,43 +1,39 @@
 document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelector('.nav-links');
     const stickyNav = document.createElement('nav');
+    const logo = document.querySelector('.logo-img');
+    const header = document.querySelector('header');
+  
     stickyNav.classList.add('sticky-nav');
     stickyNav.innerHTML = navLinks.innerHTML; // Clone the navigation links
     document.body.appendChild(stickyNav);
   
-    const logo = document.querySelector('.logo-img');
-    const headerHeight = logo.offsetHeight; // Assuming the logo is fully visible initially
+    function updateNavPosition() {
+      const scrollY = window.scrollY;
+      const headerBottom = header.offsetTop + header.offsetHeight;
+      const logoBottom = logo.offsetTop + logo.offsetHeight;
+      const stickyVisible = scrollY >= logoBottom;
   
-    // Function to update nav position
-    function updateNavPosition(scrollY) {
-      const scrollRatio = scrollY / headerHeight;
-  
-      // Check if we should show or hide the original nav links
-      if (scrollRatio < 1) {
-        // User has scrolled back up
-        navLinks.style.transform = `translateX(${100 * scrollRatio}vw)`;
-        navLinks.style.opacity = 1 - scrollRatio;
-        navLinks.style.visibility = 'visible';
-  
-        // Hide the sticky navigation
-        stickyNav.style.opacity = 0;
-        stickyNav.style.visibility = 'hidden';
-      } else {
-        // User has scrolled down
-        navLinks.style.visibility = 'hidden';
-  
-        // Show the sticky navigation
+      if (stickyVisible) {
+        // When the logo is off the screen, make the sticky nav fully visible
         stickyNav.style.opacity = 1;
         stickyNav.style.visibility = 'visible';
+        navLinks.style.visibility = 'hidden';
+      } else {
+        // Calculate the scroll ratio based on the logo's visibility
+        const scrollRatio = Math.min(scrollY / logoBottom, 1);
+        navLinks.style.transform = `translateX(${scrollRatio * 100}%)`;
+        navLinks.style.opacity = 1 - scrollRatio;
+        stickyNav.style.opacity = scrollRatio;
+        stickyNav.style.visibility = scrollRatio > 0 ? 'visible' : 'hidden';
+        navLinks.style.visibility = 'visible';
       }
     }
   
-    // Initial update
-    updateNavPosition(0);
+    // Initial update based on the current scroll position
+    updateNavPosition();
   
     // Listen for scroll events
-    window.addEventListener('scroll', () => {
-      updateNavPosition(window.scrollY);
-    });
+    window.addEventListener('scroll', updateNavPosition);
   });
   
