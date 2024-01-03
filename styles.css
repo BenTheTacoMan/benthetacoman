@@ -107,7 +107,7 @@ main {
     align-items: center; /* This will vertically center the image with the text */
     justify-content: flex-start;
     width: 100%;
-    padding-right: 50px;
+    margin-top: 2em;
 }
 
 .about-header {
