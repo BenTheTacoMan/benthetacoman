@@ -144,12 +144,11 @@ main {
 .about-img {
     width: 15%; /* Adjust width as necessary or set to auto */
     height: auto;
-    position: absolute; /* Fixed to the viewport */
-    bottom: 10%; /* Adjust as needed */
+    position: relative; /* Fixed to the viewport */
     left: -100%; /* Start off-screen */
     transition: opacity 1s ease, left 1s ease;
     z-index: 2; /* Ensure it's above other content, adjust as needed */
-    margin-top: 2em;
+    
 }
 
 
