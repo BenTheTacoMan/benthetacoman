@@ -77,8 +77,12 @@ header {
     font-size: 30px;
 }
 
-.nav-links li a:hover {
+.nav-links li a:hover, .nav-links li a:focus {
     color: #ffcc00;
+    background-color: transparent; /* Prevent any background color change */
+    border: none; /* Remove any borders that might appear */
+    outline: none; /* Already specified, but reiterated here for clarity */
+    box-shadow: none;
 }
 
 main {
@@ -119,6 +123,11 @@ main {
     font-weight: bold; /* Match original font weight */
     font-size: 30px; /* Match original font size */
     padding: 0 20px; /* Match original padding between links */
+}
+
+.sticky-nav li a:hover, sticky-nav a:focus {
+    color: #ffcc00;
+    outline: none;
 }
 
 .moved-right {

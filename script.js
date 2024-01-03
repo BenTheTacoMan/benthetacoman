@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         // Calculate the scroll ratio based on the logo's visibility
         const scrollRatio = Math.min(scrollY / logoBottom, 1);
-        navLinks.style.transform = `translateX(${scrollRatio * 100}%)`;
+        navLinks.style.transform = `translateX(${scrollRatio * 200}%)`;
         navLinks.style.opacity = 1 - scrollRatio;
         stickyNav.style.opacity = scrollRatio;
         stickyNav.style.visibility = scrollRatio > 0 ? 'visible' : 'hidden';
