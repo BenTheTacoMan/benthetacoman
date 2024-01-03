@@ -5,18 +5,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('header');
     const aboutImg = document.querySelector('.about-img');
     const aboutSection = document.getElementById('about');
-    const aboutHeader = document.querySelector('.about-header'); // Selector for your header
-    const aboutText = document.querySelector('.about-text'); // Selector for your text
+    const aboutHeader = document.querySelector('.about-header');
+    const aboutText = document.querySelector('.about-text');
 
     stickyNav.classList.add('sticky-nav');
-    stickyNav.innerHTML = navLinks.innerHTML; // Clone the navigation links
+    stickyNav.innerHTML = navLinks.innerHTML;
     document.body.appendChild(stickyNav);
 
     function updateContent(scrollY) {
         const headerBottom = header.offsetTop + header.offsetHeight;
         const logoBottom = logo.offsetTop + logo.offsetHeight;
         const stickyVisible = scrollY >= logoBottom;
-        const aboutTop = aboutSection.offsetTop;
+        const aboutTop = aboutSection.getBoundingClientRect().top + scrollY;
+        const aboutBottom = aboutTop + aboutSection.offsetHeight;
+        const windowHeight = window.innerHeight;
 
         // Handle sticky nav visibility
         if (stickyVisible) {
@@ -25,31 +27,36 @@ document.addEventListener('DOMContentLoaded', () => {
             navLinks.style.visibility = 'hidden';
         } else {
             const scrollRatio = Math.min(scrollY / logoBottom, 1);
-            navLinks.style.transform = `translateX(${scrollRatio * 200}%)`;
+            navLinks.style.transform = `translateX(${scrollRatio * 100}%)`;
             navLinks.style.opacity = 1 - scrollRatio;
             stickyNav.style.opacity = scrollRatio;
             stickyNav.style.visibility = scrollRatio > 0 ? 'visible' : 'hidden';
             navLinks.style.visibility = 'visible';
         }
 
-        // Handle about section visibility and image animation
-        if (scrollY > aboutTop - window.innerHeight * 1.5 && scrollY < aboutTop - window.innerHeight / 2) {
-            // When user is approaching the about section, show text with some transparency
-            aboutHeader.style.opacity = 0.5;
-            aboutText.style.opacity = 0.5;
-        } else if (scrollY >= aboutTop - window.innerHeight / 2) {
-            // As the user scrolls past the about section, make text fully opaque
-            aboutHeader.style.opacity = 1;
-            aboutText.style.opacity = 1;
-            // And move the image in from the left
-            aboutImg.style.opacity = 1;
-            aboutImg.style.left = '25%';
+        // Calculate the ratio of how much the about section is visible
+        const aboutVisibilityRatio = Math.max(0, Math.min(1, (scrollY + windowHeight - aboutTop) / windowHeight));
+
+        // Update the taco image based on the visibility ratio
+        if (scrollY < aboutBottom && aboutVisibilityRatio > 0) {
+            aboutImg.style.opacity = aboutVisibilityRatio;
+            aboutImg.style.left = `${14- (1 - aboutVisibilityRatio) * 100}%`;
         } else {
-            // Reset styles if the about section is not in view
-            aboutHeader.style.opacity = 0;
-            aboutText.style.opacity = 0;
             aboutImg.style.opacity = 0;
-            aboutImg.style.left = '-100%'; // Start off-screen to the left
+            aboutImg.style.left = '-100%';
+        }
+
+        // Update the text based on the visibility ratio
+        if (scrollY + windowHeight > aboutTop) {
+            aboutHeader.style.opacity = Math.min(1, (scrollY + windowHeight - aboutTop) / 100);
+            aboutHeader.style.transform = 'translateY(0)';
+            aboutText.style.opacity = Math.min(1, (scrollY + windowHeight - aboutTop) / 100);
+            aboutText.style.transform = 'translateY(0)';
+        } else {
+            aboutHeader.style.opacity = 0;
+            aboutHeader.style.transform = 'translateY(20px)';
+            aboutText.style.opacity = 0;
+            aboutText.style.transform = 'translateY(20px)';
         }
     }
 
