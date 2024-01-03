@@ -90,14 +90,24 @@ main {
 }
 
 .content-section {
-    min-height: 100vh; /* Minimum height for each section to create a scrollable area */
-    padding: 20px;
-    box-sizing: border-box;
-    /* Add more styles here as needed */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
 }
 
 .highlight {
     color: #ffcc00; /* Your chosen highlight color */
+}
+
+.about-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* This will vertically center the image with the text */
+    justify-content: flex-start;
+    width: 100%;
+    padding-right: 50px;
 }
 
 .about-header {
@@ -109,6 +119,7 @@ main {
     font-size: 30px;
     text-align: center;
     display: block;
+    padding-right: 160px;
     
 }
 
@@ -124,10 +135,12 @@ main {
 }
 
 
+
+
 .about-img {
     width: 15%; /* Adjust width as necessary or set to auto */
     height: auto;
-    position: fixed; /* Fixed to the viewport */
+    position: absolute; /* Fixed to the viewport */
     bottom: 10%; /* Adjust as needed */
     left: -100%; /* Start off-screen */
     transition: opacity 1s ease, left 1s ease;

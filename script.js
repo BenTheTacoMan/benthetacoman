@@ -9,16 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const aboutText = document.querySelector('.about-text');
 
     stickyNav.classList.add('sticky-nav');
-    stickyNav.innerHTML = navLinks.innerHTML;
+    stickyNav.innerHTML = navLinks.innerHTML; // Clone the navigation links
     document.body.appendChild(stickyNav);
 
     function updateContent(scrollY) {
         const headerBottom = header.offsetTop + header.offsetHeight;
         const logoBottom = logo.offsetTop + logo.offsetHeight;
         const stickyVisible = scrollY >= logoBottom;
-        const aboutTop = aboutSection.getBoundingClientRect().top + scrollY;
-        const aboutBottom = aboutTop + aboutSection.offsetHeight;
-        const windowHeight = window.innerHeight;
+        const aboutTop = aboutSection.offsetTop;
 
         // Handle sticky nav visibility
         if (stickyVisible) {
@@ -34,29 +32,34 @@ document.addEventListener('DOMContentLoaded', () => {
             navLinks.style.visibility = 'visible';
         }
 
-        // Calculate the ratio of how much the about section is visible
-        const aboutVisibilityRatio = Math.max(0, Math.min(1, (scrollY + windowHeight - aboutTop) / windowHeight));
-
-        // Update the taco image based on the visibility ratio
-        if (scrollY < aboutBottom && aboutVisibilityRatio > 0) {
-            aboutImg.style.opacity = aboutVisibilityRatio;
-            aboutImg.style.left = `${14- (1 - aboutVisibilityRatio) * 100}%`;
-        } else {
+        // Handle about section visibility and image animation
+        if (scrollY > aboutTop - window.innerHeight) {
+            // As the user scrolls past the about section, make text fully opaque
+            aboutHeader.style.opacity = 1;
+            aboutHeader.style.transform = 'translateY(0)';
+            aboutText.style.opacity = 1;
+            aboutText.style.transform = 'translateY(0)';
+            
+            // And move the image in from the left
+            aboutImg.style.opacity = 1;
+            aboutImg.style.left = '8.5%';
+        } else if (scrollY > aboutTop - window.innerHeight * 1.5) {
+            // When user is approaching the about section, show text with some transparency
+            aboutHeader.style.opacity = 0.5;
+            aboutHeader.style.transform = 'translateY(50px)';
+            aboutText.style.opacity = 0.5;
+            aboutText.style.transform = 'translateY(50px)';
+            // Keep the image hidden
             aboutImg.style.opacity = 0;
             aboutImg.style.left = '-100%';
-        }
-
-        // Update the text based on the visibility ratio
-        if (scrollY + windowHeight > aboutTop) {
-            aboutHeader.style.opacity = Math.min(1, (scrollY + windowHeight - aboutTop) / 100);
-            aboutHeader.style.transform = 'translateY(0)';
-            aboutText.style.opacity = Math.min(1, (scrollY + windowHeight - aboutTop) / 100);
-            aboutText.style.transform = 'translateY(0)';
         } else {
+            // Reset styles if the about section is not in view
             aboutHeader.style.opacity = 0;
-            aboutHeader.style.transform = 'translateY(20px)';
+            aboutHeader.style.transform = 'translateY(100px)';
             aboutText.style.opacity = 0;
-            aboutText.style.transform = 'translateY(20px)';
+            aboutText.style.transform = 'translateY(100px)';
+            aboutImg.style.opacity = 0;
+            aboutImg.style.left = '-100%';
         }
     }
 
