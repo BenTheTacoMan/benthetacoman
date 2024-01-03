@@ -96,6 +96,47 @@ main {
     /* Add more styles here as needed */
 }
 
+.highlight {
+    color: #ffcc00; /* Your chosen highlight color */
+}
+
+.about-header {
+    color:#ffcc00;
+    opacity: 0; /* Start fully transparent */
+    transition: opacity 1s ease, transform 1s ease;
+    transform: translateY(20px);
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+    display: block;
+    
+}
+
+.about-text {
+    opacity: 0; /* Start fully transparent */
+    transition: opacity 1s ease, transform 1s ease;
+    transform: translateY(20px);
+    font-weight: bold;
+    font-size: 22px;
+    margin-bottom: 10px;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+
+.about-img {
+    width: 15%; /* Adjust width as necessary or set to auto */
+    height: auto;
+    position: fixed; /* Fixed to the viewport */
+    bottom: 10%; /* Adjust as needed */
+    left: -100%; /* Start off-screen */
+    transition: opacity 1s ease, left 1s ease;
+    z-index: 2; /* Ensure it's above other content, adjust as needed */
+    margin-top: 2em;
+}
+
+
+
 /* Sticky navigation bar styles */
 .sticky-nav {
     list-style: none;
@@ -114,7 +155,7 @@ main {
     visibility: hidden; /* Start hidden */
     display: flex;
     justify-content: center; /* Center the nav links */
-    align-items: center; /* Align links vertically */
+     /* Align links vertically */
 }
 
 .sticky-nav a {
