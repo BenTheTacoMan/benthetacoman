@@ -11,7 +11,7 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: 'Dosis', sans-serif;
-    overflow-x: hidden; /* Hide horizontal scroll */
+    overflow-x: hidden;
 
 }
 
@@ -19,11 +19,11 @@ body, html {
 
 header {
     width: 100%;
-    height: 100vh; /* Full viewport height */
+    height: 100vh; 
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative; /* Use relative for natural flow */
+    position: relative; 
 }
 
 .header-content {
@@ -34,8 +34,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px; /* Or your desired max width */
-    margin: 0 auto; /* Center header container */
+    max-width: 1200px; 
+    margin: 0 auto; 
 }
 
 
@@ -46,7 +46,7 @@ header {
 }
 
 .logo-img {
-    width: 200px; /* Adjust to your preference */
+    width: 200px; 
     height: auto;
 }
 
@@ -61,7 +61,7 @@ header {
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 20px; /* Adjust the space between the links */
+    gap: 20px; 
     align-items: center;
     padding: 0;
     margin: 0;
@@ -79,14 +79,14 @@ header {
 
 .nav-links li a:hover, .nav-links li a:focus {
     color: #ffcc00;
-    background-color: transparent; /* Prevent any background color change */
-    border: none; /* Remove any borders that might appear */
-    outline: none; /* Already specified, but reiterated here for clarity */
+    background-color: transparent; 
+    border: none; 
+    outline: none; 
     box-shadow: none;
 }
 
 main {
-    padding-top: 80px; /* Height of the header plus some space */
+    padding-top: 80px; 
 }
 
 .content-section {
@@ -100,13 +100,13 @@ main {
 }
 
 .highlight {
-    color: #ffcc00; /* Your chosen highlight color */
+    color: #ffcc00; 
 }
 
 .about-container {
     display: flex;
     flex-direction: row;
-    align-items: center; /* This will vertically center the image with the text */
+    align-items: center; 
     justify-content: flex-start;
     width: 100%;
     padding-right: 30px
@@ -114,20 +114,20 @@ main {
 
 .about-header {
     color:#ffcc00;
-    opacity: 0; /* Start fully transparent */
+    opacity: 0; 
     transition: opacity 1s ease, transform 1s ease;
     transform: translateY(20px);
     font-weight: bold;
     font-size: 30px;
     text-align: center;
     display: block;
-    padding-right: 300px;
+    padding-right: 250px;
     margin-bottom: 20px;
     
 }
 
 .about-text {
-    opacity: 0; /* Start fully transparent */
+    opacity: 0; 
     transition: opacity 1s ease, transform 1s ease;
     transform: translateY(20px);
     font-weight: bold;
@@ -135,29 +135,29 @@ main {
     margin-bottom: 10px;
     max-width: 700px;
     margin: 0 auto;
-    padding-left: 50px;
+    padding-left: 10px;
 }
 
 
 
 
 .about-img {
-    width: 17.5%; /* Adjust width as necessary or set to auto */
+    width: 17.5%; 
     height: auto;
-    position: relative; /* Fixed to the viewport */
-    left: -100%; /* Start off-screen */
+    position: relative; 
+    left: -100%; 
     transition: opacity 1s ease, left 1s ease;
-    z-index: 2; /* Ensure it's above other content, adjust as needed */
+    z-index: 2; 
     
 }
 
 
 
-/* Sticky navigation bar styles */
+
 .sticky-nav {
     list-style: none;
     display: flex;
-    gap: 20px; /* Adjust the space between the links */
+    gap: 20px; 
     align-items: center;
     padding: 0;
     margin: 0;
@@ -167,19 +167,19 @@ main {
     left: 0;
     width: 100%;
     transition: opacity 0.5s ease, visibility 0.5s ease;
-    opacity: 0; /* Start fully transparent */
-    visibility: hidden; /* Start hidden */
+    opacity: 0; 
+    visibility: hidden; 
     display: flex;
-    justify-content: center; /* Center the nav links */
-     /* Align links vertically */
+    justify-content: center; 
+     
 }
 
 .sticky-nav a {
     text-decoration: none;
-    color: #fff; /* Match original link color */
-    font-weight: bold; /* Match original font weight */
-    font-size: 30px; /* Match original font size */
-    padding: 0 20px; /* Match original padding between links */
+    color: #fff; 
+    font-weight: bold; 
+    font-size: 30px; 
+    padding: 0 20px; 
 }
 
 .sticky-nav li a:hover, sticky-nav a:focus {
@@ -188,8 +188,8 @@ main {
 }
 
 .moved-right {
-    transform: translateX(100%); /* Move to the right */
-    opacity: 0; /* Fade out */
+    transform: translateX(100%); 
+    opacity: 0; 
     transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
@@ -197,11 +197,11 @@ main {
     position: fixed;
     top: 0;
     left: 50%;
-    transform: translateX(-50%); /* Center the nav-links */
-    opacity: 1; /* Fade in */
-    background-color: #4365c4; /* Match the background color */
-    width: 100%; /* Full width */
-    justify-content: center; /* Center the items */
+    transform: translateX(-50%); 
+    opacity: 1; 
+    background-color: #4365c4; 
+    width: 100%; 
+    justify-content: center; 
     padding: 10px 0;
     box-sizing: border-box;
     transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
