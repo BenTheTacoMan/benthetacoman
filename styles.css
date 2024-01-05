@@ -213,6 +213,119 @@ main {
     transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
+.experience-content-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+    margin-top: 25vh;
+    width: 100%;
+}
+
+.work-container, .projects-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem; /* This creates space between the panels */
+    width: 100%;
+
+}
+
+.experience-header {
+    text-align: center;
+    width: 100%; /* Ensures the header takes up the full width */
+    margin-bottom: 20px;
+    color:#ffcc00;
+    font-weight: bold;
+    font-size: 30px;
+    padding-right: 20px;
+}
+
+.panel {
+    background-color: #d7d9f2;
+    border-radius: 8px; /* Rounded corners for panel */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Simple shadow for panels */
+    width: calc(33% - 1rem);; /* Adjust the width to have 2 panels per row, considering the gap */
+    margin-bottom: 1rem; /* Space between rows of panels */
+    padding: 1rem; /* Padding inside the panels */
+    box-sizing: border-box; /* Border-box for including padding and border in width */
+    cursor: pointer; /* Change cursor on hover to indicate it's clickable */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    max-height: 400px;
+    
+}
+
+.panel:hover {
+    transform: translateY(-5px); /* Slightly raise the panel on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+.panel h4 {
+    text-align: center; 
+    font-size: 24px; /* Increase the font size as desired */
+    margin-top: 0.5rem; /* Adjust top margin to suit your design */
+    margin-bottom: 0.5rem; /* Adjust bottom margin to suit your design */
+    color: #4365c4; /* Color of the title text, you can change this */
+    font-weight: bold; /* Make the title bold */
+    line-height: 1.2; /* Adjust line-height for better readability if needed */
+}
+
+.panelimg {
+    width: 100%;
+    height: auto;
+    max-height: 150px;
+    margin: 10px 0;
+}
+.highlight2{
+    color: #4365c4;
+}
+
+.panel p {
+    font-weight: bold; /* Make the text bold */
+    color: #000000; /* Change the color to white for readability */
+    font-size: 18px; /* Adjust the font size as needed */
+    line-height: 1.4; /* Adjust the line height for better readability */
+    margin-top: 1rem; /* Adjust top margin for spacing */
+    margin-bottom: 1rem; /* Adjust bottom margin for spacing */
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.tag {
+    background-color: #eeeeee;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #000000;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .experience-content-section {
+        flex-direction: column;
+    }
+
+    .work-container, .projects-container {
+        width: 100%;
+    }
+
+    .panel {
+        width: 80%;
+        margin: 20px auto;
+    }
+}
+
 
 
 
