@@ -246,7 +246,7 @@ main {
     background-color: #d7d9f2;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: calc(33% - 1rem);;
+    width: calc(33% - 1rem);
     margin-bottom: 1rem;
     padding: 1rem;
     box-sizing: border-box;
@@ -258,6 +258,7 @@ main {
     flex-direction: column;
     max-height: 400px;
     position: relative;
+    
     
 }
 
@@ -279,7 +280,10 @@ main {
 .panelimg {
     max-width: 100%;
     height: auto;
+    max-height: 200px;
     margin: 10px;
+    object-fit: cover;
+    object-position: center;
     
 }
 .highlight2{
@@ -300,6 +304,17 @@ main {
     flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
+}
+.project-panel{
+    max-height: 500px;
+    max-width: calc(40% - 1rem)
+}
+
+.project-img{
+    max-height: 75%;
+    height: auto;
+    object-fit: scale-down;
+    display: block;
 }
 
 .tag {
