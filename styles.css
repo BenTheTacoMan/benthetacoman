@@ -327,6 +327,62 @@ main {
     white-space: nowrap;
 }
 
+
+.contact-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Creates a 2x2 grid layout */
+    gap: 20px; /* Space between the panels */
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.contact-header {
+    grid-column: 1 / -1; /* Makes the header span across all columns */
+    text-align: center;
+    margin-bottom: 30px;
+    text-align: center;
+    width: 100%;
+    color:#ffcc00;
+    font-weight: bold;
+    font-size: 30px;
+    padding-right: 20px;
+
+}
+
+
+
+.contact-panel {
+    width: 15vw;
+    height: 15vw;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    cursor: pointer;
+    border: 5px solid #ffcc00; /* Thicker border with the specified yellow color */
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.2); /* Optional shadow */
+    transition: transform 0.3s ease;
+    background-color: #d7d9f2; /* Optional background color */
+
+}
+
+.contact-panel:hover {
+    transform: scale(1.05);
+}
+
+.contact-img {
+    width: 75px; /* Adjust as needed */
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.contact-text {
+    font-size: 1.6em; /* Slightly larger text */
+    color: #333; /* Darker text color for better readability */
+    margin-top: 5px;
+    font-weight: bold;
+}
+
 @media (max-width: 768px) {
     .experience-content-section {
         flex-direction: column;
