@@ -395,6 +395,7 @@ main {
     font-size: 0.8em; /* Smaller font size */
     color: #000000; /* Lighter color for the small text */
     white-space: pre-wrap;
+    font-weight: bold;
     
 }
 
