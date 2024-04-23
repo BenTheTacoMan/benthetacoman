@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Information Page</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background-color: #4365c4;
+            font-family: 'Dosis', sans-serif;
+        }
+
+        nav {
+            width: 100%;
+            background-color: #4365c4;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        .nav-links li a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 24px;
+        }
+
+        .nav-links li a:hover {
+            color: #ffcc00;
+        }
+
+        .info-box {
+            width: 50%;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #d7d9f2;
+            color: #333;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="index.html#about">about</a></li>
+            <li><a href="index.html#experience">experience</a></li>
+            <li><a href="index.html#contact">contact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="info-box">
+            <h1>Estate Genius Software Developer Internship</h1>
+            <p>under construction! trying to make a comphrensive description of what i did in the role
+                and a pretty page
+                tldr(still a bit long): essentially the problem was current law firm tech was absolute 
+                garbage for the purpose of generating common documents, mainly things like wills.
+                this startup (which was a subsidary of a larger successful company) aimed to fix things
+                and make this process faster and easier. my job was to read legal documents, and basically
+                find every single place that needed to be filled in, or every single clause that needed to be
+                removed or added dependent on client preference, using python for the logic and docassemble markdown for 
+                the actual .docx editing. turnaround was often needed within a week for documents over 30 pages(this was 
+                a ton to write). It was a really fun internship and taught me really what time-constraints are like
+                in the industry.
+            </p>
+        </div>
+    </main>
+</body>
+</html>
