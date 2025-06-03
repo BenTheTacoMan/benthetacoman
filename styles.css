@@ -318,13 +318,14 @@ main {
 }
 
 .tag {
-    background-color: #eeeeee;
-    padding: 5px 15px;
+    background-color: #ffcc00;
+    color: #4365c4;
+    padding: 5px 10px;
     border-radius: 15px;
-    font-size: 1.1em;
+    font-size: 12px;
     font-weight: bold;
-    color: #000000;
-    white-space: nowrap;
+    margin: 2px;
+    display: inline-block;
 }
 
 
@@ -465,6 +466,474 @@ main {
     outline: none;
     border-color: #4365c4;
     box-shadow: 0 0 5px rgba(67, 101, 196, 0.5);
+}
+
+/* Education Panel - Using existing panel style */
+.education-panel {
+    background-color: #d7d9f2;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(90% - 1rem);
+    margin-bottom: 1rem;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.education-panel h4 {
+    text-align: center;
+    font-size: 24px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #4365c4;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.location {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.education-panel p {
+    font-weight: bold;
+    color: #000000;
+    font-size: 18px;
+    line-height: 1.4;
+    margin: 0.5rem 0;
+}
+
+.coursework, .activities {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.coursework h5, .activities h5 {
+    font-size: 18px;
+    color: #4365c4;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.activities p {
+    margin: 0.5rem 0;
+    line-height: 1.4;
+    color: #000000;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Award Panel - Using existing panel style */
+.award-panel {
+    background-color: #d7d9f2;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(45% - 1rem);
+    margin-bottom: 1rem;
+    padding: 1rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.award-panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.award-panel h4 {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #4365c4;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.award-panel p {
+    font-weight: bold;
+    color: #000000;
+    font-size: 16px;
+    line-height: 1.4;
+    margin: 0.5rem 0;
+}
+
+/* Miscellaneous Panel - Using existing panel style */
+.misc-panel {
+    background-color: #d7d9f2;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(40% - 1rem);
+    margin-bottom: 1rem;
+    padding: 1rem;
+    box-sizing: border-box;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.misc-panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.misc-panel h4 {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #4365c4;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.misc-panel p {
+    font-weight: bold;
+    color: #000000;
+    font-size: 16px;
+    line-height: 1.4;
+    margin: 0.5rem 0;
+}
+
+/* Miscellaneous Image */
+.misc-img {
+    max-width: 100%;
+    height: auto;
+    max-height: 120px;
+    margin: 10px;
+    object-fit: contain;
+    object-position: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .education-panel {
+        width: calc(95% - 1rem);
+        padding: 1rem;
+    }
+
+    .award-panel {
+        width: calc(95% - 1rem);
+        margin: 10px auto;
+    }
+
+    .misc-panel {
+        width: calc(95% - 1rem);
+        margin: 10px auto;
+    }
+
+    .education-panel h4 {
+        font-size: 20px;
+    }
+
+    .award-panel h4, .misc-panel h4 {
+        font-size: 18px;
+    }
+}
+
+.degree {
+    font-size: 20px;
+    font-weight: bold;
+    color: #4365c4;
+    margin-bottom: 0.5rem;
+}
+
+.years {
+    font-size: 16px;
+    color: #666;
+    font-weight: normal;
+}
+
+.coursework-title, .activities-title {
+    font-size: 18px;
+    color: #4365c4;
+    font-weight: bold;
+    margin: 1.2rem 0 0.5rem 0;
+    text-align: center;
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    text-align: left;
+}
+
+.activity-list div {
+    font-size: 16px;
+    color: #000;
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+/* Remove award-panel styling since awards are gone */
+.award-panel { display: none !important; }
+
+/* Education About Section (like About Me) */
+.education-about-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 40px 0 30px 0;
+    background: none;
+}
+
+.education-about-text {
+    max-width: 1100px;
+    margin: 0 auto;
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 400;
+    text-align: left;
+    padding: 0 20px;
+}
+
+.edu-main {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.edu-school {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #4365c4;
+    display: block;
+    margin-bottom: 0.2em;
+}
+
+.edu-location {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: #222;
+    margin-bottom: 0.2em;
+    display: block;
+}
+
+.edu-degree {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #4365c4;
+    margin-bottom: 0.5em;
+    display: block;
+}
+
+.edu-years {
+    font-size: 1rem;
+    color: #666;
+    font-weight: normal;
+}
+
+.edu-section {
+    margin: 18px 0 0 0;
+}
+
+.edu-section-title {
+    color: #ffcc00;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-right: 8px;
+}
+
+.edu-courses {
+    color: #222;
+    font-size: 1.05rem;
+    font-weight: 500;
+    display: inline;
+}
+
+.edu-activities {
+    margin: 10px 0 0 0;
+    padding-left: 20px;
+}
+
+.edu-activities li {
+    color: #fff;
+    font-size: 1.05rem;
+    margin-bottom: 0.3em;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+    .education-about-text {
+        font-size: 1.05rem;
+    }
+    .edu-school {
+        font-size: 1.5rem;
+    }
+}
+
+.education-resume-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+    margin-top: 40px;
+}
+
+.education-resume-container {
+    background-color: #d7d9f2;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    width: 100%;
+    padding: 30px;
+    color: #000000;
+    font-weight: 400;
+    text-align: left;
+}
+
+.edu-resume-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #4365c4;
+}
+
+.edu-resume-school {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4365c4;
+}
+
+.edu-resume-location {
+    font-size: 18px;
+    font-style: italic;
+    color: #666;
+}
+
+.edu-resume-degree-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.edu-resume-degree {
+    font-size: 20px;
+    font-weight: bold;
+    color: #4365c4;
+}
+
+.edu-resume-years {
+    font-size: 18px;
+    color: #666;
+}
+
+.edu-resume-section {
+    margin: 25px 0;
+}
+
+.edu-resume-section-title {
+    color: #4365c4;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.edu-resume-courses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.edu-resume-activities {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.edu-resume-activities li {
+    color: #000000;
+    font-size: 16px;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    padding-left: 20px;
+    position: relative;
+}
+
+.edu-resume-activities li::before {
+    content: "•";
+    color: #4365c4;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+@media (max-width: 768px) {
+    .education-resume-section {
+        padding: 40px 15px;
+    }
+
+    .education-resume-container {
+        padding: 20px;
+    }
+
+    .edu-resume-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .edu-resume-degree-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .edu-resume-school,
+    .edu-resume-degree {
+        font-size: 20px;
+    }
+
+    .edu-resume-location,
+    .edu-resume-years {
+        font-size: 16px;
+    }
+}
+
+.edu-resume-courses .tag {
+    background-color: #4365c4;
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 2px;
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.edu-resume-courses .tag:hover {
+    transform: translateY(-2px);
+}
+
+.education-resume-container .highlight {
+    color: #4365c4;
+    font-weight: bold;
 }
 
 
