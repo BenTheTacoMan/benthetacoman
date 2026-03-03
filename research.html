@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adversarial ML Research — Princeton ECE</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background-color: #4365c4;
+            font-family: 'Dosis', sans-serif;
+        }
+        nav {
+            width: 100%;
+            background-color: #4365c4;
+        }
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .nav-links li a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 24px;
+        }
+        .nav-links li a:hover {
+            color: #ffcc00;
+        }
+        .research-content {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .research-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .research-header h1 {
+            color: #ffcc00;
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        .research-header p {
+            color: #fff;
+            font-size: 1.1rem;
+            margin: 5px 0;
+        }
+        .research-panel {
+            background-color: #d7d9f2;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 30px;
+            color: #000;
+        }
+        .research-panel h3 {
+            color: #4365c4;
+            font-size: 1.4rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .research-panel ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+        .research-panel ul li {
+            font-size: 1.05rem;
+            font-weight: bold;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            color: #000;
+        }
+        .research-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="index.html#about">about</a></li>
+            <li><a href="index.html#experience">experience</a></li>
+            <li><a href="index.html#contact">contact</a></li>
+        </ul>
+    </nav>
+    <div class="research-content">
+        <div class="research-header">
+            <h1>adversarial ML research</h1>
+            <p>Princeton University — ECE Department</p>
+            <p><span class="highlight">research intern</span> | jun 2025 – aug 2025</p>
+        </div>
+        <div class="research-panel">
+            <h3>what i worked on</h3>
+            <ul>
+                <li>built end-to-end pipeline for static malware classification using DeepDi, Capstone, and Transformer-based models</li>
+                <li>encoded binaries as bags of disassembled functions with opcode-level tokenization and attention-based aggregation</li>
+                <li>trained models on 100K+ Windows executables with mixed-precision PyTorch and curriculum-based HotFlip adversarial training</li>
+                <li>evaluated robustness under white-box attacks and analyzed model behavior via attention-based interpretability tools</li>
+                <li>published reproducible codebase and conducted extensive transferability testing across architectures and seeds</li>
+            </ul>
+        </div>
+        <div class="research-tags">
+            <span class="tag">python</span>
+            <span class="tag">pytorch</span>
+            <span class="tag">transformers</span>
+            <span class="tag">adversarial ML</span>
+            <span class="tag">malware detection</span>
+            <span class="tag">cybersecurity</span>
+            <span class="tag">deep learning</span>
+        </div>
+    </div>
+</body>
+</html>

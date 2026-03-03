@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Homepage</title>
+    <link rel="icon" type="image/png" href="navbarlogo.png">
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
@@ -28,16 +29,16 @@
             <div class="about-text">
                 <h2 class="about-header">about me</h2>
                 <p>
-                    hi, i'm <span class="highlight">benjamin weber</span> (<span class="highlight">benthetacoman</span>) and i'm an aspiring <span class="highlight">Electrical and Computer Engineer</span> at Princeton University. i'm interested in software, hardware, machine learning, data science, and finance.
+                    hi, i'm <span class="highlight">benjamin weber</span> (<span class="highlight">benthetacoman</span>), an <span class="highlight">Electrical and Computer Engineering</span> student at Princeton University, currently on a leave of absence to build.
                   </p>
                   <p>
-                    i want to work on just about everything, from small circuit design to back-end software development to vehicle dynamics to rocket systems. i have experience in quantitative finance, full-stack development, and automated systems.
+                    i'm interested in software, hardware engineering, machine learning, data science, and finance. i have experience in quantitative finance, full-stack development, adversarial ML research, and automated systems.
                   </p>
                   <p>
-                    i'm best with <span class="highlight">Java</span> and <span class="highlight">Python</span> but have experience with <span class="highlight">R</span>, <span class="highlight">JavaScript</span>, <span class="highlight">Ruby</span>, <span class="highlight">SQL</span>, <span class="highlight">Verilog</span>, <span class="highlight">Q</span>, and <span class="highlight">HTML/CSS</span>. i also have CAD experience with <span class="highlight">Fusion 360</span> and <span class="highlight">Siemens NX</span>.
+                    i'm best with <span class="highlight">Java</span> and <span class="highlight">Python</span> but have experience with <span class="highlight">R</span>, <span class="highlight">JavaScript</span>, <span class="highlight">Ruby</span>, <span class="highlight">SQL</span>, <span class="highlight">Verilog</span>, <span class="highlight">Q</span>, and <span class="highlight">HTML/CSS</span>. i also work with <span class="highlight">PyTorch</span>.
                   </p>
                   <p>
-                    i'm an eagle scout, my favorite show is one piece, and i love to learn about anything that I can
+                    i'm an eagle scout, my favorite show is one piece, and i love to learn about anything that i can
                   </p>
             </div>
         </div>
@@ -45,7 +46,26 @@
 
     <section id="experience" class="experience-content-section">
         <h2 class="experience-header">work experience</h2>
-        <div class="work-container"> 
+        <div class="work-container">
+            <div class="panel">
+                <h4>Neo Semester — San Francisco</h4>
+                <p><span class="highlight2">founder</span>, building a personal startup through the Neo semester in SF program — building and working all day</p>
+                <div class="tags">
+                    <span class="tag">startups</span>
+                    <span class="tag">product development</span>
+                    <span class="tag">san francisco</span>
+                </div>
+            </div>
+            <div class="panel" onclick="location.href='research.html'">
+                <h4>Princeton University ECE Department</h4>
+                <p><span class="highlight2">research intern — adversarial machine learning</span>, building end-to-end pipelines for adversarially robust malware detection using transformer-based models</p>
+                <div class="tags">
+                    <span class="tag">python</span>
+                    <span class="tag">pytorch</span>
+                    <span class="tag">machine learning</span>
+                    <span class="tag">cybersecurity</span>
+                </div>
+            </div>
             <div class="panel" onclick="location.href='circle-wealth.html'">
                 <h4>Circle Wealth Management</h4>
                 <p><span class="highlight2">Full-Stack Software Development Intern</span> developing portfolio analytics software for managing $12 billion in assets</p>
@@ -79,6 +99,16 @@
         </div>
         <h2 class="experience-header">projects</h2>
         <div class="projects-container">
+            <div class="panel project-panel">
+                <h4>Multidimensional Cointegration of SOFR Futures</h4>
+                <p>Princeton ORF445 final project exploring cointegration relationships in SOFR futures term structure for statistical arbitrage</p>
+                <div class="tags">
+                    <span class="tag">R</span>
+                    <span class="tag">kdb+</span>
+                    <span class="tag">time-series</span>
+                    <span class="tag">quantitative finance</span>
+                </div>
+            </div>
             <div class="panel project-panel" onclick="location.href='momentum-trading.html'">
                 <h4>Momentum Trading Algorithm</h4>
                 <p>developed momentum-based trading strategy for DJIA stocks with signal generation, backtesting, and optimization</p>
@@ -142,13 +172,16 @@
                     <span class="tag">Electronic Circuit Design</span>
                     <span class="tag">Information Security</span>
                     <span class="tag">High Frequency Trading</span>
+                    <span class="tag">Computer Architecture</span>
+                    <span class="tag">Autonomous Systems</span>
                 </div>
             </div>
             <div class="edu-resume-section">
                 <div class="edu-resume-section-title">activities:</div>
                 <ul class="edu-resume-activities">
                     <li><span class="highlight2">Paragon Global Investments:</span> quantitative analyst for intercollegiate investment group researching implementable quantitative investment strategies using real funds</li>
-                    <li><span class="highlight2">Princeton Forge:</span> entrepreneurship and startup development club, currently working on a startup involving predictive machine learning, large-scale data analytics and behavioral analysis for advertising</li>
+                    <li><span class="highlight2">Princeton Forge:</span> entrepreneurship and startup development club, currently working with multi-modal ML to tackle property management problems</li>
+                    <li><span class="highlight2">Princeton Poker Club:</span> president, organizing tournaments and managing outreach for sponsorships</li>
                 </ul>
             </div>
         </div>
@@ -156,7 +189,7 @@
 
     <section id="miscellaneous" class="experience-content-section">
         <h2 class="experience-header">miscellaneous</h2>
-        <div class="projects-container">
+        <div class="misc-container">
             <div class="panel misc-panel">
                 <img src="cs2logo.png" alt="Counter Strike 2" class="misc-img">
                 <h4>Competitive Counter Strike</h4>
@@ -196,12 +229,7 @@
                 <p class="contact-small-text">benjaminguyweber@gmail.com</p>
             </a>
     
-            <a href="WeberResumeS.pdf" target="_blank" class="contact-panel">
-                <img src="resumeicon.png" alt="Resume" class="contact-img">
-                <p class="contact-text">resume</p>
-            </a>
-    
-            <a href="https://www.linkedin.com/in/benjamin-weber-048563230/" target="_blank" class="contact-panel">
+            <a href="https://www.linkedin.com/in/benjaminguyweber/" target="_blank" class="contact-panel">
                 <img src="linkedinicon.png" alt="LinkedIn" class="contact-img">
                 <p class="contact-text">linkedin</p>
             </a>
