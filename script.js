@@ -7,10 +7,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const aboutSection = document.getElementById("about");
   const aboutHeader = document.querySelector(".about-header");
   const aboutText = document.querySelector(".about-text");
+  const hamburger = document.getElementById("hamburger");
 
   stickyNav.classList.add("sticky-nav");
-  stickyNav.innerHTML = navLinks.innerHTML; // Clone the navigation links
+  stickyNav.innerHTML = navLinks.innerHTML;
   document.body.appendChild(stickyNav);
+
+  // Hamburger toggle
+  hamburger.addEventListener("click", () => {
+    hamburger.classList.toggle("open");
+    navLinks.classList.toggle("open");
+  });
+
+  // Close mobile nav when a link is tapped
+  navLinks.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      hamburger.classList.remove("open");
+      navLinks.classList.remove("open");
+    });
+  });
 
   function updateContent(scrollY) {
     const headerBottom = header.offsetTop + header.offsetHeight;
@@ -42,7 +57,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // And move the image in from the left
       aboutImg.style.opacity = 1;
-      aboutImg.style.left = "8.5%";
+      if (window.innerWidth > 768) {
+        aboutImg.style.left = "8.5%";
+      }
     } else if (scrollY > aboutTop - window.innerHeight * 1.5) {
       // When user is approaching the about section, show text with some transparency
       aboutHeader.style.opacity = 0.5;

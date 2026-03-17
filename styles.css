@@ -518,19 +518,167 @@ sticky-nav a:focus {
   font-weight: 500;
 }
 
+/* Hamburger button — hidden on desktop */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 200;
+}
+
+.hamburger span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background: #e8e0d0;
+  margin: 5px 0;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
 @media (max-width: 768px) {
-  .experience-content-section {
-    flex-direction: column;
+  /* Hamburger visible on mobile */
+  .hamburger {
+    display: block;
   }
 
-  .work-container,
+  /* Header — stack vertically, shrink */
+  .header-container {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 16px;
+  }
+
+  .logo-img {
+    width: 100px;
+  }
+
+  .logo-text {
+    font-size: 22px;
+    margin-left: 10px;
+    margin-right: 0;
+  }
+
+  /* Nav links — mobile dropdown */
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links li a {
+    font-size: 22px;
+  }
+
+  /* Sticky nav — smaller text */
+  .sticky-nav {
+    padding: 8px 0;
+  }
+
+  .sticky-nav a {
+    font-size: 18px;
+    padding: 0 10px;
+  }
+
+  /* About section — stack vertically */
+  .about-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px 0;
+  }
+
+  .about-img {
+    width: 40%;
+    position: relative;
+    left: 0 !important;
+    margin-bottom: 20px;
+  }
+
+  .about-header {
+    padding-right: 0;
+    font-size: 24px;
+  }
+
+  .about-text {
+    font-size: 16px;
+    padding: 0 10px;
+    max-width: 100%;
+  }
+
+  /* Experience section */
+  .experience-content-section {
+    flex-direction: column;
+    padding: 20px 0;
+    margin-top: 4vh;
+  }
+
+  .experience-header {
+    font-size: 24px;
+    padding-right: 0;
+  }
+
+  .work-container {
+    max-width: 100%;
+    padding: 0 16px;
+  }
+
+  .work-company {
+    font-size: 16px;
+  }
+
+  /* Projects — single column */
   .projects-container {
     columns: 1;
+    max-width: 100%;
+    padding: 0 16px;
   }
 
   .panel {
-    width: 80%;
-    margin: 20px auto;
+    width: 100%;
+    margin: 0 0 1rem 0;
+    box-sizing: border-box;
+  }
+
+  /* Misc + contact grid — stack */
+  .misc-contact-grid {
+    flex-direction: column;
+    max-width: 100%;
+    padding: 0 16px;
+  }
+
+  .misc-entry,
+  .contact-entry {
+    flex: unset;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .contact-handle {
+    font-size: 11px;
+    word-break: break-all;
   }
 }
 
