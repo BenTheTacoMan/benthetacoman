@@ -2,75 +2,171 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Hoop House Farm</title>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>hoop house farm · Ben Weber</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@800&family=Zen+Kaku+Gothic+New:wght@400;700&family=IBM+Plex+Mono:wght@500&family=Caveat:wght@600&display=swap" rel="stylesheet" />
     <style>
-      body,
-      html {
+      :root {
+        --paper: #eee6d2;
+        --ink: #14301f;
+        --green: #2d5a37;
+        --sage: #84997d;
+        --red: #c7422c;
+        --cross: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cg fill='%232d5a37'%3E%3Crect x='11' y='2' width='2' height='6'/%3E%3Crect x='11' y='16' width='2' height='6'/%3E%3Crect x='2' y='11' width='6' height='2'/%3E%3Crect x='16' y='11' width='6' height='2'/%3E%3Crect x='11' y='11' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E") 12 12, crosshair;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
         margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        background-color: #3b5cb8;
-        font-family: "Dosis", sans-serif;
+        min-height: 100vh;
+        color: var(--ink);
+        background: var(--paper);
+        font-family: "Zen Kaku Gothic New", sans-serif;
+        cursor: var(--cross);
       }
-      nav {
-        width: 100%;
-        background: transparent;
+
+      /* paper fibre */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 50;
+        opacity: 0.35;
+        mix-blend-mode: multiply;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .25 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
       }
-      .nav-links {
-        display: flex;
-        justify-content: center;
-        padding: 10px 0;
+
+      a {
+        color: inherit;
+        cursor: pointer;
       }
-      .nav-links li a {
-        color: #e8e0d0;
+
+      main {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 90px max(24px, 6vw) 60px;
+      }
+
+      .back {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
         text-decoration: none;
-        margin: 0 15px;
-        font-size: 24px;
       }
-      .nav-links li a:hover {
-        color: #ffcc00;
+
+      .back:hover {
+        color: var(--red);
       }
-      .page-content {
-        width: 100%;
+
+      .kind {
+        margin: 60px 0 6px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        color: var(--red);
+      }
+
+      .head {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        min-height: 70vh;
+        justify-content: space-between;
         gap: 24px;
       }
-      .page-title {
-        color: #e8e0d0;
-        font-size: 2.2rem;
-        font-weight: bold;
+
+      h1 {
+        margin: 0;
+        font-family: "Shippori Mincho B1", serif;
+        font-weight: 800;
+        font-size: clamp(48px, 7vw, 96px);
+        line-height: 0.95;
       }
-      .construction-banner {
-        background-color: #e8e0d0;
-        color: #2a3a6b;
-        padding: 16px 32px;
-        border: 2px solid #2a3a6b;
-        border-radius: 0;
-        font-size: 1.4rem;
-        font-weight: bold;
-        box-shadow: 4px 4px 0 #1a2548;
+
+      .logo {
+        max-width: 150px;
+        max-height: 80px;
+        object-fit: contain;
+      }
+
+      .brush {
+        display: block;
+        width: min(420px, 80%);
+        height: 26px;
+        margin: 14px 0 34px;
+      }
+
+      .lede {
+        max-width: 640px;
+        margin: 0 0 40px;
+        font-size: clamp(18px, 1.7vw, 22px);
+        line-height: 1.6;
+      }
+
+      /* photos, taped down */
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 34px 28px;
+        margin-bottom: 40px;
+      }
+
+      .gallery figure {
+        position: relative;
+        margin: 0;
+        padding: 9px 9px 12px;
+        background: #f8f3e6;
+        box-shadow: 0 16px 30px rgba(20, 48, 31, 0.18);
+        transform: rotate(var(--r, 0deg));
+      }
+
+      .gallery figure::before {
+        content: "";
+        position: absolute;
+        top: -11px;
+        left: 50%;
+        width: 80px;
+        height: 22px;
+        transform: translateX(-50%) rotate(-3deg);
+        background: rgba(132, 153, 125, 0.55);
+      }
+
+      .gallery img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+      }
+
+      .soon {
+        display: inline-block;
+        padding: 10px 16px;
+        background: #fbf8ef;
+        font-family: "Caveat", cursive;
+        font-size: 26px;
+        box-shadow: 0 10px 20px rgba(20, 48, 31, 0.12);
+        transform: rotate(-1.5deg);
+      }
+
+      .credit {
+        margin-top: 50px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        opacity: 0.6;
       }
     </style>
   </head>
   <body>
-    <nav>
-      <ul class="nav-links">
-        <li><a href="index.html#about">about</a></li>
-        <li><a href="index.html#experience">experience</a></li>
-        <li><a href="index.html#contact">contact</a></li>
-      </ul>
-    </nav>
-    <div class="page-content">
-      <div class="page-title">Hoop House Farm</div>
-      <div class="construction-banner">under construction</div>
-    </div>
+    <main>
+      <a class="back" href="index.html#projects">← ben weber</a>
+      <p class="kind">side project</p>
+      <div class="head"><h1>hoop house farm</h1></div>
+      <svg class="brush" viewBox="0 0 360 26" preserveAspectRatio="none" aria-hidden="true"><path d="M0 13 C40 6 80 5 120 7 C170 9 220 5 270 8 C310 10 340 11 360 13 C330 18 290 20 250 19 C200 18 150 21 100 19 C60 18 25 17 0 13 Z" fill="#14301f" /></svg>
+      <p class="lede">a small farm we built on a field at my high school: aeroponic towers, dutch buckets and a few other sustainable ways to grow food. it was never a finished operation, just a fun build, and we donated it to the school when we were done.</p>
+      <div class="gallery"><figure style="--r: -1.5deg"><img src="images/projects/hoop-2576.jpg" alt="the hoop house farm" loading="lazy" /></figure><figure style="--r: 1.2deg"><img src="images/projects/hoop-2565.jpg" alt="the hoop house farm" loading="lazy" /></figure><figure style="--r: -0.8deg"><img src="images/projects/hoop-2574.jpg" alt="the hoop house farm" loading="lazy" /></figure><figure style="--r: 1.4deg"><img src="images/projects/hoop-3168.jpg" alt="the hoop house farm" loading="lazy" /></figure><figure style="--r: -1.1deg"><img src="images/projects/hoop-2582.jpg" alt="the hoop house farm" loading="lazy" /></figure><figure style="--r: 0.9deg"><img src="images/projects/hoop-2584.jpg" alt="the hoop house farm" loading="lazy" /></figure></div>
+      
+    </main>
   </body>
 </html>

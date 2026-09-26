@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>drone challenge · Ben Weber</title>
+    <title>sofr cointegration · Ben Weber</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@800&family=Zen+Kaku+Gothic+New:wght@400;700&family=IBM+Plex+Mono:wght@500&family=Caveat:wght@600&display=swap" rel="stylesheet" />
     <style>
@@ -156,17 +156,64 @@
         font-size: 11px;
         opacity: 0.6;
       }
+    
+      .did {
+        max-width: 680px;
+        margin: 0 0 40px;
+        padding-left: 20px;
+        font-size: 17px;
+        line-height: 1.7;
+      }
+
+      .did li {
+        margin-bottom: 8px;
+      }
+
+      table {
+        margin: 0 0 44px;
+        border-collapse: collapse;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 14px;
+      }
+
+      th,
+      td {
+        padding: 8px 22px 8px 0;
+        text-align: left;
+        border-bottom: 1.5px solid rgba(20, 48, 31, 0.2);
+      }
+
+      th {
+        font-weight: 500;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        color: var(--red);
+      }
     </style>
   </head>
   <body>
     <main>
       <a class="back" href="index.html#projects">← ben weber</a>
-      <p class="kind">side project</p>
-      <div class="head"><h1>drone challenge</h1></div>
+      <p class="kind">side project · orf 445, may 2025</p>
+      <div class="head"><h1>sofr cointegration</h1></div>
       <svg class="brush" viewBox="0 0 360 26" preserveAspectRatio="none" aria-hidden="true"><path d="M0 13 C40 6 80 5 120 7 C170 9 220 5 270 8 C310 10 340 11 360 13 C330 18 290 20 250 19 C200 18 150 21 100 19 C60 18 25 17 0 13 Z" fill="#14301f" /></svg>
-      <p class="lede">a technology student association challenge. i led the team that designed and built a fully working open-source quadcopter.</p>
-      <div class="gallery"><figure style="--r: -1.5deg"><img src="images/projects/drone.jpg" alt="the quadcopter on a workbench" loading="lazy" /></figure></div>
-      
+      <p class="lede">my final for orf 445 at princeton: a multidimensional cointegration across sofr futures, to see if eight related contracts predict each other's next move better than two do.</p>
+      <ul class="did">
+        <li>took the eight most-traded 3-month sofr futures (sr3) on february 5, 2024, from the course's kdb+ server, and sampled their mid prices every minute.</li>
+        <li>tracked the eight prices with an exponentially weighted mean and covariance, with a one-hour time constant.</li>
+        <li>projected each minute onto the first principal component to get a fair value for every contract. the gap between fair value and price was the signal.</li>
+        <li>regressed the price change 1, 3, 6 and 12 minutes ahead on that signal, and compared it to my two-contract version from an earlier homework.</li>
+      </ul>
+      <table>
+        <tr><th>horizon</th><th>2 contracts β</th><th>8 contracts β</th></tr>
+        <tr><td>1 min</td><td>0.117</td><td>0.151</td></tr>
+        <tr><td>3 min</td><td>0.155</td><td>0.171</td></tr>
+        <tr><td>6 min</td><td>0.149</td><td>0.150</td></tr>
+        <tr><td>12 min</td><td>0.061</td><td>0.076</td></tr>
+      </table>
+      <p class="lede">eight contracts beat two at every horizon. the fit stayed weak (r² of 0.03 at best), and the signal faded as the horizon got longer.</p>
+      <div class="gallery"><figure style="--r: -1.5deg"><img src="images/projects/boerse.jpg" alt="traders on an exchange floor, 1988" loading="lazy" /></figure></div>
+      <p class="credit">photo: frankfurt stock exchange, june 1988, bundesarchiv b 145 bild-f078969-0007, cc by-sa 3.0 de, via wikimedia commons.</p>
     </main>
   </body>
 </html>

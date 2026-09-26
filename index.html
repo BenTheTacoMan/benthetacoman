@@ -3,241 +3,1936 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Homepage</title>
-    <link rel="icon" type="image/png" href="navbarlogo.png" />
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <title>Ben Weber</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;800&family=Zen+Kaku+Gothic+New:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --paper: #eee6d2;
+        --ink: #14301f;
+        --green: #2d5a37;
+        --sage: #84997d;
+        --red: #c7422c;
+        --orange: #e0673a;
+        --gold: #c99a3b;
+        --serif: "Shippori Mincho B1", serif;
+        --sans: "Zen Kaku Gothic New", sans-serif;
+        --mono: "IBM Plex Mono", monospace;
+        --hand: "Caveat", cursive;
+        /* a small green crosshair, cs style */
+        --cross: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cg fill='%232d5a37'%3E%3Crect x='11' y='2' width='2' height='6'/%3E%3Crect x='11' y='16' width='2' height='6'/%3E%3Crect x='2' y='11' width='6' height='2'/%3E%3Crect x='16' y='11' width='6' height='2'/%3E%3Crect x='11' y='11' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E") 12 12, crosshair;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        font-family: var(--sans);
+        background: var(--paper);
+        cursor: var(--cross);
+        overflow-x: hidden;
+      }
+
+      /* paper fibre texture */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 50;
+        opacity: 0.35;
+        mix-blend-mode: multiply;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .25 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      /* tv static over the whole page: one noise tile, jumped around on the compositor */
+      .grain {
+        position: fixed;
+        inset: -120px;
+        pointer-events: none;
+        z-index: 49;
+        opacity: 0.09;
+        mix-blend-mode: multiply;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)'/%3E%3C/svg%3E");
+        will-change: transform;
+        animation: grain 0.5s steps(1) infinite;
+      }
+
+      @keyframes grain {
+        0% {
+          transform: translate(0, 0);
+        }
+        25% {
+          transform: translate(-61px, 37px);
+        }
+        50% {
+          transform: translate(43px, -77px);
+        }
+        75% {
+          transform: translate(-29px, 91px);
+        }
+      }
+
+      a {
+        color: inherit;
+      }
+
+      a,
+      button,
+      [role="button"],
+      [data-open] {
+        cursor: pointer;
+      }
+
+      /* xp bar: one bar for each different thing you click */
+      .xp {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 70;
+        height: 9px;
+        display: flex;
+        gap: 2px;
+        padding: 2px;
+        background: rgba(20, 48, 31, 0.9);
+      }
+
+      .xp i {
+        flex: 1;
+        position: relative;
+        background: rgba(132, 153, 125, 0.22);
+        overflow: hidden;
+      }
+
+      .xp i::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        width: var(--f, 0%);
+        background: var(--sage);
+        box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.3);
+        transition: width 0.5s cubic-bezier(0.3, 1.4, 0.5, 1);
+      }
+
+      /* killfeed: only reacts to what the visitor does */
+      .feed {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 70;
+        display: grid;
+        gap: 3px;
+        justify-items: end;
+        pointer-events: none;
+      }
+
+      .feed div {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 4px 9px;
+        font-family: var(--sans);
+        font-weight: 700;
+        font-size: 13px;
+        color: #f2f2f2;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        border: 1.5px solid #d64a3a;
+        border-radius: 2px;
+        animation: feedIn 0.25s both;
+        transition: opacity 0.5s;
+      }
+
+      .feed div.out {
+        opacity: 0;
+      }
+
+      .feed .ct {
+        color: #9cc4ee;
+      }
+
+      .feed .t {
+        color: #e9c46a;
+      }
+
+      .feed svg {
+        height: 14px;
+        fill: #f2f2f2;
+      }
+
+      @keyframes feedIn {
+        from {
+          opacity: 0;
+          transform: translateX(16px);
+        }
+      }
+
+      /* ---------- hero ---------- */
+      .hero {
+        position: relative;
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr min(540px, 40vw);
+        align-items: center;
+        gap: 4vw;
+        padding: 80px max(24px, 6vw) 150px;
+      }
+
+      .hero > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .name h1 {
+        font-family: var(--serif);
+        font-weight: 800;
+        font-size: clamp(80px, 11vw, 176px);
+        line-height: 0.88;
+        margin: 0 0 26px;
+        letter-spacing: -0.02em;
+        filter: url(#boil);
+      }
+
+      .name p {
+        font-size: clamp(18px, 1.6vw, 23px);
+        line-height: 1.6;
+        max-width: 520px;
+        margin: 0;
+      }
+
+      .name p b {
+        color: var(--green);
+        border-bottom: 2px solid var(--sage);
+      }
+
+      /* red paint splotch behind the crate */
+      .splat {
+        position: absolute !important;
+        z-index: 0 !important;
+        right: -2vw;
+        top: 50%;
+        width: min(620px, 46vw);
+        transform: translateY(-56%);
+        aspect-ratio: 1;
+        pointer-events: none;
+      }
+
+      .splat svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      .bub {
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: var(--s);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #cc5640;
+        transform: translate(-50%, -50%) scale(0);
+        animation: var(--a, bubble) var(--dur) cubic-bezier(0.3, 0, 0.6, 1) var(--d) infinite;
+        will-change: transform;
+      }
+
+      /* a bubble swells out of the paint, rises a little, and pops */
+      @keyframes bubble {
+        0% {
+          transform: translate(-50%, -50%) scale(0.2);
+        }
+        62% {
+          transform: translate(-50%, calc(-50% - var(--rise))) scale(1);
+        }
+        70% {
+          transform: translate(-50%, calc(-50% - var(--rise))) scale(1.18);
+        }
+        73%,
+        100% {
+          transform: translate(-50%, calc(-50% - var(--rise))) scale(0);
+        }
+      }
+
+      /* the edge heaves like it's simmering */
+      @keyframes simmer {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(0.55);
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+
+      .crate {
+        position: relative;
+        z-index: 2 !important;
+        width: min(540px, 40vw);
+        justify-self: end;
+      }
+
+      .stage {
+        position: relative;
+        aspect-ratio: 1.6 / 1;
+      }
+
+      .sleeve {
+        position: absolute;
+        left: 0;
+        top: 8%;
+        width: 54%;
+        aspect-ratio: 1;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+        background: #ddd;
+        box-shadow: 0 18px 30px rgba(20, 48, 31, 0.3), inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+        transition: transform 0.55s cubic-bezier(0.3, 1.2, 0.4, 1), filter 0.3s;
+        overflow: hidden;
+      }
+
+      .sleeve img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* worn cardboard edges */
+      .sleeve::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        box-shadow: inset 0 0 18px rgba(60, 40, 20, 0.25);
+      }
+
+      .vinyl {
+        position: absolute;
+        left: 38%;
+        top: 8%;
+        width: 56%;
+        aspect-ratio: 1;
+        cursor: pointer;
+        transition: transform 0.45s cubic-bezier(0.5, 0, 0.3, 1);
+      }
+
+      .vinyl.tucked {
+        transform: translateX(-48%);
+      }
+
+      .disc {
+        will-change: transform;
+        --v1: #16241a;
+        --v2: #0f1a12;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle, transparent 0 31%, rgba(255, 255, 255, 0.06) 31.5% 32%, transparent 32.5%),
+          repeating-radial-gradient(circle, var(--v1) 0 2px, var(--v2) 2px 4px);
+        box-shadow: 0 20px 40px rgba(20, 48, 31, 0.35), inset 0 0 0 6px rgba(0, 0, 0, 0.35);
+        position: relative;
+      }
+
+      /* the real centre label, photographed from each pressing */
+      .label {
+        position: absolute;
+        inset: 32%;
+        border-radius: 50%;
+        background: #222 var(--img) center / cover;
+        box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.25);
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+      }
+
+      /* spindle */
+      .label::after {
+        content: "";
+        width: 8%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #fff, #b9b9b9 45%, #666);
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.35);
+      }
+
+
+      /* the strip along the bottom of the hero: one hand-drawn ink wave */
+      .band {
+        position: absolute !important;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 90px;
+        pointer-events: none;
+      }
+
+      .band svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      /* hero: a big crate pulled in toward the name */
+      .hero {
+        min-height: 88vh;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+        gap: 2vw;
+        padding-bottom: 140px;
+      }
+
+      .hero .crate {
+        width: min(720px, 50vw);
+        justify-self: center;
+      }
+
+      .hero .splat {
+        right: -6vw;
+        width: min(860px, 60vw);
+      }
+
+
+      /* ---------- the arrows under the squiggle ---------- */
+      .arrows {
+        position: absolute !important;
+        left: 50%;
+        bottom: -34px;
+        z-index: 3 !important;
+        width: 120px;
+        transform: translateX(-50%);
+        animation: nudge 1.8s ease-in-out infinite;
+      }
+
+      .arrows svg {
+        display: block;
+        width: 100%;
+        overflow: visible;
+      }
+
+      @keyframes nudge {
+        50% {
+          transform: translate(-50%, 8px);
+        }
+      }
+
+      /* ---------- sections ---------- */
+      section {
+        position: relative;
+        padding: 110px max(24px, 8vw);
+      }
+
+      section.dark {
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      .sh {
+        position: relative;
+        display: flex;
+        align-items: baseline;
+        gap: 18px;
+        margin-bottom: 44px;
+        flex-wrap: wrap;
+      }
+
+      .sh h2 {
+        position: relative;
+        isolation: isolate;
+        margin: 0;
+        font-family: var(--serif);
+        font-weight: 800;
+        font-size: clamp(58px, 7.4vw, 118px);
+        line-height: 0.9;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        filter: url(#boil);
+      }
+
+      /* the red plate, printed a little off register */
+      .sh h2::before {
+        content: attr(data-t);
+        position: absolute;
+        left: 0.05em;
+        top: 0.04em;
+        z-index: -1;
+        color: var(--red);
+        opacity: 0.8;
+        white-space: nowrap;
+      }
+
+      .sh .kick {
+        width: 100%;
+        font-size: 17px;
+        opacity: 0.75;
+        margin: 4px 0 0;
+      }
+
+      /* a strip of halftone under each title */
+      .mesh {
+        display: block;
+        flex: 1;
+        min-width: 140px;
+        max-width: 480px;
+        height: 26px;
+        align-self: center;
+        background: radial-gradient(circle, var(--green) 40%, transparent 46%) 0 0 / 9px 9px;
+        -webkit-mask: linear-gradient(90deg, #000 25%, transparent);
+        mask: linear-gradient(90deg, #000 25%, transparent);
+      }
+
+      .rise {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.8s, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .rise.shown {
+        opacity: 1;
+        transform: none;
+      }
+
+      .rise.shown .sh h2 {
+        animation: cut 0.45s steps(3) both;
+      }
+
+      .rise .mesh {
+        clip-path: inset(0 100% 0 0);
+        transition: clip-path 0.8s cubic-bezier(0.7, 0, 0.3, 1) 0.2s;
+      }
+
+      .rise.shown .mesh {
+        clip-path: inset(0 0 0 0);
+      }
+
+      @keyframes cut {
+        0% {
+          opacity: 0;
+          transform: translate(-16px, 5px) rotate(-2deg);
+        }
+        34% {
+          opacity: 1;
+          transform: translate(7px, -3px) rotate(1deg);
+        }
+        67% {
+          transform: translate(-3px, 2px);
+        }
+        100% {
+          transform: none;
+        }
+      }
+
+      /* ---------- work: stickers slapped on the page ---------- */
+      .slaps {
+        position: relative;
+        z-index: 1;
+        width: min(560px, 100%);
+        aspect-ratio: 1.15;
+      }
+
+      .slap {
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: var(--w);
+        border: 0;
+        padding: 0;
+        background: none;
+        transform: rotate(var(--r));
+        transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+      }
+
+      .slap:hover {
+        z-index: 3;
+        transform: rotate(0deg) translateY(-8px) scale(1.04);
+      }
+
+      /* die-cut: a white edge that follows the shape, then a shadow on the paper */
+      .slap img,
+      .slap .dash {
+        display: block;
+        width: 100%;
+        filter: drop-shadow(4px 0 0 #fbf8f0) drop-shadow(-4px 0 0 #fbf8f0) drop-shadow(0 4px 0 #fbf8f0) drop-shadow(0 -4px 0 #fbf8f0) drop-shadow(4px 8px 6px rgba(20, 48, 31, 0.35));
+      }
+
+      /* kiss-cut circle for the logos that aren't a shape */
+      .slap.round img {
+        aspect-ratio: 1;
+        object-fit: contain;
+        padding: 14%;
+        border-radius: 50%;
+        background: #fbf8f0;
+        filter: drop-shadow(4px 8px 6px rgba(20, 48, 31, 0.35));
+      }
+
+      /* founder: three dashes, it isn't out yet */
+      .dash {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 9%;
+        aspect-ratio: 1.7;
+        border-radius: 14px;
+        background: #161616;
+      }
+
+      .dash i {
+        width: 20%;
+        height: 12%;
+        border-radius: 3px;
+        background: #fbf8f0;
+      }
+
+      /* ---------- the long scroll: one composed spread per thing ---------- */
+      .sec {
+        min-height: 88vh;
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        align-items: center;
+        gap: 6vw;
+        --soft: 0 18px 30px rgba(20, 48, 31, 0.28), 0 3px 6px rgba(20, 48, 31, 0.2);
+      }
+
+      .sec.flip .copy {
+        order: 2;
+      }
+
+      .sec .note {
+        max-width: 420px;
+        margin: 0;
+        font-size: clamp(17px, 1.5vw, 21px);
+        line-height: 1.6;
+        opacity: 0.8;
+      }
+
+      .stagebox {
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-height: 520px;
+      }
+
+      /* a paint blot behind each object, like the one behind the records */
+      .blot {
+        position: absolute;
+        z-index: 0;
+        width: min(820px, 130%);
+        aspect-ratio: 1;
+        pointer-events: none;
+        overflow: visible;
+      }
+
+      .small .blot {
+        width: min(560px, 100%);
+      }
+
+      .stagebox > button {
+        position: relative;
+        z-index: 1;
+        border: 0;
+        padding: 0;
+        background: none;
+        transition: transform 0.4s cubic-bezier(0.3, 1.4, 0.5, 1);
+      }
+
+      .stagebox > button:hover {
+        transform: rotate(var(--r, 0deg)) translateY(-10px);
+      }
+
+      /* side projects: typed index cards, fanned like a hand */
+      .proj {
+        display: block;
+        min-height: auto;
+      }
+
+      .cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 34px 26px;
+        padding: 30px 0 10px;
+      }
+
+      .icard {
+        position: relative;
+        width: 250px;
+        min-height: 160px;
+        padding: 38px 20px 18px;
+        text-decoration: none;
+        background:
+          linear-gradient(transparent 28px, rgba(199, 66, 44, 0.45) 28px 30px, transparent 30px),
+          repeating-linear-gradient(transparent 0 23px, rgba(60, 100, 150, 0.22) 23px 24px) 0 30px,
+          #fbf8ef;
+        box-shadow: var(--soft);
+        transform: rotate(var(--r));
+        transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+        font-family: var(--mono);
+        font-size: 13px;
+        line-height: 24px;
+      }
+
+      .icard:hover {
+        transform: rotate(0deg) translateY(-10px);
+      }
+
+      .icard b {
+        position: absolute;
+        left: 20px;
+        top: 4px;
+        font-family: var(--serif);
+        font-weight: 800;
+        font-size: 19px;
+      }
+
+      .icard img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        margin-bottom: 8px;
+        padding: 5px;
+        background: #fff;
+        box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+        transform: rotate(-2deg);
+      }
+
+      /* tape */
+      .icard::before {
+        content: "";
+        position: absolute;
+        top: -11px;
+        left: 50%;
+        width: 70px;
+        height: 22px;
+        transform: translateX(-50%) rotate(var(--tr, -3deg));
+        background: rgba(132, 153, 125, 0.55);
+      }
+
+      .icard:nth-child(even)::before {
+        background: rgba(224, 103, 58, 0.45);
+      }
+
+      .squig {
+        height: 60px;
+        margin: 0 max(24px, 4vw);
+      }
+
+      .squig svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      /* ---------- pinned: a corkboard of photos and stickers ---------- */
+      .board {
+        max-width: 1240px;
+        margin: 10px auto 0;
+        padding: 18px;
+        border-radius: 6px;
+        background:
+          linear-gradient(135deg, rgba(255, 245, 220, 0.25), transparent 40%, rgba(0, 0, 0, 0.15)),
+          url("images/desk/oak.jpg") 0 0 / 420px;
+        box-shadow: 0 22px 40px rgba(20, 48, 31, 0.3), 0 4px 8px rgba(20, 48, 31, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+      }
+
+      /* cork: warm brown, dark granules and light flecks */
+      .cork {
+        position: relative;
+        aspect-ratio: 2.05;
+        background:
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='d'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .19 0 0 0 0 .08 -7 0 0 0 4'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23d)'/%3E%3C/svg%3E"),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='l'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='1' seed='9'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .8 0 0 0 0 .6 0 -9 0 0 5.3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23l)'/%3E%3C/svg%3E"),
+          radial-gradient(ellipse at 30% 25%, #c99a66, #ad7c4b 70%);
+        box-shadow: inset 0 0 30px rgba(60, 35, 10, 0.5), inset 0 0 0 2px rgba(60, 35, 10, 0.35);
+      }
+
+      .pin {
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: var(--w);
+        border: 0;
+        padding: 0;
+        background: none;
+        transform: rotate(var(--r));
+        transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+      }
+
+      .pin:hover {
+        transform: rotate(0deg) scale(1.04);
+        z-index: 5;
+      }
+
+      /* a small brass thumbtack */
+      .tack {
+        position: absolute;
+        z-index: 2;
+        top: -5px;
+        left: 50%;
+        width: 13px;
+        height: 13px;
+        margin-left: -6.5px;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle at 36% 32%, #fff4cf 0 14%, transparent 34%),
+          radial-gradient(circle, #c9a24c 0 52%, #a17c2c 60%, #6f5215 100%);
+        box-shadow: 2px 3px 2px rgba(40, 20, 5, 0.5), inset 0 0 0 1px rgba(80, 55, 10, 0.5);
+      }
+
+      .pin.photo {
+        padding: 7px 7px 26px;
+        background: #fbf8f1;
+        box-shadow: 6px 10px 14px rgba(40, 20, 5, 0.4), 1px 2px 3px rgba(40, 20, 5, 0.3);
+      }
+
+      /* pixelated until you pick it up */
+      .pin.photo img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 0.4s;
+      }
+
+      .pin.photo canvas {
+        position: absolute;
+        left: 7px;
+        top: 7px;
+        width: calc(100% - 14px);
+        aspect-ratio: 4 / 5;
+        image-rendering: pixelated;
+        transition: opacity 0.4s;
+      }
+
+      .pin.photo.seen img {
+        opacity: 1;
+      }
+
+      .pin.photo.seen canvas {
+        opacity: 0;
+      }
+
+      .pin.photo span {
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        bottom: 4px;
+        font-family: var(--hand);
+        font-size: 17px;
+        line-height: 1.1;
+        color: #2a2a2a;
+        text-align: center;
+      }
+
+      /* the holos, stuck straight onto the cork */
+      .pin.holo {
+        --mx: 50%;
+        --my: 50%;
+      }
+
+      /* die-cut: a thin white edge all round, then the shadow on the cork */
+      .pin.holo img {
+        display: block;
+        width: 100%;
+        filter: drop-shadow(1.6px 0 0 #f7f4ec) drop-shadow(-1.6px 0 0 #f7f4ec) drop-shadow(0 1.6px 0 #f7f4ec) drop-shadow(0 -1.6px 0 #f7f4ec) drop-shadow(3px 5px 3px rgba(40, 20, 5, 0.45));
+      }
+
+      .pin.vinylsticker img {
+        display: block;
+        width: 100%;
+        filter: drop-shadow(2.5px 0 0 #fbf8f0) drop-shadow(-2.5px 0 0 #fbf8f0) drop-shadow(0 2.5px 0 #fbf8f0) drop-shadow(0 -2.5px 0 #fbf8f0) drop-shadow(3px 5px 3px rgba(40, 20, 5, 0.45));
+      }
+
+      .pin.holo .shine {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        -webkit-mask: var(--src) center / contain no-repeat;
+        mask: var(--src) center / contain no-repeat;
+        mix-blend-mode: color-dodge;
+        opacity: 0.4;
+        background:
+          radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.8), transparent 35%),
+          linear-gradient(115deg, #ff6b6b 0%, #ffd93d 18%, #6bff95 36%, #4dd6ff 54%, #b36bff 72%, #ff6bd6 90%);
+        background-size: 100% 100%, 260% 260%;
+        background-position: center, var(--mx) var(--my);
+      }
+
+      /* ---------- the straw hat, resting on "say hi" ---------- */
+      #contact .sh h2 {
+        position: relative;
+      }
+
+      .hat {
+        position: absolute;
+        left: -58px;
+        top: -74px;
+        width: 150px;
+        border: 0;
+        padding: 0;
+        background: none;
+        transform: rotate(-14deg);
+        filter: drop-shadow(5px 9px 6px rgba(20, 48, 31, 0.35));
+        transition: transform 0.4s cubic-bezier(0.3, 1.6, 0.5, 1);
+      }
+
+      .hat:hover {
+        transform: rotate(-22deg) translateY(-8px);
+      }
+
+      .hat svg {
+        display: block;
+        width: 100%;
+      }
+
+      /* music volume, top left */
+      .vol {
+        position: fixed;
+        z-index: 70;
+        top: 16px;
+        left: 16px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 9px;
+        border-radius: 20px;
+        background: rgba(238, 230, 210, 0.85);
+        color: var(--green);
+        opacity: 0.6;
+        transition: opacity 0.2s;
+      }
+
+      .vol:hover,
+      .vol:focus-within {
+        opacity: 1;
+      }
+
+      .vol svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .vol input {
+        width: 76px;
+        margin: 0;
+        accent-color: var(--green);
+        cursor: pointer;
+      }
+
+      /* writing: one typed entry for now */
+      .entries {
+        display: grid;
+        gap: 22px;
+        max-width: 860px;
+      }
+
+      .entry {
+        position: relative;
+        display: grid;
+        gap: 6px;
+        padding: 26px 30px 26px 64px;
+        text-decoration: none;
+        background:
+          linear-gradient(90deg, transparent 44px, rgba(199, 66, 44, 0.5) 44px 46px, transparent 46px),
+          #fbf8ef;
+        box-shadow: 0 18px 30px rgba(20, 48, 31, 0.2), 0 3px 6px rgba(20, 48, 31, 0.15);
+        transform: rotate(-0.6deg);
+        transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+      }
+
+      .entry:hover {
+        transform: rotate(0deg) translateX(8px);
+      }
+
+      .entry small {
+        font: 500 12px var(--mono);
+        letter-spacing: 0.1em;
+        color: var(--red);
+      }
+
+      .entry b {
+        font-family: var(--serif);
+        font-weight: 800;
+        font-size: clamp(28px, 3.2vw, 42px);
+        line-height: 1.1;
+      }
+
+      .entry span {
+        font-family: var(--mono);
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.8;
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 40px max(24px, 8vw) 50px;
+        font-family: var(--mono);
+        font-size: 12px;
+        opacity: 0.7;
+      }
+
+      /* ---------- contact, with the ending's watercolor and petals ---------- */
+      #contact > .wash {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      #contact > .wash svg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      #contact > .sh,
+      #contact > .say {
+        position: relative;
+        z-index: 2;
+      }
+
+      .petal {
+        position: absolute;
+        top: -30px;
+        width: 14px;
+        height: 9px;
+        border-radius: 60% 10% 60% 10%;
+        opacity: 0.85;
+        animation: fall linear infinite paused;
+      }
+
+      #contact.inview .petal {
+        animation-play-state: running;
+      }
+
+      @keyframes fall {
+        to {
+          transform: translate(var(--dx), 110vh) rotate(540deg);
+        }
+      }
+
+      .say {
+        max-width: 620px;
+      }
+
+      .links > * {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 16px 0;
+        border-bottom: 1.5px solid var(--ink);
+        text-decoration: none;
+        font-family: var(--serif);
+        font-size: 24px;
+        font-weight: 800;
+        transition: color 0.2s, padding 0.2s;
+      }
+
+      .links small {
+        font-family: var(--mono);
+        font-size: 12px;
+        font-weight: 500;
+        align-self: center;
+        opacity: 0.7;
+        text-align: right;
+      }
+
+      .links a:hover {
+        color: var(--red);
+        padding-left: 10px;
+      }
+
+      /* ---------- things open up close ---------- */
+      .reader {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        display: grid;
+        place-items: center;
+        background: rgba(12, 7, 3, 0.62);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s;
+      }
+
+      .reader.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .view {
+        position: relative;
+        transform: scale(0.94);
+        transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .view:not(.on) {
+        display: none !important;
+      }
+
+      .reader.open .view {
+        transform: none;
+      }
+
+      .close {
+        position: absolute;
+        top: -40px;
+        right: 0;
+        border: 0;
+        background: none;
+        color: #efe7d2;
+        font: 500 13px var(--mono);
+        letter-spacing: 0.1em;
+      }
+
+      /* the corkboard, zoomed */
+      .zoomed {
+        margin: 0;
+        max-width: min(760px, 90vw);
+        padding: 14px 14px 18px;
+        background: #fbf8f1;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        transform-origin: center;
+      }
+
+      .zoomed img {
+        display: block;
+        max-width: 100%;
+        max-height: 74vh;
+        margin: 0 auto;
+      }
+
+      .zoomed figcaption {
+        max-width: 560px;
+        margin: 12px auto 0;
+        font-family: var(--hand);
+        font-size: 28px;
+        line-height: 1.2;
+        text-align: center;
+        color: #2a2a2a;
+      }
+
+      .zoomed figcaption:empty {
+        display: none;
+      }
+
+      .zoomed.sticker {
+        background: none;
+        box-shadow: none;
+      }
+
+      .zoomed.sticker img {
+        width: min(420px, 70vw);
+        max-height: 60vh;
+        filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
+      }
+
+      .zoomed.sticker figcaption {
+        color: #efe7d2;
+      }
+
+      /* the open folder */
+      .opened {
+        display: grid;
+        grid-template-columns: 0.75fr 1.25fr;
+        width: min(1000px, 94vw);
+        min-height: 440px;
+        max-height: 82vh;
+        padding: 30px;
+        gap: 30px;
+        border-radius: 4px;
+        background:
+          radial-gradient(circle, rgba(45, 90, 55, 0.16) 1.4px, transparent 1.8px) 0 0 / 10px 10px,
+          var(--paper);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+      }
+
+      .opened ul {
+        list-style: none;
+        margin: 0;
+        padding: 6px 0;
+        display: grid;
+        align-content: start;
+        gap: 8px;
+      }
+
+      /* each job is a tab you pull out of the folder */
+      .opened li button {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        border: 0;
+        padding: 9px 14px;
+        text-align: left;
+        font: 500 12px var(--mono);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink);
+        border-radius: 6px 0 0 6px;
+        background: rgba(255, 255, 255, 0.35);
+        box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+        transition: transform 0.25s cubic-bezier(0.3, 1.4, 0.5, 1), background 0.2s;
+      }
+
+      .opened li button:hover {
+        transform: translateX(6px);
+      }
+
+      .opened li button.on {
+        background: #fbf8f0;
+        color: #1c150a;
+        transform: translateX(14px);
+      }
+
+      .opened li .th {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+      }
+
+      .opened li .th img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      .opened li .th .dash {
+        width: 100%;
+        border-radius: 5px;
+      }
+
+      .opened li .th .dash i {
+        border-radius: 1px;
+      }
+
+      .opened li small {
+        display: block;
+        margin-top: 2px;
+        font-size: 10px;
+        text-transform: none;
+        opacity: 0.7;
+      }
+
+      .sheet {
+        position: relative;
+        padding: 46px 46px 40px;
+        background: #fbf8f0;
+        box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.25);
+        font-family: var(--mono);
+        font-size: 15px;
+        line-height: 1.8;
+        color: #2b2b2b;
+        transform: rotate(0.6deg);
+      }
+
+      .sheet h3 {
+        position: relative;
+        isolation: isolate;
+        margin: 26px 0 26px;
+        font-family: var(--serif);
+        font-weight: 800;
+        font-size: clamp(40px, 4.6vw, 64px);
+        line-height: 0.95;
+        color: var(--ink);
+      }
+
+      .sheet h3::before {
+        content: attr(data-t);
+        position: absolute;
+        left: 0.05em;
+        top: 0.04em;
+        z-index: -1;
+        color: var(--red);
+        opacity: 0.8;
+      }
+
+      .sheet h3 a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      /* the dates, rubber-stamped */
+      .sheet .when {
+        position: absolute;
+        right: 34px;
+        top: 30px;
+        padding: 3px 10px;
+        border: 2.5px solid var(--red);
+        border-radius: 4px;
+        font-size: 12px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--red);
+        opacity: 0.85;
+        transform: rotate(6deg);
+      }
+
+      .sheet .more {
+        display: inline-block;
+        margin-top: 22px;
+        color: var(--red);
+      }
+
+      .sheet a {
+        text-decoration-color: var(--red);
+        text-underline-offset: 3px;
+      }
+
+      @media (max-width: 900px) {
+        .sec {
+          grid-template-columns: 1fr;
+          min-height: auto;
+        }
+
+        .sec.flip .copy {
+          order: 0;
+        }
+
+        .stagebox {
+          min-height: 360px;
+        }
+
+        .hat {
+          left: -10px;
+          width: 110px;
+        }
+
+        .cork {
+          aspect-ratio: auto;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 26px 18px;
+          padding: 30px 14px;
+        }
+
+        .pin {
+          position: relative;
+          left: auto;
+          top: auto;
+          width: 40%;
+        }
+
+        .pin.holo {
+          width: 28%;
+        }
+
+        .opened {
+          grid-template-columns: 1fr;
+          aspect-ratio: auto;
+          max-height: 88vh;
+          overflow-y: auto;
+        }
+
+        .opened ul {
+          border-right: 0;
+          display: flex;
+          flex-wrap: wrap;
+        }
+
+        .opened li button {
+          width: auto;
+        }
+      }
+      @media (max-width: 960px) {
+        .hero {
+          grid-template-columns: 1fr;
+          padding-top: 90px;
+        }
+
+        .feed {
+          top: 16px;
+          right: 10px;
+        }
+
+        .hero .crate {
+          width: min(400px, 92vw);
+          justify-self: center;
+        }
+
+        .hero .splat {
+          left: auto;
+          right: -5vw;
+          width: 100vw;
+          height: auto;
+          aspect-ratio: 1;
+          top: auto;
+          bottom: 110px;
+          transform: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .grain {
+          display: none;
+        }
+
+        .it,
+        .arrows {
+          transition: none;
+          animation: none;
+        }
+      }
+    </style>
   </head>
   <body>
-    <header>
-      <div class="header-container">
-        <div class="logo-container">
-          <a href="index.html">
-            <img src="navbarlogo.png" alt="Logo" class="logo-img" />
-          </a>
-          <span class="logo-text">taco man</span>
-        </div>
-        <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
-          <span></span><span></span><span></span>
-        </button>
-        <ul class="nav-links" id="nav-links">
-          <li><a href="#about">about</a></li>
-          <li><a href="#experience">experience</a></li>
-          <li><a href="#contact">contact</a></li>
-        </ul>
+    <div class="xp" id="xp" aria-hidden="true"></div>
+    <div class="feed" id="feed" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <label class="vol" title="volume"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6 H5 L9 2.5 V13.5 L5 10 H2 Z" fill="currentColor" /><path d="M11 5.5 C12.3 6.8 12.3 9.2 11 10.5 M12.8 3.8 C15 6 15 10 12.8 12.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" /></svg><input type="range" id="vol" min="0" max="1" step="0.01" value="0.4" aria-label="music volume" /></label>
+
+    <!-- ink filters: a fixed displacement gives lines a hand-drawn wobble -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <filter id="boil"><feTurbulence id="boilT" type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="1" /><feDisplacementMap in="SourceGraphic" scale="2.4" /></filter>
+      <filter id="grunge"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="3" /><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -6 0 0 0 4.3" /><feComposite in="SourceGraphic" operator="in" /></filter>
+      <filter id="boilBig"><feTurbulence id="boilT2" type="fractalNoise" baseFrequency="0.05" numOctaves="3" seed="1" /><feDisplacementMap in="SourceGraphic" scale="6" /></filter>
+    </svg>
+
+    <header class="hero">
+      <div class="splat" id="splatBox" aria-hidden="true"><svg id="splat" viewBox="0 0 600 600" filter="url(#boilBig)"></svg></div>
+      <div class="name">
+        <h1>ben<br /> weber</h1>
+        <p>electrical engineer from princeton, on leave to <b>found</b>.</p>
       </div>
+      <div class="crate" id="crate">
+        <div class="stage" id="stage">
+          <div class="vinyl" id="vinyl"><div class="disc" id="disc" role="button" tabindex="0"><div class="label" id="label"></div></div></div>
+          <button class="sleeve" data-i="0" aria-label="masayoshi takanaka, all of me"><img src="images/records/takanaka-all-of-me.jpg" alt="masayoshi takanaka, all of me" /></button>
+          <button class="sleeve" data-i="1" aria-label="lamp, for lovers"><img src="images/records/lamp-for-lovers.jpg" alt="lamp, for lovers" /></button>
+          <button class="sleeve" data-i="2" aria-label="anri, timely!!"><img src="images/records/anri-timely.jpg" alt="anri, timely!!" /></button>
+          <button class="sleeve" data-i="3" aria-label="eiichi ohtaki, a long vacation"><img src="images/records/ohtaki-a-long-vacation.jpg" alt="eiichi ohtaki, a long vacation" /></button>
+        </div>
+      </div>
+<div class="band" id="band" aria-hidden="true"></div>
+
+      <a class="arrows" href="#pinned" aria-label="down to the rest">
+        <svg viewBox="0 0 120 70" aria-hidden="true">
+          <g fill="none" stroke="#f2c230" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#boil)">
+            <path d="M34 6 C33 22 30 38 26 52 M12 40 C18 46 22 52 26 56 C30 48 34 42 40 36" />
+            <path d="M88 8 C90 24 90 38 88 52 M72 40 C78 46 84 52 88 58 C92 50 96 44 102 40" />
+          </g>
+        </svg>
+      </a>
     </header>
 
-    <section id="about" class="about-content-section">
-      <div class="about-container">
-        <img src="aboutmelogo.png" alt="About Me" class="about-img" />
-        <div class="about-text">
-          <h2 class="about-header">about me</h2>
-          <p>
-            hi, i'm <span class="highlight">benjamin weber</span> (<span
-              class="highlight"
-              >benthetacoman</span
-            >), an
-            <span class="highlight">Electrical and Computer Engineering</span>
-            student at Princeton University, currently on a leave of absence to
-            build.
-          </p>
-          <p>
-            i'm interested in software, hardware engineering, machine learning,
-            data science, and finance. i have experience in quantitative
-            finance, full-stack development, adversarial ML research, and
-            automated systems.
-          </p>
-          <p>
-            i'm an eagle scout, my favorite show is one piece, and i love to
-            learn about anything that i can
-          </p>
+
+    <div class="squig" aria-hidden="true"></div>
+
+    <section class="rise" id="pinned">
+      <div class="sh"><h2>pinned</h2></div>
+      <div class="board">
+        <div class="cork">
+          <button class="pin photo" data-xp="photo 0" data-src="images/album/takanaka-live.jpg" data-cap="takanaka, live" style="--x:3%;--y:9%;--w:16%;--r:-5deg"><i class="tack"></i><img src="images/album/takanaka-live.jpg" alt="masayoshi takanaka on stage with a surfboard guitar" loading="lazy" /><span>takanaka, live</span></button>
+          <button class="pin photo" data-xp="photo 1" data-src="images/album/above-the-clouds.jpg" data-cap="middle of nowhere, north carolina" style="--x:21%;--y:30%;--w:20%;--r:3deg"><i class="tack"></i><img src="images/album/above-the-clouds.jpg" alt="ben above the clouds at sunset" loading="lazy" /><span>middle of nowhere, north carolina</span></button>
+          <button class="pin photo" data-xp="photo 2" data-src="images/album/dog.jpg" data-cap="pixie &lt;3" style="--x:44%;--y:6%;--w:15%;--r:-2deg"><i class="tack"></i><img src="images/album/dog.jpg" alt="a french bulldog on a blanket" loading="lazy" /><span>pixie &lt;3</span></button>
+          <button class="pin photo" data-xp="photo 3" data-src="images/album/sf-bunker.jpg" data-cap="sf" style="--x:62%;--y:26%;--w:17%;--r:4deg"><i class="tack"></i><img src="images/album/sf-bunker.jpg" alt="ben in a graffiti bunker by the bay" loading="lazy" /><span>sf</span></button>
+          <button class="pin photo" data-xp="photo 4" data-src="images/album/lamp-live.jpg" data-cap="lamp, live" style="--x:81%;--y:8%;--w:15%;--r:-4deg"><i class="tack"></i><img src="images/album/lamp-live.jpg" alt="lamp playing live" loading="lazy" /><span>lamp, live</span></button>
+          <button class="pin photo" data-xp="photo 5" data-src="images/album/coast.jpg" data-cap="enoshima, japan" style="--x:79%;--y:52%;--w:17%;--r:6deg"><i class="tack"></i><img src="images/album/coast.jpg" alt="a green coastline over blue water" loading="lazy" /><span>enoshima, japan</span></button>
+          <button class="pin holo" data-xp="ibuypower holo" data-src="images/records/ibuypower-holo-katowice-2014.png" data-cap="" data-sticker style="--x:4%;--y:63%;--w:11.5%;--r:-9deg;--src:url('images/records/ibuypower-holo-katowice-2014.png')"><img src="images/records/ibuypower-holo-katowice-2014.png" alt="ibuypower holo sticker, katowice 2014" /><i class="shine"></i></button>
+          <button class="pin holo" data-xp="titan holo" data-src="images/records/titan-holo-katowice-2014.png" data-cap="" data-sticker style="--x:10.5%;--y:74%;--w:10%;--r:11deg;--src:url('images/records/titan-holo-katowice-2014.png')"><img src="images/records/titan-holo-katowice-2014.png" alt="titan holo sticker, katowice 2014" /><i class="shine"></i></button>
+          <button class="pin vinylsticker" data-xp="straw hat jolly roger" data-src="images/stickers/straw-hat-jolly-roger.svg" data-cap="" data-sticker style="--x:45%;--y:58%;--w:10%;--r:-7deg"><img src="images/stickers/straw-hat-jolly-roger.svg" alt="a straw hat pirates jolly roger sticker" /></button>
+          <button class="pin vinylsticker" data-xp="broccoli" data-src="images/stickers/broccoli.svg" data-cap="" data-sticker style="--x:56%;--y:72%;--w:8%;--r:9deg"><img src="images/stickers/broccoli.svg" alt="a broccoli sticker" /></button>
         </div>
       </div>
     </section>
 
-    <section id="experience" class="experience-content-section">
-      <h2 class="experience-header">work experience</h2>
-      <div class="work-container">
-        <div class="work-entry">
-          <div class="work-marker"></div>
-          <div class="work-card">
-            <div class="work-company">Neo</div>
-            <div class="work-role">founder</div>
-            <div class="work-desc">
-              building a personal startup through the Neo semester in SF program
-              — building and working all day
-            </div>
-          </div>
-        </div>
-        <div
-          class="work-entry"
-          onclick="location.href = 'research.html'"
-          style="cursor: pointer"
-        >
-          <div class="work-marker"></div>
-          <div class="work-card">
-            <div class="work-company">Princeton University ECE</div>
-            <div class="work-role">
-              research intern — adversarial machine learning
-            </div>
-            <div class="work-desc">
-              building end-to-end pipelines for adversarially robust malware
-              detection using transformer-based models
-            </div>
-          </div>
-        </div>
-        <div
-          class="work-entry"
-          onclick="location.href = 'circle-wealth.html'"
-          style="cursor: pointer"
-        >
-          <div class="work-marker"></div>
-          <div class="work-card">
-            <div class="work-company">Circle Wealth Management</div>
-            <div class="work-role">full-stack software development intern</div>
-            <div class="work-desc">
-              developing portfolio analytics software for managing $12 billion
-              in assets
-            </div>
-          </div>
-        </div>
-        <div
-          class="work-entry"
-          onclick="location.href = 'estate-genius.html'"
-          style="cursor: pointer"
-        >
-          <div class="work-marker"></div>
-          <div class="work-card">
-            <div class="work-company">Estate Genius</div>
-            <div class="work-role">software developer intern</div>
-            <div class="work-desc">
-              legal document automation startup, working with clients from FL,
-              TX, NY, CA and more
-            </div>
-          </div>
-        </div>
-        <div
-          class="work-entry"
-          onclick="location.href = 'cfa.html'"
-          style="cursor: pointer"
-        >
-          <div class="work-marker"></div>
-          <div class="work-card">
-            <div class="work-company">Chick-fil-A</div>
-            <div class="work-role">assistant director</div>
-            <div class="work-desc">
-              running shifts, hiring, and managing 100+ employees as well as
-              $40,000 in daily finances
-            </div>
-          </div>
-        </div>
+    <div class="squig" aria-hidden="true"></div>
+
+    <section class="rise sec flip" id="work">
+      <div class="copy">
+        <div class="sh"><h2>work</h2></div>
+        <p class="note">where i've been.</p>
       </div>
-      <h2 class="experience-header">projects</h2>
-      <div class="projects-container">
-        <div class="panel project-panel">
-          <h4>Multidimensional Cointegration of SOFR Futures</h4>
-          <p>
-            Princeton ORF445 final project exploring cointegration relationships
-            in SOFR futures term structure for statistical arbitrage
-          </p>
-        </div>
-        <div
-          class="panel project-panel"
-          onclick="location.href = 'momentum-trading.html'"
-        >
-          <h4>Momentum Trading Algorithm</h4>
-          <p>
-            developed momentum-based trading strategy for DJIA stocks with
-            signal generation, backtesting, and optimization
-          </p>
-        </div>
-        <div
-          class="panel project-panel"
-          onclick="location.href = 'roulette-bot.html'"
-        >
-          <h4>Roulette Bot</h4>
-          <p>
-            pattern recognition system analyzing roulette spins with automated
-            betting upon pattern acknowledgment
-          </p>
-        </div>
-        <div class="panel project-panel" onclick="location.href = 'drone.html'">
-          <h4>Drone Challenge</h4>
-          <img src="dronelogo.png" alt="dronelogo" class="panelimg" />
-          <p>
-            technology student association drone challenge, led team to develop
-            fully operational open-source quadcopter drone
-          </p>
-        </div>
-        <div class="panel project-panel" onclick="location.href = 'hoop.html'">
-          <h4>Hoop House Farm</h4>
-          <img src="hoophouselogo.png" alt="hoophouse" class="panelimg" />
-          <p>created sustainable farm for donating to charity</p>
+      <div class="stagebox">
+        <svg class="blot" data-color="#c99a3b" data-mesh viewBox="0 0 600 600" aria-hidden="true" filter="url(#boilBig)"></svg>
+        <div class="slaps">
+          <button class="slap" data-job="0" style="--x:6%;--y:8%;--w:40%;--r:-7deg" aria-label="founder"><span class="dash"><i></i><i></i><i></i></span></button>
+          <button class="slap" data-job="1" style="--x:54%;--y:2%;--w:38%;--r:8deg" aria-label="neo"><img src="images/logos/neo-egg.png" alt="" /></button>
+          <button class="slap" data-job="2" style="--x:14%;--y:48%;--w:25%;--r:5deg" aria-label="princeton ece"><img src="images/logos/princeton-shield.png" alt="" /></button>
+          <button class="slap round" data-job="5" style="--x:52%;--y:46%;--w:34%;--r:-6deg" aria-label="chick-fil-a"><img src="images/logos/cfa.png" alt="" /></button>
         </div>
       </div>
     </section>
 
-    <section id="contact" class="misc-contact-section">
-      <h2 class="experience-header">miscellaneous & contact</h2>
-      <div class="misc-contact-grid">
-        <div class="misc-entry">
-          <img src="cs2logo.png" alt="Counter Strike 2" class="misc-icon" />
-          <div class="misc-info">
-            <div class="misc-title">Competitive Counter Strike</div>
-            <div class="misc-desc">
-              top <span class="highlight2">ten thousand</span> ranking in both
-              CS:GO and CS2
-            </div>
-          </div>
-        </div>
-        <div class="misc-entry">
-          <img
-            src="charterlogo.png"
-            alt="Charter Eating Club"
-            class="misc-icon"
-          />
-          <div class="misc-info">
-            <div class="misc-title">Charter Eating Club</div>
-            <div class="misc-desc">
-              <span class="highlight2">member</span> at Princeton University
-            </div>
-          </div>
-        </div>
-        <a
-          href="https://discordapp.com/users/229360161490337793"
-          target="_blank"
-          class="contact-entry"
-        >
-          <img src="discordlogo.png" alt="Discord" class="contact-icon" />
-          <div class="contact-info">
-            <div class="contact-name">discord</div>
-            <div class="contact-handle">@benthetacoman</div>
-          </div>
-        </a>
-        <a
-          href="mailto:benjaminguyweber@gmail.com"
-          target="_blank"
-          class="contact-entry"
-        >
-          <img src="emailicon.png" alt="email" class="contact-icon" />
-          <div class="contact-info">
-            <div class="contact-name">email</div>
-            <div class="contact-handle">benjaminguyweber@gmail.com</div>
-          </div>
-        </a>
-        <a
-          href="https://www.linkedin.com/in/benjaminguyweber/"
-          target="_blank"
-          class="contact-entry"
-        >
-          <img src="linkedinicon.png" alt="LinkedIn" class="contact-icon" />
-          <div class="contact-info">
-            <div class="contact-name">linkedin</div>
-          </div>
-        </a>
+    <div class="squig" aria-hidden="true"></div>
+
+    <section class="rise proj" id="projects">
+      <div class="sh"><h2>side projects</h2></div>
+      <div class="cards">
+        <a class="icard" href="hoop.html" style="--r: -3deg"><b>hoop house farm</b><img src="images/projects/hoop-2576.jpg" alt="the hoop house farm" loading="lazy" />aeroponics and dutch buckets, on a field at school.</a>
+        <a class="icard" href="drone.html" style="--r: 2deg; --tr: 4deg"><b>drone challenge</b><img src="images/projects/drone.jpg" alt="the quadcopter the team built" loading="lazy" />an open-source quadcopter, built for a competition.</a>
+        <a class="icard" href="sofr-cointegration.html" style="--r: -1.5deg"><b>sofr cointegration</b><img src="images/projects/boerse.jpg" alt="traders on an exchange floor, 1988" loading="lazy" />stat-arb on rates. orf445.</a>
+        <a class="icard" href="roulette-bot.html" style="--r: 3deg; --tr: -5deg"><b>roulette bot</b><img src="images/projects/roulette-engraving.jpg" alt="an engraving of a roulette wheel" loading="lazy" />an old bot for the roulette on csgoroll.</a>
       </div>
     </section>
 
-    <script src="script.js"></script>
+    <div class="squig" aria-hidden="true"></div>
+
+    <section class="rise" id="writing">
+      <div class="sh"><h2>writing</h2></div>
+      <div class="entries">
+        <a class="entry" href="https://www.getsieve.io/blog/chained-trust-hijacking" target="_blank" rel="noopener" data-xp="writing"><small>jul 2026 · sieve</small><b>chained trust hijacking</b><span>a phishing campaign that chained trust across compromised mailboxes, postmark, google and cloudflare.</span></a>
+      </div>
+    </section>
+
+    <section class="rise" id="contact">
+      <div class="wash" id="wash">
+        <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <filter id="wc" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7" /><feDisplacementMap in="SourceGraphic" scale="70" /><feGaussianBlur stdDeviation="14" /></filter>
+          <g filter="url(#wc)" opacity=".5">
+            <ellipse cx="260" cy="520" rx="300" ry="170" fill="#bfe0ad" />
+            <ellipse cx="980" cy="160" rx="260" ry="150" fill="#f3c6c9" />
+            <ellipse cx="760" cy="600" rx="220" ry="120" fill="#f3e2a4" />
+            <ellipse cx="560" cy="300" rx="180" ry="110" fill="#cfe8d6" />
+          </g>
+        </svg>
+      </div>
+      <div class="sh"><h2>hi<button class="hat" id="hat" aria-label="a straw hat"><svg viewBox="0 0 220 124" aria-hidden="true">
+            <g stroke="#3a220c" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round">
+              <path d="M6 88 C8 64 58 58 110 58 C162 58 212 64 214 88 C212 108 162 116 110 116 C58 116 8 108 6 88 Z" fill="#f6cf45" />
+              <path d="M28 98 C60 110 160 110 192 98 C170 108 140 112 110 112 C80 112 50 108 28 98 Z" fill="#d9a321" stroke="none" />
+              <ellipse cx="112" cy="84" rx="60" ry="13" fill="#d9a321" stroke="none" />
+              <path d="M14 98 l-7 5 M30 106 l-4 7 M52 111 l-2 8 M170 111 l3 8 M190 105 l6 6 M206 96 l8 4 M8 80 l-7 -3" fill="none" stroke-width="2.6" />
+              <path d="M54 82 C50 30 72 12 110 12 C148 12 170 30 166 82 C146 92 74 92 54 82 Z" fill="#f6cf45" />
+              <path d="M140 18 C160 30 166 54 164 80 C156 84 148 86 140 87 C146 64 146 38 140 18 Z" fill="#d9a321" stroke="none" />
+              <path d="M55 62 C80 73 140 73 165 62 L166 82 C146 92 74 92 54 82 Z" fill="#d8261b" />
+              <path d="M140 72 C150 70 158 67 165 63 L166 82 C160 86 152 88 142 90 Z" fill="#a51a11" stroke="none" />
+              <path d="M76 30 C92 24 128 24 144 30 M68 46 C92 40 128 40 152 46" fill="none" stroke="#c28f1a" stroke-width="1.8" />
+              <path d="M78 22 C88 16 100 15 112 15" fill="none" stroke="#fff5c2" stroke-width="4" />
+            </g>
+          </svg>
+</button></h2></div>
+      <div class="say">
+        <div class="links">
+          <div class="mail">email <small>benjaminguyweber [at] gmail.com</small></div>
+          <a href="https://x.com/benguyweber" target="_blank" rel="noopener" data-xp="x">x <small>@benguyweber</small></a>
+          <a href="https://www.linkedin.com/in/benjaminguyweber/" target="_blank" rel="noopener" data-xp="linkedin">linkedin <small>/benjaminguyweber</small></a>
+          <a href="https://discordapp.com/users/229360161490337793" target="_blank" rel="noopener" data-xp="discord">discord <small>@benthetacoman</small></a>
+        </div>
+      </div>
+    </section>
+
+    <footer><span>© ben weber</span><span>made in fort lauderdale</span></footer>
+
+    <div class="reader" id="reader" aria-hidden="true">
+      <figure class="view zoomed" id="zoomView" role="dialog" aria-modal="true" aria-label="a closer look"><button class="close" data-close>close ✕</button><img id="zimg" alt="" /><figcaption id="zcap"></figcaption></figure>
+      <div class="view opened" id="folderView" role="dialog" aria-modal="true" aria-label="work">
+        <button class="close" data-close>close ✕</button>
+        <ul id="tabs"></ul>
+        <div class="sheet" id="sheet"></div>
+      </div>
+    </div>
+
+    <script>
+      const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const rnd = (a, b) => a + Math.random() * (b - a);
+
+      // ---------- killfeed: a cs-style line when the visitor does something ----------
+      const feed = document.getElementById("feed");
+      const ICONS = {
+        ak: `<svg viewBox="0 0 48 16"><path d="M0 6 L11 5 L13 6.5 L13 9.5 L3 12 L0 11 Z M12 5 H30 V8.2 H12 Z M17 8 H20.5 L18.5 13.5 H15 Z M22 8 H26 C26 11 27 13 29.5 15 L25.5 15.5 C23 13.5 22 11 22 8 Z M27 3.8 H29.4 V5 H27 Z M30 4 H40 V5.1 H30 Z M30 5 H38.5 V7.4 L30 8 Z M38 5.9 H47.5 V7 H38 Z M44.2 3.8 H45.2 V6 H44.2 Z"/></svg>`,
+        knife: `<svg viewBox="0 0 40 16"><path d="M0 7 H11 V10 H0 Z M11 6 H13 V11 H11 Z M13 7 C22 5 32 5 40 7 C33 10 22 11 13 10 Z"/></svg>`,
+      };
+      function kill(victim, weapon = "ak") {
+        const d = document.createElement("div");
+        d.innerHTML = `<span class="ct">you</span>${ICONS[weapon]}<span class="t">${victim}</span>`;
+        feed.appendChild(d);
+        while (feed.children.length > 4) feed.firstChild.remove();
+        setTimeout(() => d.classList.add("out"), 4500);
+        setTimeout(() => d.remove(), 5000);
+      }
+
+      const xp = document.getElementById("xp");
+
+
+      // ---------- the crate ----------
+      // track: itunes id of one song from each album, for its 30s preview
+      const RECORDS = [
+        { artist: "takanaka", title: "all of me", song: "brasilian skies", track: 1442920651, label: "label-takanaka.jpg", url: "https://open.spotify.com/album/3sjIDWWnYzzS7PF3vjZmcB" },
+        { artist: "lamp", title: "for lovers", song: "last train at 25 o'clock", track: 1486281117, label: "label-lamp.jpg", url: "https://open.spotify.com/album/0gwS2D9sukMLXNvleEnYr2", vinyl: ["#ecebe6", "#dddcd5"] },
+        { artist: "anri", title: "timely!!", song: "windy summer", track: 283306773, label: "label-anri.jpg", url: "https://open.spotify.com/album/3OvZYx7AAGplmJjwD29JiV", vinyl: ["#2b62c4", "#1f4fa6"] },
+        { artist: "eiichi ohtaki", title: "a long vacation", song: "kimi wa tennenshoku", track: 1556260400, label: "label-ohtaki.jpg", url: "https://open.spotify.com/album/3eUV7xEoXqQb43ek7Db04H" },
+      ];
+      const sleeves = [...document.querySelectorAll(".sleeve")];
+      const crate = document.getElementById("crate"), vinyl = document.getElementById("vinyl"), disc = document.getElementById("disc"), label = document.getElementById("label");
+      let current = -1, angle = 0, lastY = scrollY;
+
+      // the record only turns while it's on screen
+      let crateSeen = true;
+      let lastT = performance.now();
+      function spin(now = performance.now()) {
+        // 33⅓ rpm is 200° a second; idle it drifts at 15° a second
+        const dt = Math.min(0.1, (now - lastT) / 1000);
+        lastT = now;
+        angle += (crate.classList.contains("playing") ? 200 : 15) * dt + (scrollY - lastY) * 0.4;
+        lastY = scrollY;
+        disc.style.transform = `rotate(${angle}deg)`;
+        if (crateSeen) requestAnimationFrame(spin);
+      }
+      new IntersectionObserver(([e]) => {
+        const was = crateSeen;
+        crateSeen = e.isIntersecting;
+        if (crateSeen && !was) {
+          lastT = performance.now();
+          requestAnimationFrame(spin);
+        }
+      }).observe(crate);
+      spin();
+
+      function layoutCrate() {
+        const order = sleeves.map((_, i) => i).filter((i) => i !== current);
+        sleeves[current].style.transform = "none";
+        sleeves[current].style.zIndex = 10;
+        order.forEach((i, k) => {
+          const d = order.length - k;
+          sleeves[i].style.zIndex = 5 - d;
+          sleeves[i].style.transform = `translate(${d * 16}px, ${-d * 12}px) rotate(${d * 2.5}deg) scale(${1 - d * 0.03})`;
+        });
+        vinyl.style.zIndex = 9;
+      }
+      function setRecord() {
+        const r = RECORDS[current];
+        label.style.setProperty("--img", `url("images/records/${r.label}")`);
+        disc.style.setProperty("--v1", r.vinyl ? r.vinyl[0] : "#16241a");
+        disc.style.setProperty("--v2", r.vinyl ? r.vinyl[1] : "#0f1a12");
+        disc.setAttribute("aria-label", `play ${r.song} by ${r.artist}`);
+      }
+      function pick(i, fromUser) {
+        if (i === current) return;
+        const prev = current, wasPlaying = crate.classList.contains("playing");
+        current = i;
+        if (prev < 0) return layoutCrate(), setRecord();
+        if (fromUser) kill(RECORDS[prev].title);
+        stop();
+        vinyl.classList.add("tucked");
+        setTimeout(() => {
+          layoutCrate();
+          setRecord();
+          vinyl.classList.remove("tucked");
+          if (wasPlaying) play();
+        }, 460);
+      }
+      const next = (d = 1) => pick((current + d + RECORDS.length) % RECORDS.length, true);
+      sleeves.forEach((sl) => sl.addEventListener("click", () => (+sl.dataset.i === current ? next() : pick(+sl.dataset.i, true))));
+
+      // ---------- the turntable: 30s previews through a vinyl chain ----------
+      const audio = new Audio();
+      audio.crossOrigin = "anonymous";
+      const previews = fetch(`https://itunes.apple.com/lookup?country=JP&id=${RECORDS.map((r) => r.track).join(",")}`)
+        .then((r) => r.json())
+        .then((d) => Object.fromEntries(d.results.map((t) => [t.trackId, t.previewUrl])))
+        .catch(() => ({}));
+      let ctx, crackle, volume;
+      const getCtx = () => ctx || (ctx = new AudioContext());
+      const volIn = document.getElementById("vol");
+      try {
+        const v = localStorage.getItem("vol");
+        if (v !== null) volIn.value = v;
+      } catch {}
+      volIn.addEventListener("input", () => {
+        if (volume) volume.gain.value = +volIn.value;
+        try {
+          localStorage.setItem("vol", volIn.value);
+        } catch {}
+      });
+      function vinylChain() {
+        getCtx();
+        volume = new GainNode(ctx, { gain: +volIn.value });
+        volume.connect(ctx.destination);
+        const hp = new BiquadFilterNode(ctx, { type: "highpass", frequency: 70 });
+        const lp = new BiquadFilterNode(ctx, { type: "lowpass", frequency: 6500, Q: 0.4 });
+        const warm = new WaveShaperNode(ctx, { curve: Float32Array.from({ length: 256 }, (_, i) => Math.tanh(((i / 255) * 2 - 1) * 1.6) / Math.tanh(1.6)) });
+        ctx.createMediaElementSource(audio).connect(hp).connect(lp).connect(warm).connect(volume);
+        // surface noise: a soft hiss with the odd pop, looped
+        const len = ctx.sampleRate * 5, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+        for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * 0.01;
+        for (let n = 0; n < 28; n++) {
+          const at = Math.floor(Math.random() * (len - 60)), amp = rnd(0.08, 0.3);
+          for (let k = 0; k < 60; k++) d[at + k] += amp * Math.exp(-k / 7) * (Math.random() * 2 - 1);
+        }
+        const src = new AudioBufferSourceNode(ctx, { buffer: buf, loop: true });
+        crackle = new GainNode(ctx, { gain: 0 });
+        src.connect(new BiquadFilterNode(ctx, { type: "highpass", frequency: 900 })).connect(crackle).connect(volume);
+        src.start();
+      }
+      async function play() {
+        if (!volume) vinylChain();
+        ctx.resume();
+        const r = RECORDS[current], url = (await previews)[r.track];
+        if (!url) return;
+        crate.classList.add("playing");
+        gain("play " + current);
+        // needle drop: a burst of crackle, then settle while the arm lands
+        const t = ctx.currentTime;
+        crackle.gain.cancelScheduledValues(t);
+        crackle.gain.setValueAtTime(1.6, t + 0.55);
+        crackle.gain.linearRampToValueAtTime(0.7, t + 1.2);
+        if (audio.src !== url) audio.src = url;
+        setTimeout(() => crate.classList.contains("playing") && audio.play().catch(stop), 650);
+      }
+      function stop() {
+        crate.classList.remove("playing");
+        audio.pause();
+        if (!crackle) return;
+        crackle.gain.cancelScheduledValues(ctx.currentTime);
+        crackle.gain.setTargetAtTime(0, ctx.currentTime, 0.03);
+      }
+      const toggle = () => (crate.classList.contains("playing") ? stop() : play());
+      // a mixtape keeps going: when a preview ends, the next record goes on
+      audio.addEventListener("ended", () => next());
+      disc.addEventListener("click", toggle);
+      disc.addEventListener("keydown", (e) => e.key === "Enter" && toggle());
+      addEventListener("keydown", (e) => {
+        if (document.getElementById("reader").classList.contains("open")) return;
+        if (e.key === "ArrowRight") next(1);
+        if (e.key === "ArrowLeft") next(-1);
+      });
+      const stage = document.getElementById("stage");
+      let sx = null;
+      stage.addEventListener("pointerdown", (e) => (sx = e.clientX));
+      stage.addEventListener("pointerup", (e) => {
+        if (sx !== null && Math.abs(e.clientX - sx) > 50) next(e.clientX < sx ? 1 : -1);
+        sx = null;
+      });
+      pick(0);
+
+      // ---------- the strip under the hero ----------
+      {
+        let d = "M0 60";
+        for (let x = 0; x <= 1200; x += 20) d += ` L${x} ${(60 + Math.sin(x / 38) * 9 + Math.sin(x / 11) * 1.5).toFixed(1)}`;
+        document.getElementById("band").innerHTML = `<svg viewBox="0 0 1200 90" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="#2d5a37" stroke-width="3" stroke-linecap="round" filter="url(#boilBig)" vector-effect="non-scaling-stroke" /></svg>`;
+      }
+
+      // ---------- red paint splotch behind the crate ----------
+      (function splat() {
+        let d = "";
+        const cx = 300, cy = 300, n = 60;
+        for (let i = 0; i <= n; i++) {
+          const t = (i / n) * Math.PI * 2;
+          const r = 215 + Math.sin(t * 5) * 10 + Math.sin(t * 13) * 6 + (Math.random() < 0.08 ? rnd(10, 26) : 0);
+          d += (i ? "L" : "M") + (cx + Math.cos(t) * r).toFixed(1) + " " + (cy + Math.sin(t) * r * 0.92).toFixed(1);
+        }
+        let extra = "";
+        for (let i = 0; i < 5; i++) {
+          const t = rnd(Math.PI * 1.1, Math.PI * 1.9), r = rnd(245, 285);
+          extra += `<circle cx="${(cx + Math.cos(t) * r).toFixed(0)}" cy="${(cy + Math.sin(t) * r).toFixed(0)}" r="${rnd(3, 9).toFixed(1)}"/>`;
+        }
+        document.getElementById("splat").innerHTML = `<g fill="#cc5640"><path d="${d}Z"/>${extra}</g>`;
+        // bubbles along the top of the paint
+        if (REDUCED) return;
+        const box = document.getElementById("splatBox");
+        for (let i = 0; i < 14; i++) {
+          const t = rnd(Math.PI * 1.08, Math.PI * 1.92), simmer = i % 3 === 0, r = simmer ? 212 : rnd(170, 205);
+          const b = document.createElement("i");
+          b.className = "bub";
+          b.style.cssText = `--x:${((cx + Math.cos(t) * r) / 6).toFixed(1)}%;--y:${((cy + Math.sin(t) * r * 0.92) / 6).toFixed(1)}%;--s:${rnd(simmer ? 26 : 9, simmer ? 46 : 24).toFixed(0)}px;--rise:${rnd(14, 46).toFixed(0)}px;--dur:${rnd(2.6, 5.2).toFixed(1)}s;--d:${(-rnd(0, 5)).toFixed(1)}s${simmer ? ";--a:simmer" : ""}`;
+          box.appendChild(b);
+        }
+      })();
+
+
+      // ---------- work: each sticker opens its sheet ----------
+      const DASH = '<span class="dash"><i></i><i></i><i></i></span>';
+      const JOBS = [
+        { name: "founder", th: DASH, what: 'working on --- with <a href="https://kevin2jeon.com/" target="_blank" rel="noopener">kevin</a>.', when: "april – now" },
+        { name: "neo", th: '<img src="images/logos/neo-egg.png" alt="">', url: "https://neo.com", what: "the neo semester in sf.", when: "jan – april" },
+        { name: "princeton ece", th: '<img src="images/logos/princeton-shield.png" alt="">', page: "research.html", what: "adversarially robust malware detection with transformers.", when: "research intern" },
+        { name: "circle wealth", what: "portfolio analytics for $12 billion in assets.", when: "full-stack intern" },
+        { name: "estate genius", what: "legal document automation for clients in fl, tx, ny, ca.", when: "software intern" },
+        { name: "chick-fil-a", th: '<img src="images/logos/cfa.png" alt="">', what: "ran shifts and hiring for 100+ people and $40k a day.", when: "assistant director" },
+      ];
+
+      // ---------- xp: one bar for each different thing you click ----------
+      const pins = [...document.querySelectorAll(".pin[data-src]")];
+      const XP_IDS = ["play 0", "play 1", "play 2", "play 3", ...JOBS.map((j) => "job " + j.name), ...pins.map((p) => p.dataset.xp), "x", "linkedin", "discord", "writing", "straw hat"];
+      const earned = new Set();
+      xp.innerHTML = "<i></i>".repeat(XP_IDS.length);
+      const bars = [...xp.children];
+      function gain(id, name) {
+        if (!XP_IDS.includes(id) || earned.has(id)) return;
+        earned.add(id);
+        bars[earned.size - 1].style.setProperty("--f", "100%");
+        if (name) kill(name);
+      }
+      document.addEventListener("click", (e) => {
+        const t = e.target.closest("a[data-xp]");
+        if (t) gain(t.dataset.xp);
+      });
+
+      // ---------- things open up close: the work sheets, and anything on the corkboard ----------
+      const reader = document.getElementById("reader"), views = [...reader.querySelectorAll(".view")];
+      function show(view) {
+        views.forEach((v) => v.classList.toggle("on", v.id === view));
+        reader.classList.add("open");
+        reader.setAttribute("aria-hidden", "false");
+      }
+      function closeAll() {
+        reader.classList.remove("open");
+        reader.setAttribute("aria-hidden", "true");
+      }
+      const tabs = document.getElementById("tabs"), sheet = document.getElementById("sheet");
+      tabs.innerHTML = JOBS.map((j, i) => `<li><button data-i="${i}"><span class="th">${j.th || ""}</span><span>${j.name}<small>${j.when}</small></span></button></li>`).join("");
+      function openJob(i) {
+        const j = JOBS[i];
+        tabs.querySelectorAll("button").forEach((b, k) => b.classList.toggle("on", k === i));
+        sheet.innerHTML = `<span class="when">${j.when}</span><h3 data-t="${j.name}">${j.url ? `<a href="${j.url}" target="_blank" rel="noopener">${j.name}</a>` : j.name}</h3>${j.what}${j.page ? `<br><a class="more" href="${j.page}">the full page →</a>` : ""}`;
+        gain("job " + j.name);
+      }
+      tabs.addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (b) openJob(+b.dataset.i);
+      });
+      document.querySelectorAll(".slap").forEach((b) =>
+        b.addEventListener("click", () => {
+          show("folderView");
+          openJob(+b.dataset.job);
+        }),
+      );
+
+      // photos sit on the board pixelated
+      const coverCrop = (img, ar) => {
+        const iw = img.naturalWidth, ih = img.naturalHeight;
+        return iw / ih > ar ? [(iw - ih * ar) / 2, 0, ih * ar, ih] : [0, (ih - iw / ar) / 2, iw, iw / ar];
+      };
+      function pixels(cv, img, n, crop) {
+        const [sx, sy, sw, sh] = crop || [0, 0, img.naturalWidth, img.naturalHeight];
+        cv.width = n;
+        cv.height = Math.round((n * sh) / sw);
+        const c = cv.getContext("2d");
+        c.imageSmoothingQuality = "high";
+        c.drawImage(img, sx, sy, sw, sh, 0, 0, cv.width, cv.height);
+      }
+      document.querySelectorAll(".pin.photo").forEach((p) => {
+        const img = p.querySelector("img"), cv = document.createElement("canvas");
+        cv.setAttribute("aria-hidden", "true");
+        img.after(cv);
+        const draw = () => pixels(cv, img, 14, coverCrop(img, 0.8));
+        img.complete && img.naturalWidth ? draw() : img.addEventListener("load", draw, { once: true });
+      });
+
+      // in the zoom the pixels resolve, step by step
+      const zpix = document.createElement("canvas");
+      zpix.style.cssText = "position:absolute;image-rendering:pixelated;pointer-events:none";
+      async function resolve(src) {
+        await zimg.decode().catch(() => {});
+        if (zimg.getAttribute("src") !== src) return;
+        zimg.after(zpix);
+        Object.assign(zpix.style, { left: zimg.offsetLeft + "px", top: zimg.offsetTop + "px", width: zimg.offsetWidth + "px", height: zimg.offsetHeight + "px", display: "block" });
+        for (const n of [14, 28, 56, 112, 224]) {
+          if (zimg.getAttribute("src") !== src) return;
+          pixels(zpix, zimg, n);
+          await new Promise((r) => setTimeout(r, REDUCED ? 0 : 130));
+        }
+        zpix.style.display = "none";
+      }
+
+      // click a pin and it lifts off the board toward you
+      const zoom = document.getElementById("zoomView"), zimg = document.getElementById("zimg"), zcap = document.getElementById("zcap");
+      pins.forEach((p) =>
+        p.addEventListener("click", () => {
+          const from = p.getBoundingClientRect();
+          zimg.src = p.dataset.src;
+          zimg.alt = p.querySelector("img").alt;
+          zcap.textContent = p.dataset.cap;
+          zoom.classList.toggle("sticker", p.hasAttribute("data-sticker"));
+          zpix.style.display = "none";
+          show("zoomView");
+          if (p.classList.contains("photo")) {
+            resolve(p.dataset.src);
+            p.classList.add("seen");
+          }
+          gain(p.dataset.xp, p.hasAttribute("data-sticker") ? p.dataset.xp : null);
+          if (REDUCED) return;
+          const to = zoom.getBoundingClientRect();
+          zoom.style.transition = "none";
+          zoom.style.transform = `translate(${from.left + from.width / 2 - (to.left + to.width / 2)}px, ${from.top + from.height / 2 - (to.top + to.height / 2)}px) scale(${Math.max(0.15, from.width / to.width)})`;
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+              zoom.style.transition = "transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1)";
+              zoom.style.transform = "none";
+            }),
+          );
+        }),
+      );
+      addEventListener("pointermove", (e) =>
+        document.querySelectorAll(".pin.holo").forEach((h) => {
+          const r = h.getBoundingClientRect();
+          h.style.setProperty("--mx", ((e.clientX - r.left) / r.width) * 100 + "%");
+          h.style.setProperty("--my", ((e.clientY - r.top) / r.height) * 100 + "%");
+        }),
+      );
+
+      // the straw hat
+      document.getElementById("hat").addEventListener("click", () => gain("straw hat", "straw hat"));
+
+      reader.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", closeAll));
+      reader.addEventListener("click", (e) => e.target === reader && closeAll());
+      addEventListener("keydown", (e) => reader.classList.contains("open") && e.key === "Escape" && closeAll());
+
+      // ---------- section titles: the red plate copies the words; a halftone strip goes underneath ----------
+      document.querySelectorAll(".sh h2").forEach((h2) => {
+        h2.dataset.t = h2.firstChild.textContent.trim();
+        const mesh = document.createElement("i");
+        mesh.className = "mesh";
+        mesh.setAttribute("aria-hidden", "true");
+        const kick = h2.parentElement.querySelector(".kick");
+        (kick || h2).insertAdjacentElement(kick ? "beforebegin" : "afterend", mesh);
+      });
+
+      // ---------- green squiggles between sections, paint blots behind the objects ----------
+      document.querySelectorAll(".squig").forEach((el) => {
+        let d = "M0 30", ph = rnd(0, 6);
+        for (let x = 0; x <= 1200; x += 20) d += ` L${x} ${(30 + Math.sin(x / 38 + ph) * 9 + Math.sin(x / 11) * 1.5).toFixed(1)}`;
+        el.innerHTML = `<svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="#2d5a37" stroke-width="3" stroke-linecap="round" filter="url(#boilBig)" vector-effect="non-scaling-stroke" /></svg>`;
+      });
+      document.querySelectorAll(".blot").forEach((el) => {
+        let d = "";
+        for (let i = 0; i <= 60; i++) {
+          const t = (i / 60) * Math.PI * 2, r = 205 + Math.sin(t * 5 + rnd(0, 1)) * 12 + Math.sin(t * 13) * 6 + (Math.random() < 0.08 ? rnd(10, 24) : 0);
+          d += (i ? "L" : "M") + (300 + Math.cos(t) * r).toFixed(1) + " " + (300 + Math.sin(t) * r * 0.9).toFixed(1);
+        }
+        const drops = Array.from({ length: 4 }, () => {
+          const t = rnd(Math.PI * 1.1, Math.PI * 1.9), r = rnd(240, 280);
+          return `<circle cx="${(300 + Math.cos(t) * r).toFixed(0)}" cy="${(300 + Math.sin(t) * r).toFixed(0)}" r="${rnd(3, 8).toFixed(1)}"/>`;
+        }).join("");
+        // a halftone fill for the "meshy" blots
+        const id = "mesh" + Math.random().toString(36).slice(2, 7);
+        const fill = el.hasAttribute("data-mesh") ? `url(#${id})` : el.dataset.color;
+        el.innerHTML = `<defs><pattern id="${id}" width="13" height="13" patternUnits="userSpaceOnUse" patternTransform="rotate(20)"><circle cx="6.5" cy="6.5" r="4.4" fill="${el.dataset.color}" /></pattern></defs><g fill="${fill}"><path d="${d}Z"/>${drops}</g>`;
+      });
+
+      // ---------- petals in the say hi section, only while it's on screen ----------
+      const wash = document.getElementById("wash"), contact = document.getElementById("contact");
+      for (let i = 0; i < 16; i++) {
+        const p = document.createElement("span");
+        p.className = "petal";
+        p.style.left = rnd(0, 100) + "%";
+        p.style.setProperty("--dx", rnd(-120, 120).toFixed(0) + "px");
+        p.style.animationDuration = rnd(9, 17).toFixed(1) + "s";
+        p.style.animationDelay = (-rnd(0, 17)).toFixed(1) + "s";
+        p.style.background = ["#f4c9cf", "#f7e3a6", "#d8ecd0", "#fbeaea"][i % 4];
+        wash.appendChild(p);
+      }
+      new IntersectionObserver(([e]) => contact.classList.toggle("inview", e.isIntersecting)).observe(contact);
+
+      // sections rise in as they scroll into view
+      const rio = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && e.target.classList.add("shown")), { threshold: 0.15 });
+      document.querySelectorAll(".rise").forEach((el) => rio.observe(el));
+    </script>
   </body>
 </html>
