@@ -29,6 +29,11 @@
 
       html {
         scroll-behavior: smooth;
+        scrollbar-width: none;
+      }
+
+      html::-webkit-scrollbar {
+        display: none;
       }
 
       body {
@@ -40,29 +45,16 @@
         overflow-x: hidden;
       }
 
-      /* paper fibre texture */
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 50;
-        opacity: 0.35;
-        mix-blend-mode: multiply;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .25 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-      }
-
-      /* tv static over the whole page: one noise tile, jumped around on the compositor */
+      /* static behind the page: one fine noise tile, jumped around on the compositor */
       .grain {
         position: fixed;
         inset: -120px;
+        z-index: -1;
         pointer-events: none;
-        z-index: 49;
-        opacity: 0.09;
-        mix-blend-mode: multiply;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)'/%3E%3C/svg%3E");
+        opacity: 0.8;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .25 0 0 0 0 .18 1.6 0 0 0 -.62'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)'/%3E%3C/svg%3E");
         will-change: transform;
-        animation: grain 0.5s steps(1) infinite;
+        animation: grain 0.4s steps(1) infinite;
       }
 
       @keyframes grain {
@@ -78,6 +70,23 @@
         75% {
           transform: translate(-29px, 91px);
         }
+      }
+
+      /* the ending's watercolor and petals, behind the whole page */
+      .bgwash {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .bgwash img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.28;
       }
 
       a {
@@ -122,6 +131,36 @@
         transition: width 0.5s cubic-bezier(0.3, 1.4, 0.5, 1);
       }
 
+      /* full bar: a minecraft level number pops up and the bar flashes gold */
+      .lvl {
+        position: fixed;
+        z-index: 71;
+        top: 12px;
+        left: 50%;
+        transform: translateX(-50%) scale(0.4);
+        opacity: 0;
+        font: 700 30px/1 var(--mono);
+        color: #80ff20;
+        text-shadow: 2px 2px 0 #1a3d00, -1px -1px 0 #1a3d00, 1px -1px 0 #1a3d00, -1px 1px 0 #1a3d00;
+        pointer-events: none;
+        transition: transform 0.5s cubic-bezier(0.3, 1.6, 0.5, 1), opacity 0.3s;
+      }
+
+      .lvl.on {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+      }
+
+      .xp.full i::after {
+        animation: gold 1.2s ease-in-out 3;
+      }
+
+      @keyframes gold {
+        50% {
+          background: #f2c230;
+        }
+      }
+
       /* killfeed: only reacts to what the visitor does */
       .feed {
         position: fixed;
@@ -144,7 +183,6 @@
         font-size: 13px;
         color: #f2f2f2;
         background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(4px);
         border: 1.5px solid #d64a3a;
         border-radius: 2px;
         animation: feedIn 0.25s both;
@@ -210,7 +248,6 @@
 
       .name p b {
         color: var(--green);
-        border-bottom: 2px solid var(--sage);
       }
 
       /* red paint splotch behind the crate */
@@ -245,20 +282,20 @@
         will-change: transform;
       }
 
-      /* a bubble swells out of the paint, rises a little, and pops */
+      /* a bubble swells out of the paint, pushes outward, and pops */
       @keyframes bubble {
         0% {
           transform: translate(-50%, -50%) scale(0.2);
         }
         62% {
-          transform: translate(-50%, calc(-50% - var(--rise))) scale(1);
+          transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1);
         }
         70% {
-          transform: translate(-50%, calc(-50% - var(--rise))) scale(1.18);
+          transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.18);
         }
         73%,
         100% {
-          transform: translate(-50%, calc(-50% - var(--rise))) scale(0);
+          transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0);
         }
       }
 
@@ -270,6 +307,22 @@
         }
         50% {
           transform: translate(-50%, -50%) scale(1);
+        }
+      }
+
+      /* a drop gathers on the edge, lets go and falls */
+      @keyframes drip {
+        0% {
+          transform: translate(-50%, -50%) scale(0.2);
+          opacity: 1;
+        }
+        35% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-50%, calc(-50% + var(--fall))) scale(0.7, 1.15);
+          opacity: 0;
         }
       }
 
@@ -367,63 +420,51 @@
       }
 
 
-      /* the strip along the bottom of the hero: one hand-drawn ink wave */
-      .band {
-        position: absolute !important;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 90px;
-        pointer-events: none;
-      }
-
-      .band svg {
-        width: 100%;
-        height: 100%;
-        overflow: visible;
-      }
-
-      /* hero: a big crate pulled in toward the name */
-      .hero {
-        min-height: 88vh;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-        gap: 2vw;
-        padding-bottom: 140px;
-      }
-
-      .hero .crate {
-        width: min(720px, 50vw);
-        justify-self: center;
-      }
-
-      .hero .splat {
-        right: -6vw;
-        width: min(860px, 60vw);
-      }
-
-
-      /* ---------- the arrows under the squiggle ---------- */
-      .arrows {
+      /* a small arrow that goes away once you scroll */
+      .cue {
         position: absolute !important;
         left: 50%;
-        bottom: -34px;
-        z-index: 3 !important;
-        width: 120px;
-        transform: translateX(-50%);
+        bottom: 26px;
+        width: 30px;
+        margin-left: -15px;
+        color: var(--green);
         animation: nudge 1.8s ease-in-out infinite;
+        transition: opacity 0.4s;
       }
 
-      .arrows svg {
-        display: block;
-        width: 100%;
-        overflow: visible;
+      .cue.gone {
+        opacity: 0;
       }
 
       @keyframes nudge {
         50% {
-          transform: translate(-50%, 8px);
+          transform: translateY(7px);
         }
       }
+
+      /* hero: a big crate pulled in toward the name */
+      .hero {
+        min-height: 100vh;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+        gap: 2vw;
+        padding: 40px max(24px, 6vw) 70px;
+      }
+
+      .hero .name h1 {
+        font-size: clamp(64px, min(10vw, 18vh), 176px);
+      }
+
+      .hero .crate {
+        width: min(620px, 42vw, 76vh);
+        justify-self: center;
+      }
+
+      .hero .splat {
+        right: 1vw;
+        width: min(700px, 47vw, 80vh);
+        transform: translateY(-53%);
+      }
+
 
       /* ---------- sections ---------- */
       section {
@@ -531,15 +572,266 @@
         }
       }
 
-      /* ---------- work: stickers slapped on the page ---------- */
-      .slaps {
+      /* ---------- the room: one screen, the board and the projects on the wall, the desk below ---------- */
+      .room {
         position: relative;
-        z-index: 1;
-        width: min(560px, 100%);
-        aspect-ratio: 1.15;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        min-height: 100vh;
+        padding: 0;
+        overflow: hidden;
       }
 
-      .slap {
+      .scene {
+        position: relative;
+        width: min(100%, 200vh);
+        aspect-ratio: 2;
+        --soft: 0 18px 30px rgba(20, 48, 31, 0.28), 0 3px 6px rgba(20, 48, 31, 0.2);
+      }
+
+      /* wallpaper stripes, fading in from the paper */
+      .wall {
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(90deg, rgba(45, 90, 55, 0.05) 0 2px, transparent 2px 46px);
+        -webkit-mask: linear-gradient(transparent, #000 12%);
+        mask: linear-gradient(transparent, #000 12%);
+      }
+
+      /* a baseboard, then oak planks running away from you */
+      .floor {
+        position: absolute;
+        left: calc(50% - 50vw);
+        width: 100vw;
+        bottom: 0;
+        height: 13%;
+        border-top: 6px solid #efe7d4;
+        box-shadow: 0 -1px 0 rgba(20, 48, 31, 0.18);
+        overflow: hidden;
+        perspective: 380px;
+        perspective-origin: 50% 0;
+        background: #a77a4e;
+      }
+
+      .floor::before {
+        content: "";
+        position: absolute;
+        left: -40%;
+        right: -40%;
+        top: 0;
+        height: 260%;
+        background: url("images/room/floor.jpg") center top / 480px auto;
+        transform-origin: top;
+        transform: rotateX(64deg);
+      }
+
+      /* the wall's shadow along the back, light toward the front */
+      .floor::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(rgba(50, 28, 10, 0.4), rgba(50, 28, 10, 0.08) 45%, rgba(255, 240, 215, 0.08));
+      }
+
+      .scene > .board {
+        position: absolute;
+        left: 25%;
+        top: 6%;
+        width: 33%;
+        margin: 0;
+        padding: 1.4%;
+      }
+
+      .scene > .board .cork {
+        aspect-ratio: 1.7;
+      }
+
+      /* side projects: photos taped to the wall */
+      .wallpic {
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: var(--w);
+        border: 0;
+        padding: 6px 6px 8px;
+        background: #fbf8f1;
+        box-shadow: var(--soft);
+        transform: rotate(var(--r));
+        transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+      }
+
+      .wallpic:hover {
+        z-index: 3;
+        transform: rotate(0deg) scale(1.05);
+      }
+
+      .wallpic::before {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        top: -9px;
+        left: 50%;
+        width: 44%;
+        height: 16px;
+        transform: translateX(-50%) rotate(-4deg);
+        background: rgba(132, 153, 125, 0.6);
+      }
+
+      .wallpic:nth-of-type(even)::before {
+        background: rgba(224, 103, 58, 0.5);
+        transform: translateX(-50%) rotate(5deg);
+      }
+
+      .wallpic img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+      }
+
+      /* labels only show up once you've opened something */
+      .wallpic span,
+      .pin.photo span {
+        position: absolute;
+        left: 4px;
+        right: 4px;
+        top: 100%;
+        margin-top: 2px;
+        font-family: var(--hand);
+        font-size: clamp(12px, 1.1vw, 17px);
+        line-height: 1.1;
+        color: #2a2a2a;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.5s 0.3s;
+      }
+
+      .pin.photo span {
+        top: auto;
+        bottom: 3px;
+        left: 2px;
+        right: 2px;
+        font-size: clamp(9px, 0.8vw, 13px);
+        line-height: 1;
+        text-wrap: balance;
+      }
+
+      .wallpic.seen span,
+      .pin.photo.seen span {
+        opacity: 1;
+      }
+
+      /* the room's furniture: rendered in 3d at one shared scale (8px per cm, 340cm across), placed by the wall line */
+      /* each render is placed at its own spot; .rl is a layer in the render's own pixels, scaled to fit */
+      .r3d {
+        position: absolute;
+        z-index: 1;
+      }
+
+      .r3d > img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .rl {
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform-origin: 0 0;
+        transform: scale(var(--k, 1));
+      }
+
+      /* the stickers ride on the flat papers, foreshortened the same way */
+      .paper {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 216px;
+        height: 279px;
+        transform-origin: 0 0;
+      }
+
+      /* the phone lying on the desk; its lock screen keeps eastern time; click it and it comes up */
+      .pscreen {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 646px;
+        height: 1380px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 0;
+        padding: 0;
+        border-radius: 80px;
+        transform-origin: 0 0;
+        background:
+          radial-gradient(circle at 20% 90%, rgba(132, 153, 125, 0.95), transparent 55%),
+          radial-gradient(circle at 90% 70%, rgba(199, 66, 44, 0.6), transparent 50%),
+          linear-gradient(#ece5d0, #d8cfb4);
+      }
+
+      /* a bigger target than the sliver of screen you can see */
+      .pscreen::before {
+        content: "";
+        position: absolute;
+        inset: -20% -30%;
+      }
+
+      .pscreen b {
+        margin-top: 330px;
+        font: 700 170px/1 var(--sans);
+        letter-spacing: -0.03em;
+        color: rgba(20, 48, 31, 0.9);
+      }
+
+      .pscreen small {
+        margin-top: 20px;
+        font: 600 64px/1 var(--sans);
+        color: rgba(20, 48, 31, 0.75);
+      }
+
+      /* the seal: click him and he does a roll */
+      .seal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 493px;
+        height: 331px;
+        border: 0;
+        padding: 0;
+        background: none;
+        transform-origin: 0 0;
+      }
+
+      .seal img {
+        display: block;
+        width: 100%;
+        filter: drop-shadow(0 8px 6px rgba(40, 20, 5, 0.3));
+      }
+
+      .seal.roll img {
+        animation: roll 1.1s cubic-bezier(0.4, 0, 0.3, 1);
+      }
+
+      @keyframes roll {
+        30% {
+          transform: translateY(-18%) rotate(-120deg);
+        }
+        70% {
+          transform: translateY(-10%) rotate(-300deg);
+        }
+        100% {
+          transform: rotate(-360deg);
+        }
+      }
+
+
+
+            .slap {
         position: absolute;
         left: var(--x);
         top: var(--y);
@@ -553,43 +845,28 @@
 
       .slap:hover {
         z-index: 3;
-        transform: rotate(0deg) translateY(-8px) scale(1.04);
+        transform: rotate(0deg) scale(1.05);
       }
 
-      /* die-cut: a white edge that follows the shape, then a shadow on the paper */
+      /* die-cut: a white edge that follows the shape */
       .slap img,
-      .slap .dash {
+      .slap svg {
         display: block;
         width: 100%;
-        filter: drop-shadow(4px 0 0 #fbf8f0) drop-shadow(-4px 0 0 #fbf8f0) drop-shadow(0 4px 0 #fbf8f0) drop-shadow(0 -4px 0 #fbf8f0) drop-shadow(4px 8px 6px rgba(20, 48, 31, 0.35));
+        filter: drop-shadow(1.5px 0 0 #fbf8f0) drop-shadow(-1.5px 0 0 #fbf8f0) drop-shadow(0 1.5px 0 #fbf8f0) drop-shadow(0 -1.5px 0 #fbf8f0) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
       }
 
-      /* kiss-cut circle for the logos that aren't a shape */
       .slap.round img {
         aspect-ratio: 1;
         object-fit: contain;
         padding: 14%;
         border-radius: 50%;
         background: #fbf8f0;
-        filter: drop-shadow(4px 8px 6px rgba(20, 48, 31, 0.35));
+        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
       }
 
-      /* founder: three dashes, it isn't out yet */
-      .dash {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        gap: 9%;
-        aspect-ratio: 1.7;
-        border-radius: 14px;
-        background: #161616;
-      }
-
-      .dash i {
-        width: 20%;
-        height: 12%;
-        border-radius: 3px;
-        background: #fbf8f0;
+      .slap .tag {
+        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
       }
 
       /* ---------- the long scroll: one composed spread per thing ---------- */
@@ -772,24 +1049,38 @@
         z-index: 5;
       }
 
-      /* a small brass thumbtack */
+      /* matte plastic pushpins, in the page's colors */
       .tack {
         position: absolute;
         z-index: 2;
         top: -5px;
         left: 50%;
-        width: 13px;
-        height: 13px;
-        margin-left: -6.5px;
+        width: 12px;
+        height: 12px;
+        margin-left: -6px;
         border-radius: 50%;
-        background:
-          radial-gradient(circle at 36% 32%, #fff4cf 0 14%, transparent 34%),
-          radial-gradient(circle, #c9a24c 0 52%, #a17c2c 60%, #6f5215 100%);
-        box-shadow: 2px 3px 2px rgba(40, 20, 5, 0.5), inset 0 0 0 1px rgba(80, 55, 10, 0.5);
+        background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.45) 0 16%, transparent 38%), var(--c, #c7422c);
+        box-shadow: 1px 2px 2px rgba(40, 20, 5, 0.45), inset 0 -2px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      .pin.photo:nth-child(5n + 2) .tack {
+        --c: #2d5a37;
+      }
+
+      .pin.photo:nth-child(5n + 3) .tack {
+        --c: #e9dfc7;
+      }
+
+      .pin.photo:nth-child(5n + 4) .tack {
+        --c: #d9a321;
+      }
+
+      .pin.photo:nth-child(5n + 5) .tack {
+        --c: #2f4f7a;
       }
 
       .pin.photo {
-        padding: 7px 7px 26px;
+        padding: 7px 7px 22px;
         background: #fbf8f1;
         box-shadow: 6px 10px 14px rgba(40, 20, 5, 0.4), 1px 2px 3px rgba(40, 20, 5, 0.3);
       }
@@ -822,18 +1113,6 @@
         opacity: 0;
       }
 
-      .pin.photo span {
-        position: absolute;
-        left: 8px;
-        right: 8px;
-        bottom: 4px;
-        font-family: var(--hand);
-        font-size: 17px;
-        line-height: 1.1;
-        color: #2a2a2a;
-        text-align: center;
-      }
-
       /* the holos, stuck straight onto the cork */
       .pin.holo {
         --mx: 50%;
@@ -844,21 +1123,34 @@
       .pin.holo img {
         display: block;
         width: 100%;
-        filter: drop-shadow(1.6px 0 0 #f7f4ec) drop-shadow(-1.6px 0 0 #f7f4ec) drop-shadow(0 1.6px 0 #f7f4ec) drop-shadow(0 -1.6px 0 #f7f4ec) drop-shadow(3px 5px 3px rgba(40, 20, 5, 0.45));
+        filter: drop-shadow(1.2px 0 0 #f7f4ec) drop-shadow(-1.2px 0 0 #f7f4ec) drop-shadow(0 1.2px 0 #f7f4ec) drop-shadow(0 -1.2px 0 #f7f4ec) drop-shadow(0 1px 1.5px rgba(40, 20, 5, 0.4));
       }
 
       .pin.vinylsticker img {
         display: block;
         width: 100%;
-        filter: drop-shadow(2.5px 0 0 #fbf8f0) drop-shadow(-2.5px 0 0 #fbf8f0) drop-shadow(0 2.5px 0 #fbf8f0) drop-shadow(0 -2.5px 0 #fbf8f0) drop-shadow(3px 5px 3px rgba(40, 20, 5, 0.45));
+        filter: drop-shadow(1.5px 0 0 #fbf8f0) drop-shadow(-1.5px 0 0 #fbf8f0) drop-shadow(0 1.5px 0 #fbf8f0) drop-shadow(0 -1.5px 0 #fbf8f0) drop-shadow(0 1px 1.5px rgba(40, 20, 5, 0.4));
       }
 
-      .pin.holo .shine {
+      /* no white edge on the ones that already have their own outline */
+      .pin.vinylsticker.bare img {
+        filter: drop-shadow(0 1px 1.5px rgba(40, 20, 5, 0.45));
+      }
+
+      .pin.holo .shine,
+      .pin.holo .glare,
+      .zshine {
         position: absolute;
         inset: 0;
         pointer-events: none;
         -webkit-mask: var(--src) center / contain no-repeat;
         mask: var(--src) center / contain no-repeat;
+        transition: opacity 0.3s;
+      }
+
+      /* a rainbow that slides as the light moves over the sticker */
+      .pin.holo .shine,
+      .zshine {
         mix-blend-mode: color-dodge;
         opacity: 0.4;
         background:
@@ -866,6 +1158,30 @@
           linear-gradient(115deg, #ff6b6b 0%, #ffd93d 18%, #6bff95 36%, #4dd6ff 54%, #b36bff 72%, #ff6bd6 90%);
         background-size: 100% 100%, 260% 260%;
         background-position: center, var(--mx) var(--my);
+      }
+
+      .pin.holo .glare {
+        mix-blend-mode: overlay;
+        opacity: 0;
+        background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.95), transparent 40%);
+      }
+
+      .pin.holo:hover .shine {
+        opacity: 0.6;
+      }
+
+      .pin.holo:hover {
+        transform: rotate(0deg) scale(1.06);
+      }
+
+      .zshine {
+        display: none;
+        inset: 14px;
+        opacity: 0.6;
+      }
+
+      .zoomed.holo .zshine {
+        display: block;
       }
 
       /* ---------- the straw hat, resting on "say hi" ---------- */
@@ -987,6 +1303,8 @@
       #contact > .wash {
         position: absolute;
         inset: 0;
+        -webkit-mask: linear-gradient(transparent, #000 30%, #000 70%, transparent);
+        mask: linear-gradient(transparent, #000 30%, #000 70%, transparent);
         overflow: hidden;
         z-index: 0;
         pointer-events: none;
@@ -1014,7 +1332,7 @@
         animation: fall linear infinite paused;
       }
 
-      #contact.inview .petal {
+      .petal {
         animation-play-state: running;
       }
 
@@ -1125,6 +1443,23 @@
         color: #2a2a2a;
       }
 
+      .zoomed figcaption small {
+        display: block;
+        margin-top: 6px;
+        font-family: var(--mono);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .zoomed figcaption a {
+        display: inline-block;
+        margin-top: 8px;
+        font-family: var(--mono);
+        font-size: 14px;
+        color: var(--red);
+        text-underline-offset: 3px;
+      }
+
       .zoomed figcaption:empty {
         display: none;
       }
@@ -1132,6 +1467,11 @@
       .zoomed.sticker {
         background: none;
         box-shadow: none;
+      }
+
+      .zoomed.small img {
+        width: auto !important;
+        max-height: 38vh !important;
       }
 
       .zoomed.sticker img {
@@ -1142,6 +1482,64 @@
 
       .zoomed.sticker figcaption {
         color: #efe7d2;
+      }
+
+      /* reach out: the phone, picked up */
+      .phoneview {
+        width: min(380px, 90vw);
+        padding: 14px;
+        border-radius: 42px;
+        background: #1b1b1b;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+      }
+
+      .phoneview .screen {
+        padding: 70px 28px 40px;
+        border-radius: 30px;
+        background:
+          radial-gradient(circle at 20% 80%, rgba(191, 224, 173, 0.8), transparent 55%),
+          radial-gradient(circle at 90% 10%, rgba(243, 198, 201, 0.8), transparent 50%),
+          radial-gradient(circle at 80% 90%, rgba(243, 226, 164, 0.7), transparent 45%),
+          var(--paper);
+      }
+
+      .phoneview .status {
+        display: flex;
+        justify-content: space-between;
+        margin: -40px 0 34px;
+        font: 600 13px var(--sans);
+        color: rgba(20, 48, 31, 0.8);
+      }
+
+      .phoneview h3 {
+        position: relative;
+        isolation: isolate;
+        margin: 0 0 30px;
+        font-family: var(--serif);
+        font-weight: 800;
+        font-size: 52px;
+        line-height: 0.95;
+        color: var(--ink);
+      }
+
+      .phoneview h3::before {
+        content: attr(data-t);
+        position: absolute;
+        left: 0.05em;
+        top: 0.04em;
+        z-index: -1;
+        color: var(--red);
+        opacity: 0.8;
+      }
+
+      .phoneview .links > * {
+        flex-wrap: wrap;
+        font-size: 20px;
+        padding: 13px 0;
+      }
+
+      .phoneview .close {
+        top: -40px;
       }
 
       /* the open folder */
@@ -1209,6 +1607,10 @@
       .opened li .th img {
         max-width: 100%;
         max-height: 100%;
+      }
+
+      .opened li .th svg {
+        width: 100%;
       }
 
       .opened li .th .dash {
@@ -1312,6 +1714,80 @@
           width: 110px;
         }
 
+        .scene {
+          width: 100%;
+          aspect-ratio: auto;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: flex-start;
+          padding: 70px 16px 30px;
+        }
+
+        .scene > .wallpic {
+          position: relative;
+          left: auto;
+          top: auto;
+          width: 42%;
+          margin: 34px 3% 16px;
+        }
+
+        .seal,
+        .chair,
+        .outlet,
+        .cables,
+        .strip {
+          display: none;
+        }
+
+        .shelf {
+          position: relative;
+          left: auto;
+          bottom: auto;
+          width: 88%;
+          margin-top: 30px;
+        }
+
+        .scene > .board .cork {
+          aspect-ratio: auto;
+        }
+
+        .r3d {
+          position: relative;
+          left: auto !important;
+          bottom: auto !important;
+          width: 100% !important;
+          margin-top: 24px;
+        }
+
+        .chair3d {
+          width: 62% !important;
+        }
+
+        .scene > .board {
+          position: relative;
+          left: auto;
+          top: auto;
+          width: 100%;
+        }
+
+        .desk {
+          position: relative;
+          right: auto;
+          bottom: auto;
+          left: auto;
+          width: min(460px, 86%);
+          margin: 34vw 0 6vw;
+        }
+
+        .wall {
+          bottom: 0;
+        }
+
+        .floor {
+          height: 90px;
+        }
+
         .cork {
           aspect-ratio: auto;
           display: flex;
@@ -1328,8 +1804,13 @@
           width: 40%;
         }
 
-        .pin.holo {
+        .pin.holo,
+        .pin.vinylsticker {
           width: 28%;
+        }
+
+        .pin.vinylsticker[data-xp="hunter license"] {
+          width: 17%;
         }
 
         .opened {
@@ -1378,12 +1859,8 @@
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .grain {
-          display: none;
-        }
-
-        .it,
-        .arrows {
+        .grain,
+        .cue {
           transition: none;
           animation: none;
         }
@@ -1393,11 +1870,16 @@
   <body>
     <div class="xp" id="xp" aria-hidden="true"></div>
     <div class="feed" id="feed" aria-hidden="true"></div>
-    <div class="grain" aria-hidden="true"></div>
+    <div class="lvl" id="lvl" aria-hidden="true">1</div>
+        <div class="grain" aria-hidden="true"></div>
+    <div class="bgwash" id="bgwash" aria-hidden="true">
+<img src="images/wash.webp" alt="" />
+    </div>
     <label class="vol" title="volume"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6 H5 L9 2.5 V13.5 L5 10 H2 Z" fill="currentColor" /><path d="M11 5.5 C12.3 6.8 12.3 9.2 11 10.5 M12.8 3.8 C15 6 15 10 12.8 12.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" /></svg><input type="range" id="vol" min="0" max="1" step="0.01" value="0.4" aria-label="music volume" /></label>
 
     <!-- ink filters: a fixed displacement gives lines a hand-drawn wobble -->
     <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <radialGradient id="cone" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#fff" stop-opacity=".5" /><stop offset=".7" stop-color="#000" stop-opacity="0" /><stop offset="1" stop-color="#000" stop-opacity=".25" /></radialGradient><linearGradient id="spkSheen" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".07" /><stop offset=".5" stop-color="#fff" stop-opacity="0" /></linearGradient>
       <filter id="boil"><feTurbulence id="boilT" type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="1" /><feDisplacementMap in="SourceGraphic" scale="2.4" /></filter>
       <filter id="grunge"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="3" /><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -6 0 0 0 4.3" /><feComposite in="SourceGraphic" operator="in" /></filter>
       <filter id="boilBig"><feTurbulence id="boilT2" type="fractalNoise" baseFrequency="0.05" numOctaves="3" seed="1" /><feDisplacementMap in="SourceGraphic" scale="6" /></filter>
@@ -1407,7 +1889,7 @@
       <div class="splat" id="splatBox" aria-hidden="true"><svg id="splat" viewBox="0 0 600 600" filter="url(#boilBig)"></svg></div>
       <div class="name">
         <h1>ben<br /> weber</h1>
-        <p>electrical engineer from princeton, on leave to <b>found</b>.</p>
+        <p>electrical engineer / <b>founder</b>,<br />on leave from princeton.</p>
       </div>
       <div class="crate" id="crate">
         <div class="stage" id="stage">
@@ -1418,119 +1900,60 @@
           <button class="sleeve" data-i="3" aria-label="eiichi ohtaki, a long vacation"><img src="images/records/ohtaki-a-long-vacation.jpg" alt="eiichi ohtaki, a long vacation" /></button>
         </div>
       </div>
-<div class="band" id="band" aria-hidden="true"></div>
-
-      <a class="arrows" href="#pinned" aria-label="down to the rest">
-        <svg viewBox="0 0 120 70" aria-hidden="true">
-          <g fill="none" stroke="#f2c230" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#boil)">
-            <path d="M34 6 C33 22 30 38 26 52 M12 40 C18 46 22 52 26 56 C30 48 34 42 40 36" />
-            <path d="M88 8 C90 24 90 38 88 52 M72 40 C78 46 84 52 88 58 C92 50 96 44 102 40" />
-          </g>
-        </svg>
-      </a>
+<div class="cue" id="cue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 9 L12 16 L19 9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
     </header>
 
 
-    <div class="squig" aria-hidden="true"></div>
-
-    <section class="rise" id="pinned">
-      <div class="sh"><h2>pinned</h2></div>
-      <div class="board">
-        <div class="cork">
+    <section class="room" id="room">
+      <div class="wall" aria-hidden="true"></div>
+      <div class="floor" aria-hidden="true"></div>
+      <div class="scene">
+        <div class="board">
+          <div class="cork">
           <button class="pin photo" data-xp="photo 0" data-src="images/album/takanaka-live.jpg" data-cap="takanaka, live" style="--x:3%;--y:9%;--w:16%;--r:-5deg"><i class="tack"></i><img src="images/album/takanaka-live.jpg" alt="masayoshi takanaka on stage with a surfboard guitar" loading="lazy" /><span>takanaka, live</span></button>
-          <button class="pin photo" data-xp="photo 1" data-src="images/album/above-the-clouds.jpg" data-cap="middle of nowhere, north carolina" style="--x:21%;--y:30%;--w:20%;--r:3deg"><i class="tack"></i><img src="images/album/above-the-clouds.jpg" alt="ben above the clouds at sunset" loading="lazy" /><span>middle of nowhere, north carolina</span></button>
+          <button class="pin photo" data-xp="photo 1" data-src="images/album/above-the-clouds.jpg" data-cap="north carolina" style="--x:21%;--y:30%;--w:20%;--r:3deg"><i class="tack"></i><img src="images/album/above-the-clouds.jpg" alt="ben above the clouds at sunset" loading="lazy" /><span>north carolina</span></button>
           <button class="pin photo" data-xp="photo 2" data-src="images/album/dog.jpg" data-cap="pixie &lt;3" style="--x:44%;--y:6%;--w:15%;--r:-2deg"><i class="tack"></i><img src="images/album/dog.jpg" alt="a french bulldog on a blanket" loading="lazy" /><span>pixie &lt;3</span></button>
           <button class="pin photo" data-xp="photo 3" data-src="images/album/sf-bunker.jpg" data-cap="sf" style="--x:62%;--y:26%;--w:17%;--r:4deg"><i class="tack"></i><img src="images/album/sf-bunker.jpg" alt="ben in a graffiti bunker by the bay" loading="lazy" /><span>sf</span></button>
           <button class="pin photo" data-xp="photo 4" data-src="images/album/lamp-live.jpg" data-cap="lamp, live" style="--x:81%;--y:8%;--w:15%;--r:-4deg"><i class="tack"></i><img src="images/album/lamp-live.jpg" alt="lamp playing live" loading="lazy" /><span>lamp, live</span></button>
           <button class="pin photo" data-xp="photo 5" data-src="images/album/coast.jpg" data-cap="enoshima, japan" style="--x:79%;--y:52%;--w:17%;--r:6deg"><i class="tack"></i><img src="images/album/coast.jpg" alt="a green coastline over blue water" loading="lazy" /><span>enoshima, japan</span></button>
-          <button class="pin holo" data-xp="ibuypower holo" data-src="images/records/ibuypower-holo-katowice-2014.png" data-cap="" data-sticker style="--x:4%;--y:63%;--w:11.5%;--r:-9deg;--src:url('images/records/ibuypower-holo-katowice-2014.png')"><img src="images/records/ibuypower-holo-katowice-2014.png" alt="ibuypower holo sticker, katowice 2014" /><i class="shine"></i></button>
-          <button class="pin holo" data-xp="titan holo" data-src="images/records/titan-holo-katowice-2014.png" data-cap="" data-sticker style="--x:10.5%;--y:74%;--w:10%;--r:11deg;--src:url('images/records/titan-holo-katowice-2014.png')"><img src="images/records/titan-holo-katowice-2014.png" alt="titan holo sticker, katowice 2014" /><i class="shine"></i></button>
-          <button class="pin vinylsticker" data-xp="straw hat jolly roger" data-src="images/stickers/straw-hat-jolly-roger.svg" data-cap="" data-sticker style="--x:45%;--y:58%;--w:10%;--r:-7deg"><img src="images/stickers/straw-hat-jolly-roger.svg" alt="a straw hat pirates jolly roger sticker" /></button>
-          <button class="pin vinylsticker" data-xp="broccoli" data-src="images/stickers/broccoli.svg" data-cap="" data-sticker style="--x:56%;--y:72%;--w:8%;--r:9deg"><img src="images/stickers/broccoli.svg" alt="a broccoli sticker" /></button>
+          <button class="pin holo" data-xp="ibuypower holo" data-src="images/records/ibuypower-holo-katowice-2014.png" data-cap="" data-sticker style="--x:3%;--y:60%;--w:14%;--r:-9deg;--src:url('images/records/ibuypower-holo-katowice-2014.png')"><img src="images/records/ibuypower-holo-katowice-2014.png" alt="ibuypower holo sticker, katowice 2014" /><i class="shine"></i><i class="glare"></i></button>
+          <button class="pin holo" data-xp="titan holo" data-src="images/records/titan-holo-katowice-2014.png" data-cap="" data-sticker style="--x:12%;--y:72%;--w:12.5%;--r:11deg;--src:url('images/records/titan-holo-katowice-2014.png')"><img src="images/records/titan-holo-katowice-2014.png" alt="titan holo sticker, katowice 2014" /><i class="shine"></i><i class="glare"></i></button>
+          <button class="pin vinylsticker bare" data-xp="jolly roger" data-src="images/stickers/straw-hat-jolly-roger.png" data-cap="" data-sticker style="--x:24.5%;--y:2%;--w:12.5%;--r:-8deg"><img src="images/stickers/straw-hat-jolly-roger.png" alt="the straw hat pirates jolly roger sticker" /></button>
+          <button class="pin vinylsticker" data-xp="hunter license" data-src="images/stickers/hunter-license.png" data-cap="" data-sticker style="--x:92%;--y:-9%;--w:8%;--r:12deg"><img src="images/stickers/hunter-license.png" alt="a hunter license from hunter x hunter" /></button>
+          <button class="pin vinylsticker bare" data-xp="broccoli" data-src="images/stickers/broccoli.png" data-cap="" data-sticker style="--x:43.5%;--y:52%;--w:11%;--r:7deg"><img src="images/stickers/broccoli.png" alt="the giant broccoli from mob psycho 100" /></button>
+          </div>
+        </div>
+          <button class="wallpic" data-xp="project hoop" data-src="images/projects/hoop-2576.jpg" data-cap="hoop house farm" data-desc="aeroponics, dutch buckets and other sustainable growing, on a field at my high school. the food went to a food shelter." data-href="hoop.html" style="--x:68%;--y:9%;--w:10%;--r:-3deg"><img src="images/projects/hoop-2576.jpg" alt="the hoop house farm" loading="lazy" /><span>hoop house farm</span></button>
+          <button class="wallpic" data-xp="project drone" data-src="images/projects/drone.jpg" data-cap="drone challenge" data-desc="an open-source quadcopter, built for a competition." data-href="drone.html" style="--x:13.5%;--y:22%;--w:9.5%;--r:3deg"><img src="images/projects/drone.jpg" alt="the quadcopter the team built" loading="lazy" /><span>drone challenge</span></button>
+          <button class="wallpic" data-xp="project sofr" data-src="images/projects/boerse.jpg" data-cap="sofr cointegration" data-desc="stat-arb on sofr futures, for orf 445." data-href="sofr-cointegration.html" style="--x:84%;--y:8%;--w:10%;--r:6deg"><img src="images/projects/boerse.jpg" alt="traders on an exchange floor, 1988" loading="lazy" /><span>sofr cointegration</span></button>
+          <button class="wallpic" data-xp="project roulette" data-src="images/projects/roulette-engraving.jpg" data-cap="roulette bot" data-desc="an old bot for the roulette on csgoroll." data-href="roulette-bot.html" style="--x:2.5%;--y:12%;--w:9%;--r:-4deg"><img src="images/projects/roulette-engraving.jpg" alt="an engraving of a roulette wheel" loading="lazy" /><span>roulette bot</span></button>
+        <div class="r3d chair3d" style="left:0.70%;bottom:4.03%;width:28.20%;aspect-ratio:767/717">
+          <img src="images/room/chair-3d.webp" alt="an armchair" />
+          <div class="rl" data-w="767"><button class="seal" id="seal" data-xp="seal" aria-label="the seal" style="transform:matrix(0.71400,0.00000,0.00000,0.70705,157.00,121.29)"><img src="images/room/seal.webp" alt="a chubby seal plush" /></button></div>
+        </div>
+        <div class="r3d desk3d" style="left:58.24%;bottom:8.22%;width:41.54%;aspect-ratio:1130/833">
+          <img src="images/room/desk-3d.webp" alt="a desk with papers, a potted sunflower and a phone on it, and two speakers underneath" />
+          <div class="rl" data-w="1130">
+            <div class="paper" style="transform:matrix(0.77624,-0.02694,0.19354,0.10803,177.60,264.86)"><button class="slap" data-job="0" style="--x:12%;--y:18%;--w:76%;--r:-4deg" aria-label="founder"><svg class="tag" viewBox="0 0 170 116" aria-hidden="true"><rect x="1" y="1" width="168" height="114" rx="12" fill="#fbf8f0" /><path d="M1 13 A12 12 0 0 1 13 1 H157 A12 12 0 0 1 169 13 V44 H1 Z" fill="#c7422c" /><path d="M1 99 H169 V103 A12 12 0 0 1 157 115 H13 A12 12 0 0 1 1 103 Z" fill="#c7422c" /><text x="85" y="27" text-anchor="middle" font-family="Zen Kaku Gothic New, sans-serif" font-weight="900" font-size="22" letter-spacing="2" fill="#fbf8f0">HELLO</text><text x="85" y="39" text-anchor="middle" font-family="Zen Kaku Gothic New, sans-serif" font-weight="700" font-size="9" letter-spacing="1" fill="#fbf8f0">my name is</text><text x="85" y="84" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="46" fill="#161616">- - -</text></svg></button></div>
+            <div class="paper" style="transform:matrix(0.79015,0.01742,-0.12515,0.10997,353.60,270.99)"><button class="slap" data-job="1" style="--x:10%;--y:10%;--w:44%;--r:8deg" aria-label="neo"><img src="images/logos/neo-egg.png" alt="" /></button><button class="slap" data-job="2" style="--x:58%;--y:40%;--w:30%;--r:-6deg" aria-label="princeton ece"><img src="images/logos/princeton-shield.png" alt="" /></button></div>
+            <div class="paper" style="transform:matrix(0.74686,-0.03990,0.28669,0.10394,513.60,261.53)"><button class="slap round" data-job="5" style="--x:22%;--y:22%;--w:52%;--r:5deg" aria-label="chick-fil-a"><img src="images/logos/cfa.png" alt="" /></button></div>
+            <button class="pscreen" id="phone" data-xp="phone" aria-label="reach out" style="transform:matrix(0.06784,0.00590,-0.04239,0.00944,807.34,287.98)"><b id="ptime">5:00</b><small>est</small></button>
+          </div>
         </div>
       </div>
     </section>
 
-    <div class="squig" aria-hidden="true"></div>
-
-    <section class="rise sec flip" id="work">
-      <div class="copy">
-        <div class="sh"><h2>work</h2></div>
-        <p class="note">where i've been.</p>
-      </div>
-      <div class="stagebox">
-        <svg class="blot" data-color="#c99a3b" data-mesh viewBox="0 0 600 600" aria-hidden="true" filter="url(#boilBig)"></svg>
-        <div class="slaps">
-          <button class="slap" data-job="0" style="--x:6%;--y:8%;--w:40%;--r:-7deg" aria-label="founder"><span class="dash"><i></i><i></i><i></i></span></button>
-          <button class="slap" data-job="1" style="--x:54%;--y:2%;--w:38%;--r:8deg" aria-label="neo"><img src="images/logos/neo-egg.png" alt="" /></button>
-          <button class="slap" data-job="2" style="--x:14%;--y:48%;--w:25%;--r:5deg" aria-label="princeton ece"><img src="images/logos/princeton-shield.png" alt="" /></button>
-          <button class="slap round" data-job="5" style="--x:52%;--y:46%;--w:34%;--r:-6deg" aria-label="chick-fil-a"><img src="images/logos/cfa.png" alt="" /></button>
-        </div>
-      </div>
-    </section>
-
-    <div class="squig" aria-hidden="true"></div>
-
-    <section class="rise proj" id="projects">
-      <div class="sh"><h2>side projects</h2></div>
-      <div class="cards">
-        <a class="icard" href="hoop.html" style="--r: -3deg"><b>hoop house farm</b><img src="images/projects/hoop-2576.jpg" alt="the hoop house farm" loading="lazy" />aeroponics and dutch buckets, on a field at school.</a>
-        <a class="icard" href="drone.html" style="--r: 2deg; --tr: 4deg"><b>drone challenge</b><img src="images/projects/drone.jpg" alt="the quadcopter the team built" loading="lazy" />an open-source quadcopter, built for a competition.</a>
-        <a class="icard" href="sofr-cointegration.html" style="--r: -1.5deg"><b>sofr cointegration</b><img src="images/projects/boerse.jpg" alt="traders on an exchange floor, 1988" loading="lazy" />stat-arb on rates. orf445.</a>
-        <a class="icard" href="roulette-bot.html" style="--r: 3deg; --tr: -5deg"><b>roulette bot</b><img src="images/projects/roulette-engraving.jpg" alt="an engraving of a roulette wheel" loading="lazy" />an old bot for the roulette on csgoroll.</a>
-      </div>
-    </section>
-
-    <div class="squig" aria-hidden="true"></div>
-
-    <section class="rise" id="writing">
-      <div class="sh"><h2>writing</h2></div>
-      <div class="entries">
-        <a class="entry" href="https://www.getsieve.io/blog/chained-trust-hijacking" target="_blank" rel="noopener" data-xp="writing"><small>jul 2026 · sieve</small><b>chained trust hijacking</b><span>a phishing campaign that chained trust across compromised mailboxes, postmark, google and cloudflare.</span></a>
-      </div>
-    </section>
-
-    <section class="rise" id="contact">
-      <div class="wash" id="wash">
-        <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <filter id="wc" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7" /><feDisplacementMap in="SourceGraphic" scale="70" /><feGaussianBlur stdDeviation="14" /></filter>
-          <g filter="url(#wc)" opacity=".5">
-            <ellipse cx="260" cy="520" rx="300" ry="170" fill="#bfe0ad" />
-            <ellipse cx="980" cy="160" rx="260" ry="150" fill="#f3c6c9" />
-            <ellipse cx="760" cy="600" rx="220" ry="120" fill="#f3e2a4" />
-            <ellipse cx="560" cy="300" rx="180" ry="110" fill="#cfe8d6" />
-          </g>
-        </svg>
-      </div>
-      <div class="sh"><h2>hi<button class="hat" id="hat" aria-label="a straw hat"><svg viewBox="0 0 220 124" aria-hidden="true">
-            <g stroke="#3a220c" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round">
-              <path d="M6 88 C8 64 58 58 110 58 C162 58 212 64 214 88 C212 108 162 116 110 116 C58 116 8 108 6 88 Z" fill="#f6cf45" />
-              <path d="M28 98 C60 110 160 110 192 98 C170 108 140 112 110 112 C80 112 50 108 28 98 Z" fill="#d9a321" stroke="none" />
-              <ellipse cx="112" cy="84" rx="60" ry="13" fill="#d9a321" stroke="none" />
-              <path d="M14 98 l-7 5 M30 106 l-4 7 M52 111 l-2 8 M170 111 l3 8 M190 105 l6 6 M206 96 l8 4 M8 80 l-7 -3" fill="none" stroke-width="2.6" />
-              <path d="M54 82 C50 30 72 12 110 12 C148 12 170 30 166 82 C146 92 74 92 54 82 Z" fill="#f6cf45" />
-              <path d="M140 18 C160 30 166 54 164 80 C156 84 148 86 140 87 C146 64 146 38 140 18 Z" fill="#d9a321" stroke="none" />
-              <path d="M55 62 C80 73 140 73 165 62 L166 82 C146 92 74 92 54 82 Z" fill="#d8261b" />
-              <path d="M140 72 C150 70 158 67 165 63 L166 82 C160 86 152 88 142 90 Z" fill="#a51a11" stroke="none" />
-              <path d="M76 30 C92 24 128 24 144 30 M68 46 C92 40 128 40 152 46" fill="none" stroke="#c28f1a" stroke-width="1.8" />
-              <path d="M78 22 C88 16 100 15 112 15" fill="none" stroke="#fff5c2" stroke-width="4" />
-            </g>
-          </svg>
-</button></h2></div>
-      <div class="say">
-        <div class="links">
-          <div class="mail">email <small>benjaminguyweber [at] gmail.com</small></div>
+    <div class="reader" id="reader" aria-hidden="true">
+      <figure class="view zoomed" id="zoomView" role="dialog" aria-modal="true" aria-label="a closer look"><button class="close" data-close>close ✕</button><img id="zimg" alt="" /><i class="zshine"></i><figcaption id="zcap"></figcaption></figure>
+      <div class="view phoneview" id="phoneView" role="dialog" aria-modal="true" aria-label="reach out">
+        <button class="close" data-close>close ✕</button>
+        <div class="screen"><div class="status"><span id="vtime">5:00 pm est</span></div><h3 data-t="reach out">reach out</h3><div class="links">
+          <div class="mail">email <small>benjaminguyweber [at] gmail [.] com</small></div>
           <a href="https://x.com/benguyweber" target="_blank" rel="noopener" data-xp="x">x <small>@benguyweber</small></a>
           <a href="https://www.linkedin.com/in/benjaminguyweber/" target="_blank" rel="noopener" data-xp="linkedin">linkedin <small>/benjaminguyweber</small></a>
           <a href="https://discordapp.com/users/229360161490337793" target="_blank" rel="noopener" data-xp="discord">discord <small>@benthetacoman</small></a>
-        </div>
+        </div></div>
       </div>
-    </section>
-
-    <footer><span>© ben weber</span><span>made in fort lauderdale</span></footer>
-
-    <div class="reader" id="reader" aria-hidden="true">
-      <figure class="view zoomed" id="zoomView" role="dialog" aria-modal="true" aria-label="a closer look"><button class="close" data-close>close ✕</button><img id="zimg" alt="" /><figcaption id="zcap"></figcaption></figure>
       <div class="view opened" id="folderView" role="dialog" aria-modal="true" aria-label="work">
         <button class="close" data-close>close ✕</button>
         <ul id="tabs"></ul>
@@ -1676,7 +2099,7 @@
         const r = RECORDS[current], url = (await previews)[r.track];
         if (!url) return;
         crate.classList.add("playing");
-        gain("play " + current);
+        gain("play " + current, RECORDS[current].title);
         // needle drop: a burst of crackle, then settle while the arm lands
         const t = ctx.currentTime;
         crackle.gain.cancelScheduledValues(t);
@@ -1693,8 +2116,8 @@
         crackle.gain.setTargetAtTime(0, ctx.currentTime, 0.03);
       }
       const toggle = () => (crate.classList.contains("playing") ? stop() : play());
-      // a mixtape keeps going: when a preview ends, the next record goes on
-      audio.addEventListener("ended", () => next());
+      // when the song ends the record just stops; it doesn't move on
+      audio.addEventListener("ended", stop);
       disc.addEventListener("click", toggle);
       disc.addEventListener("keydown", (e) => e.key === "Enter" && toggle());
       addEventListener("keydown", (e) => {
@@ -1711,12 +2134,9 @@
       });
       pick(0);
 
-      // ---------- the strip under the hero ----------
-      {
-        let d = "M0 60";
-        for (let x = 0; x <= 1200; x += 20) d += ` L${x} ${(60 + Math.sin(x / 38) * 9 + Math.sin(x / 11) * 1.5).toFixed(1)}`;
-        document.getElementById("band").innerHTML = `<svg viewBox="0 0 1200 90" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="#2d5a37" stroke-width="3" stroke-linecap="round" filter="url(#boilBig)" vector-effect="non-scaling-stroke" /></svg>`;
-      }
+      // ---------- the little arrow goes as soon as you scroll ----------
+      const cue = document.getElementById("cue");
+      addEventListener("scroll", () => cue.classList.toggle("gone", scrollY > 30), { passive: true });
 
       // ---------- red paint splotch behind the crate ----------
       (function splat() {
@@ -1727,29 +2147,31 @@
           const r = 215 + Math.sin(t * 5) * 10 + Math.sin(t * 13) * 6 + (Math.random() < 0.08 ? rnd(10, 26) : 0);
           d += (i ? "L" : "M") + (cx + Math.cos(t) * r).toFixed(1) + " " + (cy + Math.sin(t) * r * 0.92).toFixed(1);
         }
-        let extra = "";
-        for (let i = 0; i < 5; i++) {
-          const t = rnd(Math.PI * 1.1, Math.PI * 1.9), r = rnd(245, 285);
-          extra += `<circle cx="${(cx + Math.cos(t) * r).toFixed(0)}" cy="${(cy + Math.sin(t) * r).toFixed(0)}" r="${rnd(3, 9).toFixed(1)}"/>`;
-        }
-        document.getElementById("splat").innerHTML = `<g fill="#cc5640"><path d="${d}Z"/>${extra}</g>`;
-        // bubbles along the top of the paint
+        document.getElementById("splat").innerHTML = `<g fill="#cc5640"><path d="${d}Z"/></g>`;
+        // bubbles all the way round, and drops that fall off the bottom
         if (REDUCED) return;
         const box = document.getElementById("splatBox");
-        for (let i = 0; i < 14; i++) {
-          const t = rnd(Math.PI * 1.08, Math.PI * 1.92), simmer = i % 3 === 0, r = simmer ? 212 : rnd(170, 205);
+        const add = (css) => {
           const b = document.createElement("i");
           b.className = "bub";
-          b.style.cssText = `--x:${((cx + Math.cos(t) * r) / 6).toFixed(1)}%;--y:${((cy + Math.sin(t) * r * 0.92) / 6).toFixed(1)}%;--s:${rnd(simmer ? 26 : 9, simmer ? 46 : 24).toFixed(0)}px;--rise:${rnd(14, 46).toFixed(0)}px;--dur:${rnd(2.6, 5.2).toFixed(1)}s;--d:${(-rnd(0, 5)).toFixed(1)}s${simmer ? ";--a:simmer" : ""}`;
+          b.style.cssText = css;
           box.appendChild(b);
+        };
+        for (let i = 0; i < 20; i++) {
+          const t = (i / 20) * Math.PI * 2 + rnd(-0.12, 0.12), simmer = i % 4 === 0, r = simmer ? 212 : rnd(186, 208), out = rnd(14, 40);
+          add(`--x:${((cx + Math.cos(t) * r) / 6).toFixed(1)}%;--y:${((cy + Math.sin(t) * r * 0.92) / 6).toFixed(1)}%;--dx:${(Math.cos(t) * out).toFixed(0)}px;--dy:${(Math.sin(t) * out).toFixed(0)}px;--s:${rnd(simmer ? 24 : 8, simmer ? 42 : 22).toFixed(0)}px;--dur:${rnd(2.6, 5.2).toFixed(1)}s;--d:${(-rnd(0, 5)).toFixed(1)}s${simmer ? ";--a:simmer" : ""}`);
+        }
+        for (let i = 0; i < 5; i++) {
+          const t = rnd(Math.PI * 0.2, Math.PI * 0.8), r = 206;
+          add(`--x:${((cx + Math.cos(t) * r) / 6).toFixed(1)}%;--y:${((cy + Math.sin(t) * r * 0.92) / 6).toFixed(1)}%;--fall:${rnd(60, 130).toFixed(0)}px;--s:${rnd(9, 16).toFixed(0)}px;--dur:${rnd(3, 5.5).toFixed(1)}s;--d:${(-rnd(0, 5)).toFixed(1)}s;--a:drip`);
         }
       })();
 
 
       // ---------- work: each sticker opens its sheet ----------
-      const DASH = '<span class="dash"><i></i><i></i><i></i></span>';
+      const NAMETAG = '<svg class="tag" viewBox="0 0 170 116" aria-hidden="true"><rect x="1" y="1" width="168" height="114" rx="12" fill="#fbf8f0" /><path d="M1 13 A12 12 0 0 1 13 1 H157 A12 12 0 0 1 169 13 V44 H1 Z" fill="#c7422c" /><path d="M1 99 H169 V103 A12 12 0 0 1 157 115 H13 A12 12 0 0 1 1 103 Z" fill="#c7422c" /><text x="85" y="27" text-anchor="middle" font-family="Zen Kaku Gothic New, sans-serif" font-weight="900" font-size="22" letter-spacing="2" fill="#fbf8f0">HELLO</text><text x="85" y="39" text-anchor="middle" font-family="Zen Kaku Gothic New, sans-serif" font-weight="700" font-size="9" letter-spacing="1" fill="#fbf8f0">my name is</text><text x="85" y="84" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="46" fill="#161616">- - -</text></svg>';
       const JOBS = [
-        { name: "founder", th: DASH, what: 'working on --- with <a href="https://kevin2jeon.com/" target="_blank" rel="noopener">kevin</a>.', when: "april – now" },
+        { name: "founder", th: NAMETAG, what: 'working on --- with <a href="https://kevin2jeon.com/" target="_blank" rel="noopener">kevin</a>.', when: "april – now" },
         { name: "neo", th: '<img src="images/logos/neo-egg.png" alt="">', url: "https://neo.com", what: "the neo semester in sf.", when: "jan – april" },
         { name: "princeton ece", th: '<img src="images/logos/princeton-shield.png" alt="">', page: "research.html", what: "adversarially robust malware detection with transformers.", when: "research intern" },
         { name: "circle wealth", what: "portfolio analytics for $12 billion in assets.", when: "full-stack intern" },
@@ -1759,7 +2181,9 @@
 
       // ---------- xp: one bar for each different thing you click ----------
       const pins = [...document.querySelectorAll(".pin[data-src]")];
-      const XP_IDS = ["play 0", "play 1", "play 2", "play 3", ...JOBS.map((j) => "job " + j.name), ...pins.map((p) => p.dataset.xp), "x", "linkedin", "discord", "writing", "straw hat"];
+      const wallpics = [...document.querySelectorAll(".wallpic")];
+      // every record, the work stickers once, every photo and sticker, every project, the phone and the hat
+      const XP_IDS = ["play 0", "play 1", "play 2", "play 3", "work", ...pins.map((p) => p.dataset.xp), ...wallpics.map((w) => w.dataset.xp), "phone", "seal"];
       const earned = new Set();
       xp.innerHTML = "<i></i>".repeat(XP_IDS.length);
       const bars = [...xp.children];
@@ -1767,7 +2191,13 @@
         if (!XP_IDS.includes(id) || earned.has(id)) return;
         earned.add(id);
         bars[earned.size - 1].style.setProperty("--f", "100%");
-        if (name) kill(name);
+        kill(name || id);
+        if (earned.size === XP_IDS.length)
+          setTimeout(() => {
+            kill("ace", "knife");
+            xp.classList.add("full");
+            document.getElementById("lvl").classList.add("on");
+          }, 900);
       }
       document.addEventListener("click", (e) => {
         const t = e.target.closest("a[data-xp]");
@@ -1790,7 +2220,7 @@
       function openJob(i) {
         const j = JOBS[i];
         tabs.querySelectorAll("button").forEach((b, k) => b.classList.toggle("on", k === i));
-        sheet.innerHTML = `<span class="when">${j.when}</span><h3 data-t="${j.name}">${j.url ? `<a href="${j.url}" target="_blank" rel="noopener">${j.name}</a>` : j.name}</h3>${j.what}${j.page ? `<br><a class="more" href="${j.page}">the full page →</a>` : ""}`;
+        sheet.innerHTML = `<span class="when">${j.when}</span><h3 data-t="${j.name}">${j.url ? `<a href="${j.url}" target="_blank" rel="noopener">${j.name}</a>` : j.name}</h3>${j.what}${j.page ? `<br><span class="more">write-up: work in progress</span>` : ""}`;
         gain("job " + j.name);
       }
       tabs.addEventListener("click", (e) => {
@@ -1799,6 +2229,7 @@
       });
       document.querySelectorAll(".slap").forEach((b) =>
         b.addEventListener("click", () => {
+          gain("work", "work");
           show("folderView");
           openJob(+b.dataset.job);
         }),
@@ -1843,20 +2274,29 @@
 
       // click a pin and it lifts off the board toward you
       const zoom = document.getElementById("zoomView"), zimg = document.getElementById("zimg"), zcap = document.getElementById("zcap");
-      pins.forEach((p) =>
+      [...pins, ...wallpics].forEach((p) =>
         p.addEventListener("click", () => {
           const from = p.getBoundingClientRect();
           zimg.src = p.dataset.src;
           zimg.alt = p.querySelector("img").alt;
           zcap.textContent = p.dataset.cap;
+          // a side project: what it was, and a link to the rest
+          if (p.dataset.href) {
+            const small = document.createElement("small"), more = document.createElement("a");
+            small.textContent = p.dataset.desc;
+            more.href = p.dataset.href;
+            more.textContent = "view more →";
+            zcap.append(small, more);
+          }
           zoom.classList.toggle("sticker", p.hasAttribute("data-sticker"));
+          zoom.classList.toggle("holo", p.classList.contains("holo"));
+          zoom.classList.toggle("small", p.dataset.xp === "hunter license");
+          zoom.style.setProperty("--src", `url('${p.dataset.src}')`);
           zpix.style.display = "none";
           show("zoomView");
-          if (p.classList.contains("photo")) {
-            resolve(p.dataset.src);
-            p.classList.add("seen");
-          }
-          gain(p.dataset.xp, p.hasAttribute("data-sticker") ? p.dataset.xp : null);
+          if (p.classList.contains("photo")) resolve(p.dataset.src);
+          p.classList.add("seen");
+          gain(p.dataset.xp, p.dataset.cap || p.dataset.xp);
           if (REDUCED) return;
           const to = zoom.getBoundingClientRect();
           zoom.style.transition = "none";
@@ -1869,16 +2309,67 @@
           );
         }),
       );
-      addEventListener("pointermove", (e) =>
-        document.querySelectorAll(".pin.holo").forEach((h) => {
-          const r = h.getBoundingClientRect();
-          h.style.setProperty("--mx", ((e.clientX - r.left) / r.width) * 100 + "%");
-          h.style.setProperty("--my", ((e.clientY - r.top) / r.height) * 100 + "%");
-        }),
+      const holos = [...document.querySelectorAll(".pin.holo"), document.getElementById("zoomView")];
+      let lightQueued = false;
+      addEventListener(
+        "pointermove",
+        (e) => {
+          if (lightQueued) return;
+          lightQueued = true;
+          requestAnimationFrame(() => {
+            lightQueued = false;
+            holos.forEach((h) => {
+              const r = h.getBoundingClientRect();
+              if (!r.width) return;
+              h.style.setProperty("--mx", (((e.clientX - r.left) / r.width) * 100).toFixed(1) + "%");
+              h.style.setProperty("--my", (((e.clientY - r.top) / r.height) * 100).toFixed(1) + "%");
+            });
+          });
+        },
+        { passive: true },
       );
 
-      // the straw hat
-      document.getElementById("hat").addEventListener("click", () => gain("straw hat", "straw hat"));
+
+      // the phone's lock screen keeps eastern time
+      const hm = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" });
+      const setTime = () => {
+        const d = new Date();
+        document.getElementById("ptime").textContent = hm.format(d).replace(/\s?[AP]M$/, "");
+        document.getElementById("vtime").textContent = hm.format(d).toLowerCase() + " est";
+      };
+      setTime();
+      setInterval(setTime, 30000);
+
+      // render layers: scale each one to the size its render is drawn at
+      const layers = [...document.querySelectorAll(".rl")];
+      const fit = () => layers.forEach((l) => l.style.setProperty("--k", l.parentElement.clientWidth / +l.dataset.w));
+      new ResizeObserver(fit).observe(document.getElementById("room"));
+      fit();
+
+      // the seal does a roll
+      const seal = document.getElementById("seal");
+      seal.addEventListener("click", () => {
+        gain("seal", "seal");
+        seal.classList.remove("roll");
+        void seal.offsetWidth;
+        seal.classList.add("roll");
+      });
+
+      // the phone on the desk: pick it up to reach out
+      document.getElementById("phone").addEventListener("click", () => {
+        gain("phone", "phone");
+        const from = document.getElementById("phone").getBoundingClientRect(), pv = document.getElementById("phoneView");
+        show("phoneView");
+        if (!REDUCED) {
+          const to = pv.getBoundingClientRect();
+          pv.style.transition = "none";
+          pv.style.transform = `translate(${from.left + from.width / 2 - (to.left + to.width / 2)}px, ${from.top + from.height / 2 - (to.top + to.height / 2)}px) scale(0.08) rotate(-30deg)`;
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            pv.style.transition = "transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)";
+            pv.style.transform = "none";
+          }));
+        }
+      });
 
       reader.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", closeAll));
       reader.addEventListener("click", (e) => e.target === reader && closeAll());
@@ -1917,8 +2408,8 @@
       });
 
       // ---------- petals in the say hi section, only while it's on screen ----------
-      const wash = document.getElementById("wash"), contact = document.getElementById("contact");
-      for (let i = 0; i < 16; i++) {
+      const wash = document.getElementById("bgwash");
+      for (let i = 0; i < 10; i++) {
         const p = document.createElement("span");
         p.className = "petal";
         p.style.left = rnd(0, 100) + "%";
@@ -1928,7 +2419,6 @@
         p.style.background = ["#f4c9cf", "#f7e3a6", "#d8ecd0", "#fbeaea"][i % 4];
         wash.appendChild(p);
       }
-      new IntersectionObserver(([e]) => contact.classList.toggle("inview", e.isIntersecting)).observe(contact);
 
       // sections rise in as they scroll into view
       const rio = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && e.target.classList.add("shown")), { threshold: 0.15 });
