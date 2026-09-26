@@ -788,16 +788,17 @@
         background: none;
       }
 
-      /* a little paper tag taped under the car */
+      /* a little paper tag taped in the corner of the car viewer */
       .carnote {
         position: absolute;
-        top: calc(100% + 6px);
-        transform: translateX(-50%) rotate(-3deg);
-        padding: 1px 9px 2px;
+        left: 22px;
+        top: 20px;
+        transform: rotate(-3deg);
+        padding: 3px 12px 4px;
         background: #fbf8f0;
         box-shadow: 0 2px 4px rgba(40, 25, 10, 0.2);
         font-family: var(--hand);
-        font-size: clamp(11px, 1vw, 16px);
+        font-size: 22px;
         white-space: nowrap;
         color: #2a2a2a;
         pointer-events: none;
@@ -2138,7 +2139,7 @@
         </div>
           <button class="wallpic" data-xp="project hoop" data-src="images/projects/hoop-2576.webp" data-cap="hoop house farm" data-desc="aeroponics, dutch buckets and other sustainable growing, on a field at my high school. the food went to a food shelter." data-href="hoop.html" style="--x:74%;--y:8%;--w:11%;--r:3deg"><img src="images/projects/hoop-2576.webp" alt="the hoop house farm" loading="lazy" /><span>hoop house farm</span></button>
           <button class="wallpic" data-xp="project drone" data-src="images/projects/drone.webp" data-cap="drone challenge" data-desc="an open-source quadcopter, built for a competition." data-href="drone.html" style="--x:6%;--y:16%;--w:10.5%;--r:-3deg"><img src="images/projects/drone.webp" alt="the quadcopter the team built" loading="lazy" /></button>
-        <div class="r3d shelf3d" style="left:28.82%;bottom:33.48%;width:25.29%;aspect-ratio:1376/392"><img loading="lazy" decoding="async" src="images/room/shelf-3d.webp" alt="an oak floating shelf with the vagabond vizbig set and a model lexus gs 350" /><button class="carhit" id="car" data-xp="lexus" aria-label="a model lexus gs 350; drag to spin it" style="left:63.41%;top:40.92%;width:33.63%;height:45.10%"></button><span class="carnote" aria-hidden="true" style="left:80.22%">nyc → la, 34 hrs</span></div>
+        <div class="r3d shelf3d" style="left:28.82%;bottom:33.48%;width:25.29%;aspect-ratio:1376/392"><img loading="lazy" decoding="async" src="images/room/shelf-3d.webp" alt="an oak floating shelf with the vagabond vizbig set and a model lexus gs 350" /><button class="carhit" id="car" data-xp="lexus" aria-label="a model lexus gs 350; drag to spin it" style="left:63.41%;top:40.92%;width:33.63%;height:45.10%"></button></div>
         <div class="r3d chair3d" style="left:0.70%;bottom:4.03%;width:28.20%;aspect-ratio:767/717">
           <img loading="lazy" decoding="async" src="images/room/chair-3d.webp" alt="an armchair" />
           <div class="rl" data-w="767"><button class="seal" id="seal" data-xp="seal" data-src="images/room/seal.webp" data-cap="" data-sticker aria-label="the seal" style="transform:matrix(0.71400,0.00000,0.00000,0.70705,157.00,121.29)"><img loading="lazy" decoding="async" src="images/room/seal.webp" alt="a chubby seal plush" /></button></div>
@@ -2171,6 +2172,7 @@
       <figure class="view carview" id="carView" role="dialog" aria-modal="true" aria-label="a model lexus gs 350">
         <button class="close" data-close>close ✕</button>
         <canvas id="carCanvas"></canvas>
+        <span class="carnote">nyc → la, 34 hrs</span>
         <a class="credit" href="https://sketchfab.com/3d-models/lexus-gs-350-2011-a89d18432d5047549c4e8b9a66cb2d7d" target="_blank" rel="noopener" aria-label="model credit">i<span>“lexus gs 350 2011” by 3dshowroom · cc by 4.0</span></a>
       </figure>
       <div class="view opened" id="folderView" role="dialog" aria-modal="true" aria-label="work">
@@ -2585,6 +2587,7 @@
         const { OrbitControls } = await import("three/addons/controls/OrbitControls.js");
         const { MeshoptDecoder } = await import("three/addons/libs/meshopt_decoder.module.js");
         const { RoomEnvironment } = await import("three/addons/environments/RoomEnvironment.js");
+        const { styleLexus } = await import("./js/lexus-look.js");
         const canvas = document.getElementById("carCanvas");
         const r = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         r.setPixelRatio(Math.min(2, devicePixelRatio));
@@ -2592,12 +2595,14 @@
         r.toneMapping = THREE.ACESFilmicToneMapping;
         const scene = new THREE.Scene();
         scene.environment = new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(), 0.04).texture;
-        const sun = new THREE.DirectionalLight(0xfff4e4, 1.4);
+        scene.add(new THREE.HemisphereLight(0xfff6e8, 0x6b6250, 1.1));
+        const sun = new THREE.DirectionalLight(0xfff4e4, 2.2);
         sun.position.set(3, 6, 4);
         scene.add(sun);
         const loader = new GLTFLoader();
         loader.setMeshoptDecoder(MeshoptDecoder);
         const car = (await loader.loadAsync("images/room/lexus.glb")).scene;
+        styleLexus(THREE, car);
         const box = new THREE.Box3().setFromObject(car), c = box.getCenter(new THREE.Vector3()), sz = box.getSize(new THREE.Vector3());
         car.position.sub(c);
         scene.add(car);
