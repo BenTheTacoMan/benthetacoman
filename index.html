@@ -724,6 +724,54 @@
         opacity: 1;
       }
 
+      /* sticky notes above the desk: a little overlapping pile, scribbled on */
+      .stickies {
+        position: absolute;
+        left: 70.5%;
+        top: 28.5%;
+        width: 15%;
+        height: 19%;
+        z-index: 2;
+      }
+
+      .sticky {
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: var(--w);
+        aspect-ratio: 1;
+        padding: 0;
+        border: 0;
+        background: var(--c);
+        box-shadow: 0 4px 7px -3px rgba(20, 48, 31, 0.4), 0 1px 1px rgba(20, 48, 31, 0.15);
+        transform: rotate(var(--r));
+        transition: transform 0.3s cubic-bezier(0.3, 1.4, 0.5, 1);
+        cursor: pointer;
+      }
+
+      .sticky:hover {
+        z-index: 9;
+        transform: rotate(0deg) scale(1.15);
+      }
+
+      .sticky svg {
+        position: absolute;
+        inset: 14% 12%;
+        width: 76%;
+        height: 72%;
+        overflow: visible;
+      }
+
+      /* a slightly darker, curling bottom edge */
+      .sticky::after {
+        content: "";
+        position: absolute;
+        inset: auto 0 0;
+        height: 22%;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.08));
+      }
+
+
       /* the room's furniture: rendered in 3d at one shared scale (8px per cm, 340cm across), placed by the wall line */
       /* each render is placed at its own spot; .rl is a layer in the render's own pixels, scaled to fit */
       .r3d {
@@ -835,53 +883,14 @@
         cursor: grabbing;
       }
 
-      /* the model credit (cc by), kept small in the corner; hover shows it */
-      .carview .credit {
+      .carview .carname {
         position: absolute;
         right: 16px;
         bottom: 14px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        text-decoration: none;
         font: 600 11px var(--mono);
+        letter-spacing: 0.04em;
         color: var(--ink);
-        opacity: 0.35;
-        transition: opacity 0.2s;
-      }
-
-      .carview .credit::before {
-        content: "i";
-        order: 2;
-        display: grid;
-        place-items: center;
-        font: 700 10px/1 var(--mono);
-        width: 16px;
-        height: 16px;
-        border: 1.5px solid currentColor;
-        border-radius: 50%;
-      }
-
-      .carview .credit {
-        font-size: 0;
-      }
-
-      .carview .credit span {
-        font-size: 10px;
-        max-width: 0;
-        overflow: hidden;
-        white-space: nowrap;
-        transition: max-width 0.3s;
-      }
-
-      .carview .credit:hover,
-      .carview .credit:focus {
-        opacity: 0.8;
-      }
-
-      .carview .credit:hover span,
-      .carview .credit:focus span {
-        max-width: 320px;
+        opacity: 0.45;
       }
 
       /* the sandwich is the chick-fil-a job too */
@@ -1685,6 +1694,338 @@
         top: -40px;
       }
 
+      /* the sticky notes, opened: leave one, read the rest */
+      .notesview {
+        width: min(920px, 94vw);
+        max-height: 84vh;
+        overflow: auto;
+        padding: 28px 30px 34px;
+        border-radius: 4px;
+        background:
+          radial-gradient(circle, rgba(45, 90, 55, 0.16) 1.4px, transparent 1.8px) 0 0 / 10px 10px,
+          var(--paper);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+      }
+
+      .notesview .close {
+        position: sticky;
+        z-index: 3;
+        float: right;
+        top: 0;
+        color: var(--ink);
+      }
+
+      .notesview h3 {
+        position: relative;
+        isolation: isolate;
+        margin: 0 0 18px;
+        font-family: var(--serif);
+        font-weight: 800;
+        font-size: 46px;
+        line-height: 0.95;
+        color: var(--ink);
+      }
+
+      .notesview h3::before {
+        content: attr(data-t);
+        position: absolute;
+        left: 0.05em;
+        top: 0.04em;
+        z-index: -1;
+        color: var(--red);
+        opacity: 0.8;
+      }
+
+      .nfilter {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 14px;
+        margin: 0 0 22px;
+        font: 500 12px var(--mono);
+        letter-spacing: 0.06em;
+        color: rgba(20, 48, 31, 0.7);
+      }
+
+      .nfilter button {
+        border: 0;
+        padding: 2px 0;
+        background: none;
+        font: inherit;
+        color: inherit;
+      }
+
+      .nfilter button.on {
+        color: var(--ink);
+        text-decoration: underline 2px var(--red);
+        text-underline-offset: 4px;
+      }
+
+      .nfilter input {
+        width: 150px;
+        border: 0;
+        border-bottom: 1px solid rgba(20, 48, 31, 0.35);
+        padding: 2px 0;
+        background: none;
+        font: inherit;
+        color: var(--ink);
+        outline: none;
+      }
+
+      .compose.done {
+        justify-content: center;
+        text-align: center;
+        font-size: 22px;
+        line-height: 1.1;
+      }
+
+      .compose.done p {
+        margin: 0;
+      }
+
+      .ncolors label {
+        width: 16px;
+        height: 16px;
+        padding: 0;
+        border-radius: 50%;
+        background: var(--c);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+      }
+
+      .nfilter .count {
+        margin-left: auto;
+      }
+
+      .ngrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 22px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .ngrid > li,
+      .compose {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        aspect-ratio: 1;
+        padding: 14px 14px 10px;
+        background: var(--c);
+        box-shadow: 0 10px 14px -8px rgba(20, 48, 31, 0.45), 0 1px 1px rgba(20, 48, 31, 0.15);
+        transform: rotate(var(--r, 0deg));
+        font-family: var(--hand);
+        color: #2a2a2a;
+      }
+
+      .ngrid > li p {
+        flex: 1;
+        margin: 0;
+        overflow: hidden;
+        font-size: 22px;
+        line-height: 1.05;
+        overflow-wrap: anywhere;
+      }
+
+      .ngrid > li .by {
+        white-space: nowrap;
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+        font-size: 17px;
+      }
+
+      .ngrid > li time {
+        font: 500 11px var(--mono);
+        align-self: flex-end;
+        opacity: 0.6;
+      }
+
+      .ngrid > li.new {
+        animation: stick 0.5s cubic-bezier(0.3, 1.5, 0.5, 1);
+      }
+
+      @keyframes stick {
+        from {
+          transform: translateY(-30px) rotate(-12deg) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      /* the owner's delete button, only after the admin code */
+      .ngrid .rm {
+        position: absolute;
+        top: 4px;
+        right: 6px;
+        border: 0;
+        background: none;
+        font: 600 14px var(--mono);
+        color: var(--red);
+      }
+
+      .compose {
+        --c: #f7e27a;
+        --r: -1.5deg;
+        outline: 2px dashed rgba(20, 48, 31, 0.35);
+        outline-offset: 5px;
+      }
+
+      .compose textarea,
+      .compose input[type="text"] {
+        width: 100%;
+        border: 0;
+        padding: 0;
+        background: none;
+        font: inherit;
+        color: inherit;
+        resize: none;
+        outline: none;
+      }
+
+      .compose textarea {
+        flex: 1;
+        font-size: 22px;
+        line-height: 1.05;
+      }
+
+      .compose input[type="text"] {
+        font-size: 17px;
+      }
+
+      .compose .row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 6px;
+      }
+
+      .ncolors {
+        display: flex;
+        gap: 5px;
+      }
+
+      .ncolors input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .ncolors label {
+        width: 14px;
+        height: 14px;
+        cursor: pointer;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+      }
+
+      .ncolors input:checked + label {
+        outline: 2px solid #2a2a2a;
+        outline-offset: 1px;
+      }
+
+      .compose small {
+        margin-left: auto;
+        font: 500 10px var(--mono);
+        opacity: 0.55;
+      }
+
+      .compose .stick {
+        margin-left: auto;
+        border: 0;
+        padding: 3px 9px;
+        background: var(--ink);
+        color: var(--paper);
+        font: 600 11px var(--mono);
+        letter-spacing: 0.06em;
+        white-space: nowrap;
+      }
+
+      .ngrid .heart {
+        border: 0;
+        padding: 0;
+        background: none;
+        font: 600 13px var(--mono);
+        color: rgba(42, 42, 42, 0.55);
+      }
+
+      .ngrid .heart.on {
+        color: var(--red);
+      }
+
+      .nmsg {
+        min-height: 18px;
+        margin: -8px 0 12px;
+        font: 500 12px var(--mono);
+        color: var(--red);
+      }
+
+      /* the outlet by the desk: pull the plug and the room goes dark */
+      .plug {
+        position: absolute;
+        padding: 0;
+        border: 0;
+        background: none;
+        cursor: pointer;
+      }
+
+      .plug svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      .plug .out,
+      .room.pulled .plug .in {
+        display: none;
+      }
+
+      .room.pulled .plug .out {
+        display: inline;
+      }
+
+      .dark {
+        position: absolute;
+        inset: 0;
+        z-index: 8;
+        pointer-events: none;
+        opacity: 0;
+        background: rgba(1, 1, 3, 0.99);
+      }
+
+      .room.off .dark {
+        pointer-events: auto;
+        cursor: pointer;
+      }
+
+      .room.off .dark,
+      .room.flick .dark {
+        opacity: 1;
+      }
+
+      /* with the lights out, someone is crouched under the desk */
+      .lurker {
+        position: absolute;
+        z-index: 9;
+        opacity: 0;
+        pointer-events: none;
+        /* as dark as the room around him: moonlight from above catches his head and shoulders, and he fades into the dark below */
+        filter: brightness(0.1);
+        -webkit-mask-image: linear-gradient(#000 35%, rgba(0, 0, 0, 0.7));
+        mask-image: linear-gradient(#000 35%, rgba(0, 0, 0, 0.7));
+      }
+
+      /* the double barrel is its own layer, a little easier to see than he is */
+      .lurker.gun {
+        filter: brightness(1.2) saturate(0.6);
+      }
+
+      /* he fades in slowly; when the lights come back he's just gone */
+      .room.moon .lurker {
+        opacity: 0.85;
+        transition: opacity 1.2s;
+      }
+
       /* the open folder */
       .opened {
         display: grid;
@@ -1902,6 +2243,16 @@
           order: 5;
           z-index: 2;
           margin-bottom: 20px;
+        }
+
+        .stickies {
+          order: 4;
+          position: relative;
+          left: auto;
+          top: auto;
+          width: 56%;
+          height: 32vw;
+          margin: 30px 0 0 20%;
         }
 
         /* the wood floor starts under the desk's feet and runs to the bottom, so the desk and the chair both stand on it */
@@ -2139,12 +2490,13 @@
         </div>
           <button class="wallpic" data-xp="project hoop" data-src="images/projects/hoop-2576.webp" data-cap="hoop house farm" data-desc="aeroponics, dutch buckets and other sustainable growing, on a field at my high school. the food went to a food shelter." data-href="hoop.html" style="--x:74%;--y:8%;--w:11%;--r:3deg"><img src="images/projects/hoop-2576.webp" alt="the hoop house farm" loading="lazy" /><span>hoop house farm</span></button>
           <button class="wallpic" data-xp="project drone" data-src="images/projects/drone.webp" data-cap="drone challenge" data-desc="an open-source quadcopter, built for a competition." data-href="drone.html" style="--x:6%;--y:16%;--w:10.5%;--r:-3deg"><img src="images/projects/drone.webp" alt="the quadcopter the team built" loading="lazy" /></button>
-        <div class="r3d shelf3d" style="left:28.82%;bottom:33.48%;width:25.29%;aspect-ratio:1376/392"><img loading="lazy" decoding="async" src="images/room/shelf-3d.webp" alt="an oak floating shelf with the vagabond vizbig set and a model lexus gs 350" /><button class="carhit" id="car" data-xp="lexus" aria-label="a model lexus gs 350; drag to spin it" style="left:63.41%;top:40.92%;width:33.63%;height:45.10%"></button></div>
+        <div class="r3d shelf3d" style="left:28.82%;bottom:33.48%;width:25.29%;aspect-ratio:1376/392"><img loading="lazy" decoding="async" src="images/room/shelf-3d.webp" alt="an oak floating shelf with the vagabond vizbig set and a model 2006 lexus gs430" /><button class="carhit" id="car" data-xp="lexus" aria-label="a model 2006 lexus gs430; drag to spin it" style="left:63.41%;top:40.92%;width:33.63%;height:45.10%"></button></div>
         <div class="r3d chair3d" style="left:0.70%;bottom:4.03%;width:28.20%;aspect-ratio:767/717">
           <img loading="lazy" decoding="async" src="images/room/chair-3d.webp" alt="an armchair" />
           <div class="rl" data-w="767"><button class="seal" id="seal" data-xp="seal" data-src="images/room/seal.webp" data-cap="" data-sticker aria-label="the seal" style="transform:matrix(0.71400,0.00000,0.00000,0.70705,157.00,121.29)"><img loading="lazy" decoding="async" src="images/room/seal.webp" alt="a chubby seal plush" /></button></div>
           <img loading="lazy" decoding="async" class="front" src="images/room/chair-front.webp" alt="" />
         </div>
+        <div class="stickies" id="stickies"></div>
         <div class="r3d desk3d" style="left:58.24%;bottom:4.69%;width:41.54%;aspect-ratio:1130/854">
           <img loading="lazy" decoding="async" src="images/room/desk-3d.webp" alt="a desk with papers, a potted sunflower, a spicy chicken sandwich and a phone on it, and two speakers underneath" />
           <div class="rl" data-w="1130">
@@ -2152,10 +2504,24 @@
             <div class="paper" style="transform:matrix(0.79221,0.02694,-0.11134,0.19165,377.97,301.77)"><button class="slap" data-job="1" style="--x:8%;--y:8%;--w:44%;--r:8deg" aria-label="neo"><img loading="lazy" decoding="async" src="images/logos/neo-egg.png" alt="" /></button><button class="slap" data-job="2" style="--x:60%;--y:12%;--w:26%;--r:-6deg" aria-label="princeton ece"><img loading="lazy" decoding="async" src="images/logos/princeton-shield.png" alt="" /></button></div>
             <button class="flowerhit" id="flower" data-xp="sunflower" data-src="images/room/sunflower.webp" data-cap="" data-sticker aria-label="the sunflower" style="left:10px;top:0;width:170px;height:262px"><img loading="lazy" decoding="async" src="images/room/sunflower.webp" alt="a potted sunflower" /></button>
             <button class="sandwich" data-job="5" aria-label="a spicy chicken sandwich" style="left:592px;top:268px;width:96px;height:52px"></button>
+            <button class="plug" id="plug" data-xp="lights" aria-label="the plug; pull it" style="left:985px;top:588px;width:90px;height:170px"><svg viewBox="0 0 90 170" aria-hidden="true">
+              <defs><linearGradient id="plate" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbf9f4" /><stop offset="1" stop-color="#e6e0d3" /></linearGradient></defs>
+              <rect x="17" y="0" width="56" height="92" rx="5" fill="url(#plate)" stroke="#cfc8b8" stroke-width="1.5" />
+              <circle cx="45" cy="46" r="2.4" fill="#bdb5a3" />
+              <rect x="28" y="12" width="34" height="28" rx="9" fill="#f7f4ec" stroke="#d6cfbf" />
+              <rect x="35" y="18" width="3.5" height="10" rx="1" fill="#3a3630" /><rect x="51.5" y="18" width="3.5" height="11.5" rx="1" fill="#3a3630" /><path d="M42 33 a3 3 0 0 1 6 0 v3 h-6 z" fill="#3a3630" />
+              <rect x="28" y="52" width="34" height="28" rx="9" fill="#f7f4ec" stroke="#d6cfbf" />
+              <rect x="35" y="58" width="3.5" height="10" rx="1" fill="#3a3630" /><rect x="51.5" y="58" width="3.5" height="11.5" rx="1" fill="#3a3630" />
+              <g class="in"><path d="M44.5 86 C44.5 120 50 140 44 150 C38 158 10 156 -72 156" fill="none" stroke="#1c1c1c" stroke-width="6" stroke-linecap="round" /><rect x="30" y="54" width="30" height="27" rx="6" fill="#1e1e1e" /><rect x="33" y="57" width="24" height="4" rx="2" fill="#3a3a3a" /><rect x="39" y="80" width="11" height="8" rx="2" fill="#1e1e1e" /></g>
+              <g class="out"><path d="M46 140 C48 148 44 154 36 156 C20 158 0 156 -72 156" fill="none" stroke="#1c1c1c" stroke-width="6" stroke-linecap="round" /><g transform="rotate(14 45 124)"><rect x="37" y="98" width="3.5" height="10" rx="1" fill="#b9b3a6" /><rect x="50" y="98" width="3.5" height="10" rx="1" fill="#b9b3a6" /><rect x="30" y="106" width="30" height="27" rx="6" fill="#1e1e1e" /><rect x="33" y="109" width="24" height="4" rx="2" fill="#3a3a3a" /><rect x="39" y="132" width="11" height="8" rx="2" fill="#1e1e1e" /></g></g>
+            </svg></button>
             <button class="pscreen" id="phone" data-xp="phone" aria-label="reach out" style="transform:matrix(0.06928,0.00968,-0.04000,0.01676,813.22,300.46)"><b id="ptime">5:00</b><small>est</small></button>
           </div>
         </div>
       </div>
+      <div class="dark" id="dark" aria-label="turn the lights back on"></div>
+      <img class="lurker" alt="someone crouched under the desk, pointing a shotgun at you" data-src="images/room/lurker-body6.webp" />
+      <img class="lurker gun" alt="" data-src="images/room/lurker-gun6.webp" />
     </section>
 
     <div class="reader" id="reader" aria-hidden="true">
@@ -2169,12 +2535,19 @@
           <a href="https://discordapp.com/users/229360161490337793" target="_blank" rel="noopener" data-xp="discord">discord <small>@benthetacoman</small></a>
         </div></div>
       </div>
-      <figure class="view carview" id="carView" role="dialog" aria-modal="true" aria-label="a model lexus gs 350">
+      <figure class="view carview" id="carView" role="dialog" aria-modal="true" aria-label="a model 2006 lexus gs430">
         <button class="close" data-close>close ✕</button>
         <canvas id="carCanvas"></canvas>
         <span class="carnote">nyc → la, 34 hrs</span>
-        <a class="credit" href="https://sketchfab.com/3d-models/lexus-gs-350-2011-a89d18432d5047549c4e8b9a66cb2d7d" target="_blank" rel="noopener" aria-label="model credit">i<span>“lexus gs 350 2011” by 3dshowroom · cc by 4.0</span></a>
+        <span class="carname">2006 lexus gs430</span>
       </figure>
+      <div class="view notesview" id="notesView" role="dialog" aria-modal="true" aria-label="sticky notes">
+        <button class="close" data-close>close ✕</button>
+        <h3 data-t="leave a note">leave a note</h3>
+        <div class="nfilter" id="nfilter"></div>
+        <p class="nmsg" id="nmsg" role="status"></p>
+        <ul class="ngrid" id="ngrid"></ul>
+      </div>
       <div class="view opened" id="folderView" role="dialog" aria-modal="true" aria-label="work">
         <button class="close" data-close>close ✕</button>
         <ul id="tabs"></ul>
@@ -2408,7 +2781,7 @@
       const pins = [...document.querySelectorAll(".pin[data-src]")];
       const wallpics = [...document.querySelectorAll(".wallpic")];
       // every record, the work stickers once, every photo and sticker, every project, the phone and the hat
-      const XP_IDS = ["play 0", "play 1", "play 2", "play 3", "work", ...pins.map((p) => p.dataset.xp), ...wallpics.map((w) => w.dataset.xp), "phone", "seal", "sunflower", "lexus"];
+      const XP_IDS = ["play 0", "play 1", "play 2", "play 3", "work", ...pins.map((p) => p.dataset.xp), ...wallpics.map((w) => w.dataset.xp), "phone", "seal", "sunflower", "lexus", "notes", "lights"];
       const earned = new Set();
       xp.innerHTML = "<i></i>".repeat(XP_IDS.length);
       const bars = [...xp.children];
@@ -2679,6 +3052,338 @@
       });
 
       reader.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", closeAll));
+
+      // ---------- sticky notes: anyone can leave one and everyone sees them; the wall shows a scribbled pile ----------
+      // notes live in supabase. the url and publishable key are public by design: the database only lets visitors
+      // read, add and heart notes, and deleting needs the admin code. with no url set, notes stay in this browser.
+      const NOTES_DB = { url: "https://gffwlygcblzmcbuazmms.supabase.co", key: "sb_publishable_WXdUlPLesr2Thm5EWrnJtw_JWOIWwTp" };
+      const NOTE_COLORS = { yellow: "#f7e27a", pink: "#f4bcc4", green: "#c4e2b0", blue: "#bcd9ec", purple: "#d8c9ef" };
+      // the pile above the desk: x, y and width in % of the pile, and a tilt
+      const PILE = [[24, 0, 20.5, -3], [0, 21, 21, -6], [28, 23, 17.5, 5], [54, 8, 19, -8], [55, 31, 19.5, 4], [39, 58, 17.5, -4], [12, 56, 16.5, 8], [75, 49, 17.5, -5]];
+      const live = !!(NOTES_DB.url && NOTES_DB.key);
+      const COLS = "id,body,name,color,hearts,created_at";
+
+      async function api(path, body) {
+        const r = await fetch(`${NOTES_DB.url}/rest/v1/${path}`, {
+          method: body ? "POST" : "GET",
+          headers: { apikey: NOTES_DB.key, "Content-Type": "application/json", Prefer: "return=representation" },
+          body: body && JSON.stringify(body),
+        });
+        const t = await r.text(), d = t ? JSON.parse(t) : null;
+        if (!r.ok) throw new Error(d?.message || "couldn't reach the notes");
+        return d;
+      }
+      const kept = (k, fallback) => {
+        try {
+          return JSON.parse(localStorage.getItem(k)) ?? fallback;
+        } catch {
+          return fallback;
+        }
+      };
+      const keep = (k, v) => {
+        try {
+          localStorage.setItem(k, JSON.stringify(v));
+        } catch {}
+      };
+      const store = live
+        ? {
+            list: () => api(`notes?select=${COLS}&order=created_at.desc&limit=300`),
+            add: (n) => api(`notes?select=${COLS}`, n).then((r) => r[0]),
+            heart: (id, up) => api("rpc/heart_note", { note_id: id, up }),
+                        remove: (id, code) => api("rpc/delete_note", { note_id: id, code }),
+          }
+        : {
+            // no database yet: this browser only
+            list: async () => kept("notes-test", []),
+            add: async (n) => {
+              const m = { ...n, id: Date.now().toString(36), hearts: 0, created_at: new Date().toISOString() };
+              keep("notes-test", [m, ...kept("notes-test", [])]);
+              return m;
+            },
+            heart: async (id, up) => {
+              const all = kept("notes-test", []), m = all.find((x) => x.id === id);
+              m.hearts = Math.max(0, m.hearts + (up ? 1 : -1));
+              keep("notes-test", all);
+              return m.hearts;
+            },
+                        remove: async (id) => keep("notes-test", kept("notes-test", []).filter((x) => x.id !== id)),
+          };
+
+      // the same rules the database enforces, checked here first so the message is instant.
+      // the n-word and the f-slur are refused; "retard" goes through as r*****.
+      function screen(text) {
+        const words = text.toLowerCase().replace(/[1!|]/g, "i").replace(/3/g, "e").replace(/[4@]/g, "a").replace(/0/g, "o").replace(/[$5]/g, "s").split(/\s+/);
+        for (let w of words) {
+          w = w.replace(/[^a-z]/g, "").replace(/(.)\1{2,}/g, "$1$1");
+          if ((w.includes("nigg") && !w.startsWith("snigg")) || /^nig(a|ah|as|az|uh)s?$/.test(w) || /^f+a+g+(s|z|gy|gie|got|gots|ot|ots)?$/.test(w) || /fagg?ots?/.test(w)) return null;
+        }
+        return text.replace(/r[e3]t[a4@]rd/gi, "r*****");
+      }
+
+      // a few pencil lines, the same ones every time for the same note
+      function scribble(seed) {
+        let x = 1;
+        for (const ch of String(seed)) x = (x * 31 + ch.charCodeAt(0)) % 2147483647;
+        const r = () => (x = (x * 16807) % 2147483647) / 2147483647;
+        const lines = 2 + Math.floor(r() * 3);
+        let d = "";
+        for (let i = 0; i < lines; i++) {
+          const y = 10 + i * (78 / lines) + r() * 8, end = 45 + r() * 50;
+          d += `M${2 + r() * 6} ${y.toFixed(1)}`;
+          for (let px = 9; px < end; px += 8) d += ` Q${px - 4} ${(y + (r() - 0.5) * 16).toFixed(1)} ${px} ${(y + (r() - 0.5) * 5).toFixed(1)}`;
+        }
+        return `<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" fill="none" stroke="#333" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.72" vector-effect="non-scaling-stroke" /></svg>`;
+      }
+
+      let notes = [], sortNew = true, query = "", adminCode = "";
+      try {
+        localStorage.removeItem("notes-local");
+      } catch {}
+      // signed in at /admin? then every note gets a delete button
+      try {
+        adminCode = localStorage.getItem("notes-admin") || "";
+      } catch {}
+      const hearted = new Set(kept("hearted", []));
+      const stickies = document.getElementById("stickies"), ngrid = document.getElementById("ngrid"), nfilter = document.getElementById("nfilter"), nmsg = document.getElementById("nmsg");
+      const byNew = (a, b) => (a.created_at < b.created_at ? 1 : -1);
+      const fmt = (iso) => new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).toLowerCase();
+      // one note per visitor a day (the database enforces this too)
+      const DAY = 864e5, leftToday = () => Date.now() - kept("noted-at", 0) < DAY;
+      const say = (t) => (nmsg.textContent = t);
+
+      function renderWall() {
+        const keys = Object.keys(NOTE_COLORS);
+        stickies.replaceChildren(
+          ...PILE.map(([x, y, w, r], i) => {
+            const b = document.createElement("button"), n = notes[i];
+            b.className = "sticky";
+            b.style.cssText = `--x:${x}%;--y:${y}%;--w:${w}%;--r:${r}deg;--c:${NOTE_COLORS[n?.color] || NOTE_COLORS[keys[i % keys.length]]}`;
+            b.innerHTML = scribble(n ? n.id : "pile" + i);
+            b.setAttribute("aria-label", "sticky notes; leave one");
+            b.addEventListener("click", openNotes);
+            return b;
+          }),
+        );
+      }
+
+      function renderFilter() {
+        nfilter.innerHTML = `<button data-sort="new">newest</button><button data-sort="old">oldest</button><button data-sort="hearts">most ♥</button><input type="search" placeholder="search" aria-label="search notes" /><span class="count"></span>`;
+        nfilter.querySelector("input").addEventListener("input", (e) => {
+          query = e.target.value.trim().toLowerCase();
+          renderGrid();
+        });
+      }
+      nfilter.addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (!b) return;
+        if (b.dataset.sort) sortNew = b.dataset.sort;
+        renderGrid();
+      });
+
+      function heartButton(n) {
+        const b = document.createElement("button");
+        const paint = () => {
+          b.className = "heart" + (hearted.has(n.id) ? " on" : "");
+          b.textContent = `${hearted.has(n.id) ? "♥" : "♡"} ${n.hearts || ""}`.trim();
+          b.setAttribute("aria-label", `${hearted.has(n.id) ? "unheart" : "heart"} this note, ${n.hearts} hearts`);
+        };
+        b.addEventListener("click", async () => {
+          const up = !hearted.has(n.id);
+          up ? hearted.add(n.id) : hearted.delete(n.id);
+          keep("hearted", [...hearted]);
+          n.hearts = Math.max(0, (n.hearts || 0) + (up ? 1 : -1));
+          paint();
+          try {
+            const h = await store.heart(n.id, up);
+            if (typeof h === "number") n.hearts = h;
+            paint();
+          } catch (e) {
+            say(e.message);
+          }
+        });
+        paint();
+        return b;
+      }
+
+      let freshId;
+      function renderGrid(fresh) {
+        freshId = fresh;
+        const sort = sortNew === true ? "new" : sortNew;
+        nfilter.querySelectorAll("[data-sort]").forEach((b) => b.classList.toggle("on", b.dataset.sort === sort));
+        const list = notes
+          .filter((n) => !query || `${n.body} ${n.name || ""}`.toLowerCase().includes(query))
+          .sort(sort === "old" ? (a, b) => byNew(b, a) : sort === "hearts" ? (a, b) => (b.hearts || 0) - (a.hearts || 0) || byNew(a, b) : byNew);
+        nfilter.querySelector(".count").textContent = `${list.length} note${list.length === 1 ? "" : "s"}`;
+
+        const compose = document.createElement("li");
+        compose.className = "compose";
+        compose.innerHTML = `<textarea maxlength="140" placeholder="say something…" aria-label="your note"></textarea>
+          <input type="text" maxlength="24" placeholder="— name (optional)" aria-label="your name" />
+          <div class="row"><span class="ncolors">${Object.entries(NOTE_COLORS).map(([k, c], i) => `<input type="radio" name="nc" id="nc-${k}" value="${k}"${i ? "" : " checked"}><label for="nc-${k}" style="background:${c}" aria-label="${k}"></label>`).join("")}</span><button class="stick">stick it</button></div>`;
+        if (leftToday()) {
+          compose.classList.add("done");
+          compose.innerHTML = `<p>you left one today.<br />come back tomorrow.</p>`;
+        }
+        const ta = compose.querySelector("textarea"), btn = compose.querySelector(".stick");
+        if (!ta) return ngrid.replaceChildren(compose, ...list.map(noteItem));
+        compose.querySelectorAll("input[name=nc]").forEach((r) => r.addEventListener("change", () => compose.style.setProperty("--c", NOTE_COLORS[r.value])));
+        btn.addEventListener("click", async () => {
+          const body = screen(ta.value.trim()), name = screen(compose.querySelector("input[type=text]").value.trim());
+          if (body === "") return ta.focus();
+          if (body === null || name === null) return say("that word isn't allowed here");
+          btn.disabled = true;
+          try {
+            const n = await store.add({ body, name: name || null, color: compose.querySelector("input[name=nc]:checked").value });
+            notes.unshift(n);
+            keep("noted-at", Date.now());
+            sortNew = true;
+            query = "";
+            nfilter.querySelector("input").value = "";
+            say("");
+            renderGrid(n.id);
+            renderWall();
+          } catch (e) {
+            say(e.message);
+            btn.disabled = false;
+          }
+        });
+
+        ngrid.replaceChildren(compose, ...list.map(noteItem));
+      }
+
+      function noteItem(n, i) {
+        const li = document.createElement("li"), p = document.createElement("p"), by = document.createElement("div"), who = document.createElement("span"), t = document.createElement("time");
+        li.style.cssText = `--c:${NOTE_COLORS[n.color] || NOTE_COLORS.yellow};--r:${[-2, 1.5, -1, 2.5, 0.5, -2.5][i % 6]}deg`;
+        if (n.id === freshId) li.className = "new";
+        p.textContent = n.body;
+        who.textContent = n.name ? "— " + n.name : "";
+        t.dateTime = n.created_at;
+        t.title = new Date(n.created_at).toLocaleString();
+        t.textContent = fmt(n.created_at);
+        by.className = "by";
+        by.append(who, heartButton(n), t);
+        li.append(p, by);
+        if (adminCode) {
+          const rm = document.createElement("button");
+          rm.className = "rm";
+          rm.textContent = "✕";
+          rm.setAttribute("aria-label", "delete this note");
+          rm.addEventListener("click", async () => {
+            try {
+              await store.remove(n.id, adminCode);
+              notes = notes.filter((x) => x !== n);
+              renderGrid();
+              renderWall();
+            } catch (e) {
+              say(e.message);
+            }
+          });
+          li.append(rm);
+        }
+        return li;
+      }
+
+      async function loadNotes() {
+        try {
+          notes = (await store.list()).sort(byNew);
+          renderWall();
+          if (reader.classList.contains("open")) renderGrid();
+        } catch (e) {
+          say(e.message);
+        }
+      }
+      function openNotes() {
+        gain("notes", "sticky notes");
+        say("");
+        renderGrid();
+        show("notesView");
+        loadNotes();
+      }
+      renderFilter();
+      renderWall();
+      setTimeout(loadNotes, 1200);
+
+      // ---------- the plug by the desk: pull it and the lights flicker out; click the dark to bring them back ----------
+      const room = document.getElementById("room"), plug = document.getElementById("plug"), dark = document.getElementById("dark");
+      let flicking = false;
+      // a relay click, and the room's hum sagging away (or swelling back)
+      function powerSound(on) {
+        const c = getCtx(), t = c.currentTime, vol = Math.min(1.5, (+volIn.value || 0.4) / 0.4);
+        c.resume();
+        const click = new AudioBufferSourceNode(c, { buffer: new AudioBuffer({ length: 2400, sampleRate: 48000 }) });
+        const d = click.buffer.getChannelData(0);
+        for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / 180);
+        click.connect(new GainNode(c, { gain: 0.5 * vol })).connect(c.destination);
+        click.start(t);
+        const hum = new OscillatorNode(c, { type: "sawtooth", frequency: 60 }), g = new GainNode(c, { gain: 0 }), lp = new BiquadFilterNode(c, { type: "lowpass", frequency: 420 });
+        hum.connect(lp).connect(g).connect(c.destination);
+        g.gain.setValueAtTime(on ? 0 : 0.07 * vol, t);
+        g.gain.linearRampToValueAtTime(on ? 0.05 * vol : 0, t + (on ? 0.35 : 1.1));
+        if (on) g.gain.linearRampToValueAtTime(0, t + 0.9);
+        hum.frequency.setValueAtTime(on ? 40 : 60, t);
+        hum.frequency.linearRampToValueAtTime(on ? 60 : 32, t + 1.1);
+        hum.start(t);
+        hum.stop(t + 1.2);
+      }
+      // footsteps in the dark (the first few seconds of a rust clip), fetched the first time you pull the plug
+      let stepsBuf, stepsSrc;
+      const loadSteps = () => stepsBuf || (stepsBuf = fetch("images/room/rust-steps.mp3").then((r) => r.arrayBuffer()).then((a) => getCtx().decodeAudioData(a)));
+      async function steps() {
+        const c = getCtx();
+        c.resume();
+        stepsSrc = new AudioBufferSourceNode(c, { buffer: await loadSteps() });
+        stepsSrc.connect(new GainNode(c, { gain: Math.min(1.5, (+volIn.value || 0.4) / 0.4) })).connect(c.destination);
+        stepsSrc.start();
+      }
+      // pull the plug: the lights flicker out, footsteps, someone's under the desk, then the lights come back
+      const lurkers = [...room.querySelectorAll(".lurker")];
+      let scare = [];
+      const later = (ms, fn) => scare.push(setTimeout(fn, ms));
+      function flicker(n, done) {
+        const gaps = [70, 90, 50, 240, 60, 130, 40, 70, 50].slice(0, n);
+        let i = 0;
+        (function tick() {
+          room.classList.toggle("flick");
+          if (i < gaps.length) return later(gaps[i++], tick);
+          room.classList.remove("flick");
+          done();
+        })();
+      }
+      function lightsOn() {
+        scare.forEach(clearTimeout);
+        scare = [];
+        try {
+          stepsSrc?.stop();
+        } catch {}
+        room.classList.remove("moon", "off", "pulled", "flick");
+        powerSound(true);
+        flicking = false;
+      }
+      // fetch him ahead of time, while the pointer is on its way to the plug
+      const loadLurkers = () => lurkers.forEach((l) => l.src || (l.src = l.dataset.src));
+      plug.addEventListener("pointerenter", loadLurkers, { once: true });
+      plug.addEventListener("click", () => {
+        if (flicking || room.classList.contains("off")) return;
+        flicking = true;
+        gain("lights", "the lights");
+        loadLurkers();
+        loadSteps();
+        room.classList.add("pulled");
+        powerSound(false);
+        flicker(REDUCED ? 0 : 9, () => {
+          room.classList.add("off");
+          steps();
+          later(3400, () => {
+            // under the desk, between the speakers, in the desk render's own pixels
+            const r = room.getBoundingClientRect(), d = room.querySelector(".desk3d").getBoundingClientRect(), k = d.width / 1130;
+            lurkers.forEach((l) => Object.assign(l.style, { left: `${d.left - r.left + 375 * k}px`, top: `${d.top - r.top + 371.5 * k}px`, width: `${202 * k}px` }));
+            // both layers decoded first, so he never shows up half drawn
+            Promise.all(lurkers.map((l) => l.decode().catch(() => {}))).then(() => room.classList.contains("off") && room.classList.add("moon"));
+          });
+        });
+      });
+      // click anywhere to get the lights back
+      document.addEventListener("click", (e) => room.classList.contains("off") && !plug.contains(e.target) && lightsOn());
       reader.addEventListener("click", (e) => e.target === reader && closeAll());
       addEventListener("keydown", (e) => reader.classList.contains("open") && e.key === "Escape" && closeAll());
 
