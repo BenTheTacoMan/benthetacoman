@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ben Weber</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;800&family=Zen+Kaku+Gothic+New:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;800&family=Zen+Kaku+Gothic+New:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;700&family=Caveat:wght@500;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet" />
     <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
     <style>
       :root {
@@ -1984,8 +1984,9 @@
         display: inline;
       }
 
+      /* fixed, so the whole page stays dark if you scroll away from the room */
       .dark {
-        position: absolute;
+        position: fixed;
         inset: 0;
         z-index: 8;
         pointer-events: none;
@@ -2024,6 +2025,200 @@
       .room.moon .lurker {
         opacity: 0.85;
         transition: opacity 1.2s;
+      }
+
+      /* shoot first: hovering him in the dark shows a red x */
+      .lurkhit {
+        position: absolute;
+        z-index: 10;
+        display: none;
+        padding: 0;
+        border: 0;
+        background: none;
+        cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M7 7l18 18M25 7L7 25' stroke='%23000' stroke-width='7' stroke-linecap='round'/%3E%3Cpath d='M7 7l18 18M25 7L7 25' stroke='%23e0261b' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E") 16 16, crosshair;
+      }
+
+      .room.moon .lurkhit {
+        display: block;
+      }
+
+      /* the rust death screen */
+      .death {
+        position: fixed;
+        inset: 0;
+        z-index: 90;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #111;
+        font-family: "Roboto Condensed", "Arial Narrow", sans-serif;
+        color: #e4dccb;
+      }
+
+      .death.on {
+        display: flex;
+      }
+
+      .dpanel {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        background: #232220;
+      }
+
+      .dbar {
+        display: flex;
+        align-items: stretch;
+        gap: 24px;
+        padding: 0 18px 0 0;
+        background: #1c1b19;
+      }
+
+      .dtitle {
+        display: grid;
+        place-items: center;
+        padding: 14px 26px;
+        background: linear-gradient(#7a3322, #5b2418);
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+
+      .dstats {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 10px 12px;
+        padding: 10px 0;
+      }
+
+      .dstats > div {
+        display: grid;
+        gap: 4px;
+      }
+
+      .dstats small {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: #9c968a;
+      }
+
+      .dstats b,
+      .dstats a {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        height: 28px;
+        padding: 0 10px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #f1e9da;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .dstats .g {
+        background: #5f7d2c;
+        color: #d9f0a8;
+      }
+
+      .dstats .r {
+        background: #b8412a;
+      }
+
+      .dstats a.r:hover {
+        background: #cf4d33;
+      }
+
+      .dstats .k {
+        background: #45433f;
+      }
+
+      .dstats img {
+        height: 22px;
+        margin-left: -6px;
+      }
+
+      .dstats .dash {
+        align-self: center;
+        width: 22px;
+        height: 1px;
+        margin-top: 16px;
+        background: #6b675f;
+      }
+
+      /* the map fills whatever room is left; its 2:1 inner layer covers it so the pin stays on its spot */
+      .dmap {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        background: #3f6680;
+        overflow: hidden;
+        container-type: size;
+      }
+
+      .dmap .dmin {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: max(100cqw, 200cqh);
+        height: max(50cqw, 100cqh);
+        transform: translate(-50%, -50%);
+      }
+
+      .dmap img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .dmap .pin {
+        position: absolute;
+        width: 30px;
+        transform: translate(-50%, -100%);
+        filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
+      }
+
+      .dfoot {
+        display: flex;
+        justify-content: flex-end;
+        padding: 12px;
+        background: #1c1b19;
+      }
+
+      .respawn {
+        padding: 12px 34px;
+        border: 0;
+        background: #5f7d2c;
+        font: 700 22px "Roboto Condensed", "Arial Narrow", sans-serif;
+        letter-spacing: 0.03em;
+        color: #d9f0a8;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .respawn:hover {
+        background: #6f9133;
+      }
+
+      @media (max-width: 700px) {
+        .dbar {
+          flex-direction: column;
+          gap: 0;
+          padding: 0;
+        }
+
+        .dstats {
+          padding: 10px 12px;
+        }
+
+        .dstats .dash {
+          display: none;
+        }
       }
 
       /* the open folder */
@@ -2522,7 +2717,32 @@
       <div class="dark" id="dark" aria-label="turn the lights back on"></div>
       <img class="lurker" alt="someone crouched under the desk, pointing a shotgun at you" data-src="images/room/lurker-body6.webp" />
       <img class="lurker gun" alt="" data-src="images/room/lurker-gun6.webp" />
+      <button class="lurkhit" id="lurkhit" aria-label="shoot first"></button>
     </section>
+
+    <div class="death" id="death" role="dialog" aria-modal="true" aria-label="you died">
+      <div class="dpanel">
+        <div class="dbar">
+          <div class="dtitle">you died</div>
+          <div class="dstats">
+            <div><small>ALIVE FOR</small><b class="g" id="alive">0s</b></div>
+            <i class="dash"></i>
+            <div><small>KILLED BY</small><a class="r" href="https://steamcommunity.com/id/benthetacoman/" target="_blank" rel="noopener"><img src="images/death/avatar.webp" alt="" width="22" height="22" />BenTheTacoMan</a></div>
+            <div><small>WITH A</small><b class="r"><img src="images/death/db.webp" alt="" />Double Barrel Shotgun</b></div>
+            <i class="dash"></i>
+            <div><small>AT A DISTANCE OF</small><b class="k">1.8m</b></div>
+            <div><small>IN</small><b class="k">L11</b></div>
+          </div>
+        </div>
+        <div class="dmap">
+          <div class="dmin">
+          <img data-src="images/death/map.webp" alt="a rust-style map of manhattan, where you died" />
+          <svg class="pin" style="left: 39.67%; top: 76.36%" viewBox="0 0 30 40" aria-hidden="true"><path d="M15 39C15 39 2 23 2 14a13 13 0 0 1 26 0c0 9-13 25-13 25z" fill="#c9302c" stroke="#fff" stroke-width="2" /><circle cx="15" cy="13" r="6.2" fill="#fff" /><rect x="11.6" y="16.5" width="6.8" height="4" rx="1" fill="#fff" /><circle cx="12.8" cy="12.8" r="1.8" fill="#c9302c" /><circle cx="17.2" cy="12.8" r="1.8" fill="#c9302c" /></svg>
+          </div>
+        </div>
+        <div class="dfoot"><button class="respawn" id="respawn">↻ respawn</button></div>
+      </div>
+    </div>
 
     <div class="reader" id="reader" aria-hidden="true">
       <figure class="view zoomed" id="zoomView" role="dialog" aria-modal="true" aria-label="a closer look"><button class="close" data-close>close ✕</button><img id="zimg" alt="" /><i class="zshine"></i><figcaption id="zcap"></figcaption></figure>
@@ -3306,36 +3526,54 @@
       // ---------- the plug by the desk: pull it and the lights flicker out; click the dark to bring them back ----------
       const room = document.getElementById("room"), plug = document.getElementById("plug"), dark = document.getElementById("dark");
       let flicking = false;
-      // a relay click, and the room's hum sagging away (or swelling back)
-      function powerSound(on) {
-        const c = getCtx(), t = c.currentTime, vol = Math.min(1.5, (+volIn.value || 0.4) / 0.4);
+      // the click of the plug coming out of the socket
+      function plugClick() {
+        const c = getCtx(), vol = Math.min(1.5, (+volIn.value || 0.4) / 0.4);
         c.resume();
         const click = new AudioBufferSourceNode(c, { buffer: new AudioBuffer({ length: 2400, sampleRate: 48000 }) });
         const d = click.buffer.getChannelData(0);
         for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / 180);
         click.connect(new GainNode(c, { gain: 0.5 * vol })).connect(c.destination);
-        click.start(t);
-        const hum = new OscillatorNode(c, { type: "sawtooth", frequency: 60 }), g = new GainNode(c, { gain: 0 }), lp = new BiquadFilterNode(c, { type: "lowpass", frequency: 420 });
-        hum.connect(lp).connect(g).connect(c.destination);
-        g.gain.setValueAtTime(on ? 0 : 0.07 * vol, t);
-        g.gain.linearRampToValueAtTime(on ? 0.05 * vol : 0, t + (on ? 0.35 : 1.1));
-        if (on) g.gain.linearRampToValueAtTime(0, t + 0.9);
-        hum.frequency.setValueAtTime(on ? 40 : 60, t);
-        hum.frequency.linearRampToValueAtTime(on ? 60 : 32, t + 1.1);
-        hum.start(t);
-        hum.stop(t + 1.2);
+        click.start();
       }
-      // footsteps in the dark (the first few seconds of a rust clip), fetched the first time you pull the plug
-      let stepsBuf, stepsSrc;
-      const loadSteps = () => stepsBuf || (stepsBuf = fetch("images/room/rust-steps.mp3").then((r) => r.arrayBuffer()).then((a) => getCtx().decodeAudioData(a)));
-      async function steps() {
+      // footsteps in the dark, then a double barrel being reloaded (both rust clips), fetched the first time you reach for the plug
+      let stepsBuf, reloadBuf, scareSrcs = [];
+      const clip = (url) => fetch(url).then((r) => r.arrayBuffer()).then((a) => getCtx().decodeAudioData(a));
+      let boomBuf;
+      const loadSteps = () => {
+        boomBuf ||= clip("images/room/rust-boom.mp3");
+        stepsBuf ||= clip("images/room/rust-steps.mp3");
+        reloadBuf ||= clip("images/room/rust-reload.mp3");
+      };
+      // three seconds of footsteps, then a quiet reload under them; calls done() when the reload has actually finished playing
+      const stopScareSounds = () => {
+        scareSrcs.forEach((s) => {
+          s.onended = null;
+          try {
+            s.stop();
+          } catch {}
+        });
+        scareSrcs = [];
+      };
+      async function steps(done) {
+        stopScareSounds();
         const c = getCtx();
-        c.resume();
-        stepsSrc = new AudioBufferSourceNode(c, { buffer: await loadSteps() });
-        stepsSrc.connect(new GainNode(c, { gain: Math.min(1.5, (+volIn.value || 0.4) / 0.4) })).connect(c.destination);
-        stepsSrc.start();
+        await c.resume();
+        loadSteps();
+        const [a, b] = await Promise.all([stepsBuf, reloadBuf]);
+        if (!room.classList.contains("off") || scareSrcs.length) return;
+        const out = new GainNode(c, { gain: Math.min(1.5, (+volIn.value || 0.4) / 0.4) });
+        out.connect(c.destination);
+        const walk = new AudioBufferSourceNode(c, { buffer: a }), reload = new AudioBufferSourceNode(c, { buffer: b });
+        walk.connect(new GainNode(c, { gain: 0.6 })).connect(out);
+        reload.connect(new GainNode(c, { gain: 0.7 })).connect(out);
+        reload.onended = done;
+        scareSrcs = [walk, reload];
+        const t = c.currentTime + 0.05;
+        walk.start(t);
+        reload.start(t + 3);
       }
-      // pull the plug: the lights flicker out, footsteps, someone's under the desk, then the lights come back
+      // pull the plug: the lights flicker out, footsteps, a reload, and then someone's under the desk
       const lurkers = [...room.querySelectorAll(".lurker")];
       let scare = [];
       const later = (ms, fn) => scare.push(setTimeout(fn, ms));
@@ -3352,16 +3590,13 @@
       function lightsOn() {
         scare.forEach(clearTimeout);
         scare = [];
-        try {
-          stepsSrc?.stop();
-        } catch {}
+        stopScareSounds();
         room.classList.remove("moon", "off", "pulled", "flick");
-        powerSound(true);
         flicking = false;
       }
       // fetch him ahead of time, while the pointer is on its way to the plug
       const loadLurkers = () => lurkers.forEach((l) => l.src || (l.src = l.dataset.src));
-      plug.addEventListener("pointerenter", loadLurkers, { once: true });
+      plug.addEventListener("pointerenter", () => (loadLurkers(), loadSteps()), { once: true });
       plug.addEventListener("click", () => {
         if (flicking || room.classList.contains("off")) return;
         flicking = true;
@@ -3369,21 +3604,52 @@
         loadLurkers();
         loadSteps();
         room.classList.add("pulled");
-        powerSound(false);
+        plugClick();
         flicker(REDUCED ? 0 : 9, () => {
           room.classList.add("off");
-          steps();
-          later(3400, () => {
+          // he shows up the moment the reload finishes
+          steps(() => {
             // under the desk, between the speakers, in the desk render's own pixels
             const r = room.getBoundingClientRect(), d = room.querySelector(".desk3d").getBoundingClientRect(), k = d.width / 1130;
             lurkers.forEach((l) => Object.assign(l.style, { left: `${d.left - r.left + 375 * k}px`, top: `${d.top - r.top + 371.5 * k}px`, width: `${202 * k}px` }));
+            Object.assign(lurkhit.style, { left: `${d.left - r.left + 390 * k}px`, top: `${d.top - r.top + 371.5 * k}px`, width: `${172 * k}px`, height: `${470 * k}px` });
             // both layers decoded first, so he never shows up half drawn
             Promise.all(lurkers.map((l) => l.decode().catch(() => {}))).then(() => room.classList.contains("off") && room.classList.add("moon"));
           });
         });
       });
       // click anywhere to get the lights back
-      document.addEventListener("click", (e) => room.classList.contains("off") && !plug.contains(e.target) && lightsOn());
+      document.addEventListener("click", (e) => room.classList.contains("off") && !plug.contains(e.target) && !death.contains(e.target) && e.target !== lurkhit && lightsOn());
+
+      // click him first and you get the boom, then a rust death screen; respawn brings the lights back
+      const lurkhit = document.getElementById("lurkhit"), death = document.getElementById("death"), bornAt = Date.now();
+      function aliveFor() {
+        const t = Math.floor((Date.now() - bornAt) / 1000), h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), sec = t % 60;
+        return h ? `${h}h${String(m).padStart(2, "0")}m` : m ? `${m}m${String(sec).padStart(2, "0")}s` : `${sec}s`;
+      }
+      // the map is the heaviest image on the page, so it only loads once you're aiming at him
+      const loadMap = () => {
+        const map = death.querySelector(".dmap img");
+        map.src ||= map.dataset.src;
+      };
+      lurkhit.addEventListener("pointerenter", loadMap, { once: true });
+      lurkhit.addEventListener("click", async () => {
+        const c = getCtx();
+        c.resume();
+        loadSteps();
+        stopScareSounds();
+        const boom = new AudioBufferSourceNode(c, { buffer: await boomBuf });
+        // quiet on purpose: nobody wants their ears blown out by a personal website
+        boom.connect(new GainNode(c, { gain: 0.3 * Math.min(1.5, (+volIn.value || 0.4) / 0.4) })).connect(c.destination);
+        boom.start();
+        document.getElementById("alive").textContent = aliveFor();
+        loadMap();
+        setTimeout(() => death.classList.add("on"), 180);
+      });
+      document.getElementById("respawn").addEventListener("click", () => {
+        death.classList.remove("on");
+        lightsOn();
+      });
       reader.addEventListener("click", (e) => e.target === reader && closeAll());
       addEventListener("keydown", (e) => reader.classList.contains("open") && e.key === "Escape" && closeAll());
 
